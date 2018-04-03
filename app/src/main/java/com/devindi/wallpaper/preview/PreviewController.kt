@@ -1,12 +1,12 @@
 package com.devindi.wallpaper.preview
 
 import android.app.Activity
-import android.app.WallpaperManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bluelinelabs.conductor.Controller
 import com.devindi.wallpaper.R
+import com.devindi.wallpaper.misc.WallpaperConsumer
 import org.osmdroid.tileprovider.cachemanager.CacheManager
 import org.osmdroid.tileprovider.modules.SqlTileWriter
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
@@ -31,7 +31,7 @@ class PreviewController : Controller() {
         val btn = view.findViewById<View>(R.id.button)
         btn.setOnClickListener {
             Thread(Runnable {
-                consumer.setWallpaper(factory.createWallpaper(map.boundingBox, map.zoomLevel))
+                consumer.apply(factory.createWallpaper(map.boundingBox, map.zoomLevel))
             }).start()
         }
         return view
@@ -39,7 +39,7 @@ class PreviewController : Controller() {
 
     override fun onActivityResumed(activity: Activity) {
         super.onActivityResumed(activity)
-        consumer = WallpaperConsumer(WallpaperManager.getInstance(activity))
+        consumer = WallpaperSaver(activity.getExternalFilesDir(null))
         map.onResume()
     }
 

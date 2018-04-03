@@ -25,14 +25,49 @@ class WallpaperFactory(private val cacheManager: CacheManager, private var tileS
                 .size
         val tilesX = tilesCoverage.size / tilesY
         val tileSize = tileSource.tileSizePixels
-        val target = Bitmap.createBitmap(tilesX * tileSize, tilesY * tileSize, Bitmap.Config.RGB_565)
+        val left = calculateLeftOffset(rect, zoom, tileSize)
+        val top = calculateTopOffset(rect, zoom, tileSize)
+        val right = calculateRightOffset(rect, zoom, tileSize)
+        val bottom = calculateBottomOffset(rect, zoom, tileSize)
+        val target = Bitmap.createBitmap(tilesX * tileSize - left - right, tilesY * tileSize - top - bottom, Bitmap.Config.RGB_565)
         val canvas = Canvas(target)
         for (i in 0 until tilesCoverage.size) {
-            val pxLeft = (i / tilesY) * tileSize.toFloat()
-            val pxTop = (i % tilesY) * tileSize.toFloat()
+            val pxLeft = (i / tilesY) * tileSize.toFloat() - left
+            val pxTop = (i % tilesY) * tileSize.toFloat() - top
             val drawable = cache.loadTile(tileSource, tilesCoverage[i]) as BitmapDrawable
+            println("Drawing tile ${MapTileIndex.getZoom(tilesCoverage[i])} / ${MapTileIndex.getX(tilesCoverage[i])} / ${MapTileIndex.getY(tilesCoverage[i])} at $pxLeft $pxTop ")
             canvas.drawBitmap(drawable.bitmap, pxLeft, pxTop, null)
         }
         return target
+    }
+
+    fun calculateLeftOffset(rect: BoundingBox, zoom: Int, tileSize: Int): Int {
+        val tileX = lonToTile(rect.lonWest, zoom)
+        val relative = tileX % 1
+        return (tileSize * relative).toInt()
+    }
+
+    fun calculateTopOffset(rect: BoundingBox, zoom: Int, tileSize: Int): Int {
+        val tileY = latToTile(rect.latNorth, zoom)
+        val relative = tileY % 1
+        return (tileSize * relative).toInt()
+    }
+
+    fun calculateRightOffset(rect: BoundingBox, zoom: Int, tileSize: Int): Int {
+        val tileX = lonToTile(rect.lonEast, zoom)
+        val relative = 1 - tileX % 1
+        return (tileSize * relative).toInt()
+    }
+
+    fun calculateBottomOffset(rect: BoundingBox, zoom: Int, tileSize: Int): Int {
+        val tileY = latToTile(rect.latSouth, zoom)
+        val relative = 1 - tileY % 1
+        return (tileSize * relative).toInt()
+    }
+
+    private fun lonToTile(lon: Double, zoom: Int) = (lon + 180) / 360 * (1 shl zoom)
+
+    private fun latToTile(lat: Double, zoom: Int): Double {
+        return (1 shl zoom) * (1 - (Math.log(Math.tan(Math.toRadians(lat)) + 1 / (Math.cos(Math.toRadians(lat))))) / Math.PI) / 2
     }
 }
