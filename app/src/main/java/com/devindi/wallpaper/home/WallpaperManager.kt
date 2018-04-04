@@ -1,4 +1,4 @@
-package com.devindi.wallpaper.preview
+package com.devindi.wallpaper.home
 
 import android.app.WallpaperManager as WallpaperManagerImpl
 import android.graphics.Bitmap

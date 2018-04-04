@@ -1,4 +1,4 @@
-package com.devindi.wallpaper.preview
+package com.devindi.wallpaper.home
 
 import android.graphics.Bitmap
 import com.devindi.wallpaper.misc.WallpaperConsumer

@@ -5,7 +5,7 @@ import android.os.Bundle
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
-import com.devindi.wallpaper.preview.PreviewController
+import com.devindi.wallpaper.home.HomeController
 import org.osmdroid.config.Configuration
 
 class MainActivity: Activity() {
@@ -24,7 +24,7 @@ class MainActivity: Activity() {
 
         router = Conductor.attachRouter(this, findViewById(R.id.container), savedInstanceState)
         if (!router.hasRootController()) {
-            router.setRoot(RouterTransaction.with(PreviewController()))
+            router.setRoot(RouterTransaction.with(HomeController()))
         }
     }
 

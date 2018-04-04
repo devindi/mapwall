@@ -1,7 +1,6 @@
-package com.devindi.wallpaper.preview
+package com.devindi.wallpaper.home
 
 import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
@@ -18,7 +17,7 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.util.TileSystem
 import org.osmdroid.views.MapView
 
-class PreviewController : Controller() {
+class HomeController : Controller() {
 
     private lateinit var map:MapView
     private lateinit var consumer: WallpaperConsumer
