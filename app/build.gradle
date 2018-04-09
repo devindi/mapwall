@@ -27,6 +27,7 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.bluelinelabs:conductor:2.1.4'
     implementation 'org.osmdroid:osmdroid-android:6.0.1'
+    implementation 'org.koin:koin-android-architecture:0.9.1'
 
     testImplementation 'junit:junit:4.12'
 
