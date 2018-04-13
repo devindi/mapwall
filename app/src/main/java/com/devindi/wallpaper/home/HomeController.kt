@@ -9,13 +9,9 @@ import android.view.ViewGroup
 import com.bluelinelabs.conductor.Controller
 import com.devindi.wallpaper.R
 import com.devindi.wallpaper.misc.SettingsRepo
-import com.devindi.wallpaper.misc.WallpaperConsumer
+
 import com.devindi.wallpaper.misc.inject
-import org.osmdroid.config.Configuration
-import org.osmdroid.tileprovider.cachemanager.CacheManager
-import org.osmdroid.tileprovider.modules.SqlTileWriter
-import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.config.IConfigurationProvider
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.util.TileSystem
 import org.osmdroid.views.MapView
@@ -24,13 +20,13 @@ import java.io.File
 class HomeController : Controller() {
 
     private lateinit var map:MapView
-    private lateinit var consumer: WallpaperConsumer
 
     private val settings: SettingsRepo by inject()
+    private val osmConfig: IConfigurationProvider by inject()
+    private val viewModel: HomeViewModel by inject()
 
     init {
-        val config = Configuration.getInstance()
-        config.osmdroidBasePath = File(settings.getMapCachePath())
+        osmConfig.osmdroidBasePath = File(settings.getMapCachePath())
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
@@ -41,35 +37,25 @@ class HomeController : Controller() {
 
     override fun onAttach(view: View) {
         super.onAttach(view)
-        showMap()
-    }
+        val tileSource = viewModel.currentTileSource
 
-    private fun showMap() {
-        map.run {
-            val tileSource = TileSourceFactory.DEFAULT_TILE_SOURCE
-            val factory = createFactory(tileSource)
-            val btn = view!!.findViewById<View>(R.id.button)
-            btn.setOnClickListener {
-                Thread(Runnable {
-                    consumer.apply(factory.createWallpaper(map.boundingBox, map.zoomLevel))
-                }).start()
-            }
+        view.findViewById<View>(R.id.button).setOnClickListener {
+            viewModel.createWallpaper(map.boundingBox, map.zoomLevel)
+        }
 
-            isVerticalMapRepetitionEnabled = false
-            setMultiTouchControls(true)
-            setBuiltInZoomControls(false)
-            setScrollableAreaLimitLatitude(TileSystem.MaxLatitude,-TileSystem.MaxLatitude, 0)
-            setTileSource(tileSource)
+        map.isVerticalMapRepetitionEnabled = false
+        map.setMultiTouchControls(true)
+        map.setBuiltInZoomControls(false)
+        map.setScrollableAreaLimitLatitude(TileSystem.MaxLatitude,-TileSystem.MaxLatitude, 0)
+        map.setTileSource(tileSource)
 
-            val metrics = DisplayMetrics()
-            activity!!.windowManager.defaultDisplay.getMetrics(metrics)
-            val screenHeight = metrics.heightPixels
-            val minZoom = calculateMinZoom(screenHeight, TileSourceFactory.DEFAULT_TILE_SOURCE.tileSizePixels)
-            minZoomLevel = minZoom
-            if (zoomLevelDouble < minZoom) {
-                controller.setZoom(minZoom)
-            }
-            onResume()
+        val metrics = DisplayMetrics()
+        activity!!.windowManager.defaultDisplay.getMetrics(metrics)
+        val screenHeight = metrics.heightPixels
+        val minZoom = calculateMinZoom(screenHeight, tileSource.tileSizePixels)
+        map.minZoomLevel = minZoom
+        if (map.zoomLevelDouble < minZoom) {
+            map.controller.setZoom(minZoom)
         }
     }
 
@@ -80,7 +66,6 @@ class HomeController : Controller() {
             outState.putDouble("lon", it.mapCenter.longitude)
             outState.putDouble("zoom", it.zoomLevelDouble)
         }
-
     }
 
     override fun onRestoreViewState(view: View, savedViewState: Bundle) {
@@ -93,18 +78,12 @@ class HomeController : Controller() {
 
     override fun onActivityResumed(activity: Activity) {
         super.onActivityResumed(activity)
-        showMap()
-        consumer = WallpaperSaver(activity.getExternalFilesDir(null))
+        map.onResume()
     }
 
     override fun onActivityPaused(activity: Activity) {
         super.onActivityPaused(activity)
         map.onPause()
-    }
-
-    private fun createFactory(tileSource: OnlineTileSourceBase):WallpaperFactory {
-        val cache = SqlTileWriter()
-        return WallpaperFactory(CacheManager(tileSource, cache, tileSource.minimumZoomLevel, tileSource.maximumZoomLevel), tileSource, cache)
     }
 
     private fun calculateMinZoom(height: Int, tileSize: Int): Double {

@@ -41,25 +41,25 @@ class WallpaperFactory(private val cacheManager: CacheManager, private var tileS
         return target
     }
 
-    fun calculateLeftOffset(rect: BoundingBox, zoom: Int, tileSize: Int): Int {
+    private fun calculateLeftOffset(rect: BoundingBox, zoom: Int, tileSize: Int): Int {
         val tileX = lonToTile(rect.lonWest, zoom)
         val relative = tileX % 1
         return (tileSize * relative).toInt()
     }
 
-    fun calculateTopOffset(rect: BoundingBox, zoom: Int, tileSize: Int): Int {
+    private fun calculateTopOffset(rect: BoundingBox, zoom: Int, tileSize: Int): Int {
         val tileY = latToTile(rect.latNorth, zoom)
         val relative = tileY % 1
         return (tileSize * relative).toInt()
     }
 
-    fun calculateRightOffset(rect: BoundingBox, zoom: Int, tileSize: Int): Int {
+    private fun calculateRightOffset(rect: BoundingBox, zoom: Int, tileSize: Int): Int {
         val tileX = lonToTile(rect.lonEast, zoom)
         val relative = 1 - tileX % 1
         return (tileSize * relative).toInt()
     }
 
-    fun calculateBottomOffset(rect: BoundingBox, zoom: Int, tileSize: Int): Int {
+    private fun calculateBottomOffset(rect: BoundingBox, zoom: Int, tileSize: Int): Int {
         val tileY = latToTile(rect.latSouth, zoom)
         val relative = 1 - tileY % 1
         return (tileSize * relative).toInt()
