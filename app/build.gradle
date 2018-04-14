@@ -3,12 +3,15 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.getkeepsafe.dexcount'
 apply plugin: 'com.vanniktech.android.apk.size'
+apply plugin: "org.sonarqube"
 
-def fabricKey = getProperty('fabricKey')
+def fabricKey = resolveProperty('fabricKey')
 
 if (fabricKey != null) {
     apply plugin: 'io.fabric'
 }
+
+def version = '0.1'
 
 android {
     compileSdkVersion 26
@@ -17,7 +20,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 26
         versionCode 1
-        versionName "1.0"
+        versionName version
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [fabricKey:"$fabricKey"]
     }
@@ -26,6 +29,14 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectVersion", version
+        property "sonar.host.url", resolveProperty('sonarUrl')
+        property "sonar.login", resolveProperty('sonarKey')
     }
 }
 
@@ -46,7 +57,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
 
-def getProperty(String key) {
+def resolveProperty(String key) {
     if (hasProperty(key)) return findProperty(key)
     Properties properties = new Properties()
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
