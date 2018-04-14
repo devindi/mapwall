@@ -2,6 +2,7 @@ package com.devindi.wallpaper
 
 import android.app.Application
 import android.app.WallpaperManager
+import android.os.Bundle
 import android.preference.PreferenceManager
 import com.devindi.wallpaper.home.HomeViewModel
 import com.devindi.wallpaper.home.WallpaperFactory
@@ -10,9 +11,14 @@ import com.devindi.wallpaper.misc.FabricReportManager
 import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.SettingsRepo
 import com.devindi.wallpaper.misc.createPermissionManager
+import com.devindi.wallpaper.search.GoogleApiClientLifecycleObserver
+import com.devindi.wallpaper.search.SearchManager
+import com.devindi.wallpaper.search.SearchViewModel
 import com.devindi.wallpaper.splash.SplashViewModel
 import com.devindi.wallpaper.storage.KeyValueStorage
 import com.devindi.wallpaper.storage.SharedPreferencesStorage
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.location.places.Places
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.startKoin
@@ -50,6 +56,24 @@ class App : Application() {
             WallpaperFactory(get { params.values }, params[PARAM_TILE_SOURCE], get(), get())
         }
         bean { FabricReportManager() as ReportManager }
+        viewModel { SearchViewModel(get()) }
+        bean { SearchManager(get()) }
+        bean {
+            GoogleApiClient.Builder(androidApplication())
+                    .addApi(Places.GEO_DATA_API)
+                    .addConnectionCallbacks(object : GoogleApiClient.ConnectionCallbacks {
+                        override fun onConnected(p0: Bundle?) {
+                            Timber.d("Connected $p0")
+                        }
+
+                        override fun onConnectionSuspended(p0: Int) {
+                            Timber.d("Suspended $p0")
+                        }
+                    })
+                    .addOnConnectionFailedListener { Timber.d("Failed $it") }
+                    .build()
+        }
+        bean { GoogleApiClientLifecycleObserver(get()) }
     }
 
     override fun onCreate() {

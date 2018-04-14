@@ -7,10 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bluelinelabs.conductor.Controller
+import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
+import com.bluelinelabs.conductor.changehandler.TransitionChangeHandler
+import com.bluelinelabs.conductor.changehandler.TransitionChangeHandlerCompat
+import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.devindi.wallpaper.R
 import com.devindi.wallpaper.misc.SettingsRepo
 
 import com.devindi.wallpaper.misc.inject
+import com.devindi.wallpaper.search.SearchController
 import org.osmdroid.config.IConfigurationProvider
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.util.TileSystem
@@ -41,6 +47,10 @@ class HomeController : Controller() {
 
         view.findViewById<View>(R.id.button).setOnClickListener {
             viewModel.createWallpaper(map.boundingBox, map.zoomLevel)
+        }
+
+        view.findViewById<View>(R.id.search_edit_fake).setOnClickListener {
+            router.pushController(RouterTransaction.with(SearchController()))
         }
 
         map.isVerticalMapRepetitionEnabled = false
