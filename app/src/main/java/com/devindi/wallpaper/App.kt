@@ -6,21 +6,26 @@ import android.preference.PreferenceManager
 import com.devindi.wallpaper.home.HomeViewModel
 import com.devindi.wallpaper.home.WallpaperFactory
 import com.devindi.wallpaper.home.createWallpaperHandler
+import com.devindi.wallpaper.misc.FabricReportManager
+import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.SettingsRepo
 import com.devindi.wallpaper.misc.createPermissionManager
 import com.devindi.wallpaper.splash.SplashViewModel
 import com.devindi.wallpaper.storage.KeyValueStorage
 import com.devindi.wallpaper.storage.SharedPreferencesStorage
 import org.koin.android.architecture.ext.viewModel
+import org.koin.android.ext.android.get
 import org.koin.android.ext.android.startKoin
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module.Module
 import org.koin.dsl.module.applicationContext
+import org.koin.log.Logger
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.cachemanager.CacheManager
 import org.osmdroid.tileprovider.modules.IFilesystemCache
 import org.osmdroid.tileprovider.modules.SqlTileWriter
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
+import timber.log.Timber
 
 const val PARAM_TILE_SOURCE = "tile"
 
@@ -42,20 +47,41 @@ class App : Application() {
                     params.get<OnlineTileSourceBase>(PARAM_TILE_SOURCE).maximumZoomLevel)
         }
         factory { params ->
-            WallpaperFactory(get { params.values }, params[PARAM_TILE_SOURCE], get())
+            WallpaperFactory(get { params.values }, params[PARAM_TILE_SOURCE], get(), get())
         }
+        bean { FabricReportManager() as ReportManager }
     }
 
     override fun onCreate() {
         super.onCreate()
 
         val config = Configuration.getInstance()
-//        config.isDebugMapTileDownloader = true
-//        config.isDebugMapView = true
-//        config.isDebugMode = true
-        config.isDebugTileProviders = true
+        config.isDebugMapTileDownloader = false
+        config.isDebugMapView = false
+        config.isDebugMode = false
+        config.isDebugTileProviders = BuildConfig.DEBUG
 
-        startKoin(this, listOf(applicationModule))
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
+
+        val koinLogger = object : Logger {
+            override fun debug(msg: String) {
+                Timber.d(msg)
+            }
+
+            override fun err(msg: String) {
+                Timber.e(msg)
+            }
+
+            override fun log(msg: String) {
+                Timber.v(msg)
+            }
+        }
+
+        startKoin(this, listOf(applicationModule), logger = koinLogger)
+        val reportManager: ReportManager = get()
+        reportManager.init(this)
     }
 }
 

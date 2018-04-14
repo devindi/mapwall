@@ -3,19 +3,23 @@ package com.devindi.wallpaper.home
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
+import com.devindi.wallpaper.misc.ReportManager
 import org.osmdroid.tileprovider.cachemanager.CacheManager
 import org.osmdroid.tileprovider.modules.IFilesystemCache
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.MapTileIndex
+import timber.log.Timber
 
-class WallpaperFactory(private val cacheManager: CacheManager, private var tileSource: OnlineTileSourceBase, private val cache: IFilesystemCache) {
+class WallpaperFactory(private val cacheManager: CacheManager, private var tileSource: OnlineTileSourceBase, private val cache: IFilesystemCache, private val reportManager: ReportManager) {
 
     fun createWallpaper(rect: BoundingBox, zoom: Int): Bitmap {
         var tilesCoverage = CacheManager.getTilesCoverage(rect, zoom)
         tilesCoverage.forEach {
             if (cacheManager.downloadingAction.tileAction(it)) {
-                throw IllegalStateException("Failed to load tile")
+                val error = IllegalStateException("Failed to load tile")
+                reportManager.reportError(error)
+                throw error
             }
         }
         tilesCoverage = tilesCoverage.sortedWith(compareBy({ MapTileIndex.getX(it) }, { MapTileIndex.getY(it) }))
@@ -35,7 +39,7 @@ class WallpaperFactory(private val cacheManager: CacheManager, private var tileS
             val pxLeft = (i / tilesY) * tileSize.toFloat() - left
             val pxTop = (i % tilesY) * tileSize.toFloat() - top
             val drawable = cache.loadTile(tileSource, tilesCoverage[i]) as BitmapDrawable
-            println("Drawing tile ${MapTileIndex.getZoom(tilesCoverage[i])} / ${MapTileIndex.getX(tilesCoverage[i])} / ${MapTileIndex.getY(tilesCoverage[i])} at $pxLeft $pxTop ")
+            Timber.d("Drawing tile ${MapTileIndex.getZoom(tilesCoverage[i])} / ${MapTileIndex.getX(tilesCoverage[i])} / ${MapTileIndex.getY(tilesCoverage[i])} at $pxLeft $pxTop ")
             canvas.drawBitmap(drawable.bitmap, pxLeft, pxTop, null)
         }
         return target

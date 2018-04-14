@@ -1,8 +1,14 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.getkeepsafe.dexcount'
+apply plugin: 'com.vanniktech.android.apk.size'
+
+def fabricKey = getProperty('fabricKey')
+
+if (fabricKey != null) {
+    apply plugin: 'io.fabric'
+}
 
 android {
     compileSdkVersion 26
@@ -13,6 +19,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [fabricKey:"$fabricKey"]
     }
     buildTypes {
         release {
@@ -28,9 +35,20 @@ dependencies {
     implementation 'com.bluelinelabs:conductor:2.1.4'
     implementation 'org.osmdroid:osmdroid-android:6.0.1'
     implementation 'org.koin:koin-android-architecture:0.9.1'
+    implementation 'com.jakewharton.timber:timber:4.7.0'
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.1@aar') {
+        transitive = true
+    }
 
     testImplementation 'junit:junit:4.12'
 
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+}
+
+def getProperty(String key) {
+    if (hasProperty(key)) return findProperty(key)
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty(key)
 }
