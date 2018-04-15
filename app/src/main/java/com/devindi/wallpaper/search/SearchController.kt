@@ -15,6 +15,11 @@ import com.devindi.wallpaper.R
 import com.devindi.wallpaper.misc.viewModel
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import timber.log.Timber
+
+interface OnPlacePickedListener {
+    fun onPlacePicked(place: Place)
+}
 
 class SearchController: LifecycleController() {
 
@@ -30,7 +35,6 @@ class SearchController: LifecycleController() {
 
     override fun onAttach(view: View) {
         super.onAttach(view)
-        viewModel.suggests().observe(this, Observer<List<PlaceSuggest>> { t -> showSuggests(t) })
         search = view.findViewById(R.id.search_edit)
         list = view.findViewById(R.id.list)
         val animation = AnimationUtils.loadAnimation(view.context, R.anim.vertical_translate)
@@ -64,6 +68,9 @@ class SearchController: LifecycleController() {
                 viewModel.requestSuggests(s.toString())
             }
         })
+
+        viewModel.suggests().observe(this, Observer<List<PlaceSuggest>> { showSuggests(it) })
+        viewModel.place().observe(this, Observer { showPlace(it) })
     }
 
     override fun onDetach(view: View) {
@@ -80,12 +87,26 @@ class SearchController: LifecycleController() {
             }
             itemView.findViewById<TextView>(R.id.title).text = suggest.title
             itemView.findViewById<TextView>(R.id.description).text = suggest.description
+            itemView.setOnClickListener {
+                viewModel.requestPlace(suggest)
+            }
         }
         list?.let {
             while (suggestsContainer.childCount > it.size) {
                 println("Remove ${it.size} by ${suggestsContainer.childCount}")
                 suggestsContainer.removeViewAt(it.size)
             }
+        }
+    }
+
+    private fun showPlace(place: Place?) {
+        Timber.d("Show $place")
+        place?.let {
+            Timber.d("Send $place")
+            (targetController as OnPlacePickedListener).onPlacePicked(it)
+            router.popCurrentController()
+            viewModel.place().value = null
+            viewModel.suggests().value = null
         }
     }
 }

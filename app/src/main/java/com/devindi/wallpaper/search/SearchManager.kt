@@ -3,9 +3,9 @@ package com.devindi.wallpaper.search
 import android.arch.lifecycle.MutableLiveData
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.places.AutocompleteFilter
-import com.google.android.gms.location.places.Place as GooglePlace
 import com.google.android.gms.location.places.Places
 import timber.log.Timber
+import com.google.android.gms.location.places.Place as GooglePlace
 
 class SearchManager(private val apiClient: GoogleApiClient) {
 
@@ -14,6 +14,7 @@ class SearchManager(private val apiClient: GoogleApiClient) {
             .build()
 
     val suggests = MutableLiveData<List<PlaceSuggest>>()
+    val place = MutableLiveData<Place>()
 
     fun requestSuggests(query: String) {
         Places.GeoDataApi.getAutocompletePredictions(apiClient, query, null, filter)
@@ -26,5 +27,17 @@ class SearchManager(private val apiClient: GoogleApiClient) {
                     }
                     it.release()
                 }
+    }
+
+    fun requestPlace(placeId: String) {
+        Places.GeoDataApi.getPlaceById(apiClient, placeId).setResultCallback {
+            if (it.status.isSuccess) {
+                it.firstOrNull()?.let { googlePlace ->
+                    Timber.d("Posting new place ${googlePlace.latLng}")
+                    place.value = Place(googlePlace.latLng.latitude, googlePlace.latLng.longitude)
+                }
+            }
+            it.release()
+        }
     }
 }

@@ -83,7 +83,7 @@ class App : Application() {
         config.isDebugMapTileDownloader = false
         config.isDebugMapView = false
         config.isDebugMode = false
-        config.isDebugTileProviders = BuildConfig.DEBUG
+        config.isDebugTileProviders = false
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
@@ -91,15 +91,15 @@ class App : Application() {
 
         val koinLogger = object : Logger {
             override fun debug(msg: String) {
-                Timber.d(msg)
+//                Timber.d(msg)
             }
 
             override fun err(msg: String) {
-                Timber.e(msg)
+//                Timber.e(msg)
             }
 
             override fun log(msg: String) {
-                Timber.v(msg)
+//                Timber.v(msg)
             }
         }
 

@@ -1,6 +1,7 @@
 package com.devindi.wallpaper.home
 
 import android.app.Activity
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.archlifecycle.LifecycleController
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.TransitionChangeHandler
 import com.bluelinelabs.conductor.changehandler.TransitionChangeHandlerCompat
@@ -16,20 +18,26 @@ import com.devindi.wallpaper.R
 import com.devindi.wallpaper.misc.SettingsRepo
 
 import com.devindi.wallpaper.misc.inject
+import com.devindi.wallpaper.misc.viewModel
+import com.devindi.wallpaper.search.OnPlacePickedListener
+import com.devindi.wallpaper.search.Place
 import com.devindi.wallpaper.search.SearchController
+import com.devindi.wallpaper.search.SearchViewModel
 import org.osmdroid.config.IConfigurationProvider
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.util.TileSystem
 import org.osmdroid.views.MapView
+import timber.log.Timber
 import java.io.File
 
-class HomeController : Controller() {
+class HomeController : LifecycleController(), OnPlacePickedListener {
 
     private lateinit var map:MapView
+    private var place: Place? = null
 
     private val settings: SettingsRepo by inject()
     private val osmConfig: IConfigurationProvider by inject()
-    private val viewModel: HomeViewModel by inject()
+    private val viewModel: HomeViewModel by viewModel()
 
     init {
         osmConfig.osmdroidBasePath = File(settings.getMapCachePath())
@@ -43,6 +51,7 @@ class HomeController : Controller() {
 
     override fun onAttach(view: View) {
         super.onAttach(view)
+        Timber.d("Attach")
         val tileSource = viewModel.currentTileSource
 
         view.findViewById<View>(R.id.button).setOnClickListener {
@@ -50,7 +59,9 @@ class HomeController : Controller() {
         }
 
         view.findViewById<View>(R.id.search_edit_fake).setOnClickListener {
-            router.pushController(RouterTransaction.with(SearchController()))
+            val target = SearchController()
+            target.targetController = this
+            router.pushController(RouterTransaction.with(target))
         }
 
         map.isVerticalMapRepetitionEnabled = false
@@ -67,6 +78,19 @@ class HomeController : Controller() {
         if (map.zoomLevelDouble < minZoom) {
             map.controller.setZoom(minZoom)
         }
+        map.onResume()
+
+        place?.let {
+            map.controller.setZoom(12.0)
+            map.controller.animateTo(GeoPoint(it.lat, it.lon))
+            place = null
+        }
+    }
+
+    override fun onDetach(view: View) {
+        super.onDetach(view)
+        Timber.d("detach")
+        map.onPause()
     }
 
     override fun onSaveViewState(view: View, outState: Bundle) {
@@ -86,14 +110,9 @@ class HomeController : Controller() {
         }
     }
 
-    override fun onActivityResumed(activity: Activity) {
-        super.onActivityResumed(activity)
-        map.onResume()
-    }
-
-    override fun onActivityPaused(activity: Activity) {
-        super.onActivityPaused(activity)
-        map.onPause()
+    override fun onPlacePicked(place: Place) {
+        Timber.d("Picked $place")
+        this.place = place
     }
 
     private fun calculateMinZoom(height: Int, tileSize: Int): Double {

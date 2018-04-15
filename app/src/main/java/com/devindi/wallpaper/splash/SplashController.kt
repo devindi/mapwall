@@ -8,18 +8,19 @@ import android.content.pm.PackageManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.archlifecycle.LifecycleController
 import com.devindi.wallpaper.home.HomeController
 import com.devindi.wallpaper.misc.PermissionManager
 import com.devindi.wallpaper.misc.inject
+import com.devindi.wallpaper.misc.viewModel
 import java.io.File
 
-class SplashController: Controller() {
+class SplashController: LifecycleController() {
 
     private val permissionManager: PermissionManager by inject()
     private val context: Context by inject()
-    private val viewModel: SplashViewModel by inject()
+    private val viewModel: SplashViewModel by viewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         return View(container.context)
