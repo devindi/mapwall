@@ -1,33 +1,24 @@
 package com.devindi.wallpaper.home
 
-import android.app.Activity
-import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.archlifecycle.LifecycleController
-import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
-import com.bluelinelabs.conductor.changehandler.TransitionChangeHandler
-import com.bluelinelabs.conductor.changehandler.TransitionChangeHandlerCompat
-import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.devindi.wallpaper.R
 import com.devindi.wallpaper.misc.SettingsRepo
-
 import com.devindi.wallpaper.misc.inject
 import com.devindi.wallpaper.misc.viewModel
 import com.devindi.wallpaper.search.OnPlacePickedListener
 import com.devindi.wallpaper.search.Place
 import com.devindi.wallpaper.search.SearchController
-import com.devindi.wallpaper.search.SearchViewModel
+import com.devindi.wallpaper.source.MapSourceController
 import org.osmdroid.config.IConfigurationProvider
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.util.TileSystem
 import org.osmdroid.views.MapView
-import timber.log.Timber
 import java.io.File
 
 class HomeController : LifecycleController(), OnPlacePickedListener {
@@ -46,13 +37,12 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         val view = inflater.inflate(R.layout.home_screen, container, false)
         map = view.findViewById(R.id.map_view)
-        return view
-    }
+        map.isVerticalMapRepetitionEnabled = false
+        map.setMultiTouchControls(true)
+        map.setBuiltInZoomControls(false)
+        map.setScrollableAreaLimitLatitude(TileSystem.MaxLatitude,-TileSystem.MaxLatitude, 0)
 
-    override fun onAttach(view: View) {
-        super.onAttach(view)
-        Timber.d("Attach")
-        val tileSource = viewModel.currentTileSource
+        val root = view.findViewById<ViewGroup>(R.id.root)
 
         view.findViewById<View>(R.id.button).setOnClickListener {
             viewModel.createWallpaper(map.boundingBox, map.zoomLevel)
@@ -64,10 +54,15 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
             router.pushController(RouterTransaction.with(target))
         }
 
-        map.isVerticalMapRepetitionEnabled = false
-        map.setMultiTouchControls(true)
-        map.setBuiltInZoomControls(false)
-        map.setScrollableAreaLimitLatitude(TileSystem.MaxLatitude,-TileSystem.MaxLatitude, 0)
+        view.findViewById<View>(R.id.btn_select_source).setOnClickListener {
+            getChildRouter(root).pushController(RouterTransaction.with(MapSourceController()))
+        }
+        return view
+    }
+
+    override fun onAttach(view: View) {
+        super.onAttach(view)
+        val tileSource = viewModel.currentTileSource
         map.setTileSource(tileSource)
 
         val metrics = DisplayMetrics()
@@ -89,7 +84,6 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
 
     override fun onDetach(view: View) {
         super.onDetach(view)
-        Timber.d("detach")
         map.onPause()
     }
 
@@ -111,7 +105,6 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
     }
 
     override fun onPlacePicked(place: Place) {
-        Timber.d("Picked $place")
         this.place = place
     }
 

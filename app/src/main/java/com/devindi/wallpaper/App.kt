@@ -7,13 +7,11 @@ import android.preference.PreferenceManager
 import com.devindi.wallpaper.home.HomeViewModel
 import com.devindi.wallpaper.home.WallpaperFactory
 import com.devindi.wallpaper.home.createWallpaperHandler
-import com.devindi.wallpaper.misc.FabricReportManager
-import com.devindi.wallpaper.misc.ReportManager
-import com.devindi.wallpaper.misc.SettingsRepo
-import com.devindi.wallpaper.misc.createPermissionManager
+import com.devindi.wallpaper.misc.*
 import com.devindi.wallpaper.search.GoogleApiClientLifecycleObserver
 import com.devindi.wallpaper.search.SearchManager
 import com.devindi.wallpaper.search.SearchViewModel
+import com.devindi.wallpaper.source.MapSourceViewModel
 import com.devindi.wallpaper.splash.SplashViewModel
 import com.devindi.wallpaper.storage.KeyValueStorage
 import com.devindi.wallpaper.storage.SharedPreferencesStorage
@@ -40,7 +38,8 @@ class App : Application() {
     private val applicationModule : Module = applicationContext {
         bean { SharedPreferencesStorage(PreferenceManager.getDefaultSharedPreferences(get())) as KeyValueStorage }
         viewModel { SplashViewModel(get()) }
-        bean { SettingsRepo(get()) }
+        bean { SettingsRepo(get(), get()) }
+        bean { TileSourceSerializer() }
         bean { createPermissionManager() }
         bean { createWallpaperHandler(WallpaperManager.getInstance(androidApplication())) }
         bean { Configuration.getInstance() }
@@ -74,6 +73,8 @@ class App : Application() {
                     .build()
         }
         bean { GoogleApiClientLifecycleObserver(get()) }
+        viewModel { MapSourceViewModel(get(), get()) }
+        bean { ConfigManager() }
     }
 
     override fun onCreate() {
