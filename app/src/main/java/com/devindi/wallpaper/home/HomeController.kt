@@ -63,8 +63,9 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
         view.findViewById<View>(R.id.btn_select_source).setOnClickListener {
 
             val pushHandler = TransitionChangeHandlerCompat(FabToDialogTransitionChangeHandler(), FadeChangeHandler(false))
+            val popHandler = TransitionChangeHandlerCompat(FabToDialogTransitionChangeHandler(), FadeChangeHandler())
 
-            router.pushController(RouterTransaction.with(DialogController()).pushChangeHandler(pushHandler))
+            router.pushController(RouterTransaction.with(DialogController()).pushChangeHandler(pushHandler).popChangeHandler(popHandler))
 //            getChildRouter(root).pushController(RouterTransaction.with(MapSourceController()))
         }
         return view
