@@ -1,5 +1,6 @@
 package com.devindi.wallpaper.home
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
@@ -7,10 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.archlifecycle.LifecycleController
+import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
+import com.bluelinelabs.conductor.changehandler.TransitionChangeHandlerCompat
 import com.devindi.wallpaper.R
 import com.devindi.wallpaper.misc.SettingsRepo
 import com.devindi.wallpaper.misc.inject
 import com.devindi.wallpaper.misc.viewModel
+import com.devindi.wallpaper.sample.dialog.DialogController
+import com.devindi.wallpaper.sample.dialog.FabToDialogTransitionChangeHandler
 import com.devindi.wallpaper.search.OnPlacePickedListener
 import com.devindi.wallpaper.search.Place
 import com.devindi.wallpaper.search.SearchController
@@ -34,6 +39,7 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
         osmConfig.osmdroidBasePath = File(settings.getMapCachePath())
     }
 
+    @SuppressLint("NewApi")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         val view = inflater.inflate(R.layout.home_screen, container, false)
         map = view.findViewById(R.id.map_view)
@@ -55,7 +61,11 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
         }
 
         view.findViewById<View>(R.id.btn_select_source).setOnClickListener {
-            getChildRouter(root).pushController(RouterTransaction.with(MapSourceController()))
+
+            val pushHandler = TransitionChangeHandlerCompat(FabToDialogTransitionChangeHandler(), FadeChangeHandler(false))
+
+            router.pushController(RouterTransaction.with(DialogController()).pushChangeHandler(pushHandler))
+//            getChildRouter(root).pushController(RouterTransaction.with(MapSourceController()))
         }
         return view
     }
