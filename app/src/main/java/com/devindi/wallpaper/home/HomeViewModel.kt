@@ -3,6 +3,7 @@ package com.devindi.wallpaper.home
 import android.arch.lifecycle.ViewModel
 import com.devindi.wallpaper.PARAM_TILE_SOURCE
 import com.devindi.wallpaper.misc.get
+import com.devindi.wallpaper.model.map.WallpaperFactory
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.BoundingBox

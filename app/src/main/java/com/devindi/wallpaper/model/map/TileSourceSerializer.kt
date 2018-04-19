@@ -1,4 +1,4 @@
-package com.devindi.wallpaper.misc
+package com.devindi.wallpaper.model.map
 
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory

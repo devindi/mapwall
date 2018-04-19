@@ -1,4 +1,4 @@
-package com.devindi.wallpaper.misc
+package com.devindi.wallpaper.model.config
 
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import timber.log.Timber

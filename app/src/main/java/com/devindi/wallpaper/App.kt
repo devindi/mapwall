@@ -5,22 +5,26 @@ import android.app.WallpaperManager
 import android.os.Bundle
 import android.preference.PreferenceManager
 import com.devindi.wallpaper.home.HomeViewModel
-import com.devindi.wallpaper.home.WallpaperFactory
+import com.devindi.wallpaper.model.map.WallpaperFactory
 import com.devindi.wallpaper.home.createWallpaperHandler
 import com.devindi.wallpaper.misc.*
+import com.devindi.wallpaper.model.SettingsRepo
+import com.devindi.wallpaper.model.config.ConfigManager
+import com.devindi.wallpaper.model.map.MapSource
+import com.devindi.wallpaper.model.map.TileRequestHandler
+import com.devindi.wallpaper.model.map.TileSourceSerializer
 import com.devindi.wallpaper.search.GoogleApiClientLifecycleObserver
 import com.devindi.wallpaper.search.SearchManager
 import com.devindi.wallpaper.search.SearchViewModel
 import com.devindi.wallpaper.source.MapSourceViewModel
 import com.devindi.wallpaper.splash.SplashViewModel
-import com.devindi.wallpaper.storage.KeyValueStorage
-import com.devindi.wallpaper.storage.SharedPreferencesStorage
+import com.devindi.wallpaper.model.storage.KeyValueStorage
+import com.devindi.wallpaper.model.storage.SharedPreferencesStorage
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.places.Places
 import com.squareup.picasso.Picasso
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.android.get
-import org.koin.android.ext.android.inject
 import org.koin.android.ext.android.startKoin
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module.Module
@@ -92,9 +96,6 @@ class App : Application() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
-
-
-
 
         val koinLogger = object : Logger {
             override fun debug(msg: String) {

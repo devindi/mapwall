@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.devindi.wallpaper.misc;
+package com.devindi.wallpaper.misc.anim;
 
 import android.annotation.TargetApi;
 import android.content.Context;

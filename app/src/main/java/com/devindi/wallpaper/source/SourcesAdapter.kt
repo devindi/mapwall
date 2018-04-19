@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.devindi.wallpaper.R
-import com.devindi.wallpaper.misc.MapSource
+import com.devindi.wallpaper.model.map.MapSource
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.map_source_item.view.*
 

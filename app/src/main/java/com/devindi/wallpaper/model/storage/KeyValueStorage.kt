@@ -1,4 +1,4 @@
-package com.devindi.wallpaper.storage
+package com.devindi.wallpaper.model.storage
 
 import android.content.SharedPreferences
 import kotlin.reflect.KClass

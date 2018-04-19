@@ -11,10 +11,10 @@ import com.bluelinelabs.conductor.archlifecycle.LifecycleController
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.TransitionChangeHandlerCompat
 import com.devindi.wallpaper.R
-import com.devindi.wallpaper.misc.SettingsRepo
+import com.devindi.wallpaper.model.SettingsRepo
 import com.devindi.wallpaper.misc.inject
 import com.devindi.wallpaper.misc.viewModel
-import com.devindi.wallpaper.misc.FabToDialogTransitionChangeHandler
+import com.devindi.wallpaper.misc.anim.FabToDialogTransitionChangeHandler
 import com.devindi.wallpaper.search.OnPlacePickedListener
 import com.devindi.wallpaper.search.Place
 import com.devindi.wallpaper.search.SearchController

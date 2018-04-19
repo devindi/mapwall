@@ -2,9 +2,8 @@ package com.devindi.wallpaper.source
 
 import android.arch.lifecycle.MediatorLiveData
 import android.arch.lifecycle.ViewModel
-import com.devindi.wallpaper.misc.Config
-import com.devindi.wallpaper.misc.ConfigManager
-import com.devindi.wallpaper.misc.SettingsRepo
+import com.devindi.wallpaper.model.config.ConfigManager
+import com.devindi.wallpaper.model.SettingsRepo
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 
 class MapSourceViewModel(private val settings: SettingsRepo, private val configManager: ConfigManager): ViewModel() {

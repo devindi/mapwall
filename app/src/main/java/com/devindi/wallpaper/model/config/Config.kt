@@ -1,5 +1,7 @@
-package com.devindi.wallpaper.misc
+package com.devindi.wallpaper.model.config
 
+import com.devindi.wallpaper.misc.ConstLiveData
+import com.devindi.wallpaper.model.map.MapSource
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 
 class Config(defaultSource: OnlineTileSourceBase) {

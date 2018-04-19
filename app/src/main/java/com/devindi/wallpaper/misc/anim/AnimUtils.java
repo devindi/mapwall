@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.devindi.wallpaper.misc;
+package com.devindi.wallpaper.misc.anim;
 
 import android.animation.Animator;
 import android.animation.TimeInterpolator;

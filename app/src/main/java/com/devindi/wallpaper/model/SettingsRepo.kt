@@ -1,8 +1,9 @@
-package com.devindi.wallpaper.misc
+package com.devindi.wallpaper.model
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import com.devindi.wallpaper.storage.KeyValueStorage
+import com.devindi.wallpaper.model.map.TileSourceSerializer
+import com.devindi.wallpaper.model.storage.KeyValueStorage
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 
 private const val OSM_CACHE_PATH = "osm"

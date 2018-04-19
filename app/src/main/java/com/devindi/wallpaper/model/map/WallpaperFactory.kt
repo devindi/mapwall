@@ -1,4 +1,4 @@
-package com.devindi.wallpaper.home
+package com.devindi.wallpaper.model.map
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -11,6 +11,7 @@ import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.MapTileIndex
 import timber.log.Timber
 
+@Deprecated("Use MapAreManager")
 class WallpaperFactory(private val cacheManager: CacheManager, private var tileSource: OnlineTileSourceBase, private val cache: IFilesystemCache, private val reportManager: ReportManager) {
 
     fun createWallpaper(rect: BoundingBox, zoom: Int): Bitmap {

@@ -1,6 +1,6 @@
-package com.devindi.wallpaper.misc
+package com.devindi.wallpaper.model.map
 
-import com.devindi.wallpaper.home.WallpaperFactory
+import com.devindi.wallpaper.model.map.WallpaperFactory
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Request
 import com.squareup.picasso.RequestHandler
