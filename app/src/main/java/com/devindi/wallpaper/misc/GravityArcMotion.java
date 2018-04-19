@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.devindi.wallpaper.sample.dialog;
+package com.devindi.wallpaper.misc;
 
 import android.annotation.TargetApi;
 import android.content.Context;

@@ -30,7 +30,10 @@ class MapSourceController: LifecycleController(), OnItemClickListener {
         listView.adapter = adapter
 
         view.findViewById<View>(R.id.btn_close).setOnClickListener {
-            Timber.d("Click close")
+            router.popCurrentController()
+        }
+
+        view.findViewById<View>(R.id.dialog_window).setOnClickListener {
             router.popCurrentController()
         }
 

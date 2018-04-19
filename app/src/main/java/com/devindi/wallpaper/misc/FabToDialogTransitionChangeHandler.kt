@@ -1,4 +1,4 @@
-package com.devindi.wallpaper.sample.dialog
+package com.devindi.wallpaper.misc
 
 import android.os.Build
 import android.support.annotation.RequiresApi
@@ -9,8 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.bluelinelabs.conductor.changehandler.TransitionChangeHandler
 import com.devindi.wallpaper.R
-import android.R.transition
-
+import com.devindi.wallpaper.misc.AnimUtils
+import com.devindi.wallpaper.misc.FabTransform
 
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)

@@ -1,4 +1,4 @@
-package com.devindi.wallpaper.sample.dialog;
+package com.devindi.wallpaper.misc;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

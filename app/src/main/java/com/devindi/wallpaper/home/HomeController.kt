@@ -14,8 +14,7 @@ import com.devindi.wallpaper.R
 import com.devindi.wallpaper.misc.SettingsRepo
 import com.devindi.wallpaper.misc.inject
 import com.devindi.wallpaper.misc.viewModel
-import com.devindi.wallpaper.sample.dialog.DialogController
-import com.devindi.wallpaper.sample.dialog.FabToDialogTransitionChangeHandler
+import com.devindi.wallpaper.misc.FabToDialogTransitionChangeHandler
 import com.devindi.wallpaper.search.OnPlacePickedListener
 import com.devindi.wallpaper.search.Place
 import com.devindi.wallpaper.search.SearchController
@@ -65,8 +64,7 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
             val pushHandler = TransitionChangeHandlerCompat(FabToDialogTransitionChangeHandler(), FadeChangeHandler(false))
             val popHandler = TransitionChangeHandlerCompat(FabToDialogTransitionChangeHandler(), FadeChangeHandler())
 
-            router.pushController(RouterTransaction.with(DialogController()).pushChangeHandler(pushHandler).popChangeHandler(popHandler))
-//            getChildRouter(root).pushController(RouterTransaction.with(MapSourceController()))
+            router.pushController(RouterTransaction.with(MapSourceController()).pushChangeHandler(pushHandler).popChangeHandler(popHandler))
         }
         return view
     }
