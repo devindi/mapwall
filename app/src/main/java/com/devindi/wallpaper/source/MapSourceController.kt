@@ -8,19 +8,21 @@ import android.view.ViewGroup
 import com.bluelinelabs.conductor.archlifecycle.LifecycleController
 import com.devindi.wallpaper.R
 import com.devindi.wallpaper.misc.viewModel
+import com.devindi.wallpaper.model.map.MapSource
 import kotlinx.android.synthetic.main.map_source_screen.view.*
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 import timber.log.Timber
 
-class MapSourceController: LifecycleController(), OnItemClickListener {
-
-    override fun onItemClick(position: Int, view: View) {
-        Timber.d("OnItemClick $position")
-    }
+class MapSourceController: LifecycleController() {
 
     private val viewModel: MapSourceViewModel by viewModel()
 
-    private val adapter = SourcesAdapter(this)
+    private val adapter = SourcesAdapter(object : OnItemClickListener {
+        override fun onItemClick(position: Int, view: View) {
+            TODO()
+//            viewModel.setCurrentSource()
+        }
+    })
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         val view = inflater.inflate(R.layout.map_source_screen, container, false)
@@ -45,7 +47,7 @@ class MapSourceController: LifecycleController(), OnItemClickListener {
     override fun onAttach(view: View) {
         super.onAttach(view)
         Timber.d("Attach")
-        viewModel.currentMapSource.observe(this, Observer<OnlineTileSourceBase> { Timber.d("New tile source: $it") })
+        viewModel.currentMapSource.observe(this, Observer<MapSource> { Timber.d("New tile source: $it") })
     }
 
     override fun onDetach(view: View) {

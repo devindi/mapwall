@@ -2,6 +2,7 @@ package com.devindi.wallpaper.model
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import com.devindi.wallpaper.model.map.MapSource
 import com.devindi.wallpaper.model.map.TileSourceSerializer
 import com.devindi.wallpaper.model.storage.KeyValueStorage
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
@@ -9,14 +10,14 @@ import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 private const val OSM_CACHE_PATH = "osm"
 private const val OSM_TILE_SOURCE = "tile_source"
 
-class SettingsRepo(private val storage: KeyValueStorage, private val serializer: TileSourceSerializer) {
+class SettingsRepo(private val storage: KeyValueStorage) {
 
-    private val currentMapSource = MutableLiveData<OnlineTileSourceBase>()
+    private val currentMapSource = MutableLiveData<MapSource>()
 
     init {
         val serialized = storage.read(OSM_TILE_SOURCE, String::class)
         if (serialized != null) {
-            currentMapSource.value = serializer.deserialize(serialized)
+            currentMapSource.value = MapSource("id", "title")
         }
     }
 
@@ -28,11 +29,10 @@ class SettingsRepo(private val storage: KeyValueStorage, private val serializer:
         storage.save(OSM_CACHE_PATH, path)
     }
 
-    fun setCurrentMapSource(source: OnlineTileSourceBase) {
+    fun setCurrentMapSource(source: MapSource) {
         currentMapSource.value = source
-        val serialized = serializer.serialize(source)
-        storage.save(OSM_TILE_SOURCE, serialized)
+        storage.save(OSM_TILE_SOURCE, "id")
     }
 
-    fun currentMapSource(): LiveData<OnlineTileSourceBase?>  = currentMapSource
+    fun currentMapSource(): LiveData<MapSource?>  = currentMapSource
 }
