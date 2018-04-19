@@ -1,5 +1,6 @@
 package com.devindi.wallpaper.source
 
+import android.net.Uri
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.devindi.wallpaper.R
 import com.devindi.wallpaper.misc.MapSource
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.map_source_item.view.*
 
 class SourcesAdapter(private val clickListener: OnItemClickListener): RecyclerView.Adapter<SourceViewHolder>() {
@@ -24,6 +26,7 @@ class SourcesAdapter(private val clickListener: OnItemClickListener): RecyclerVi
 
     override fun onBindViewHolder(holder: SourceViewHolder, position: Int) {
         holder.titleView.text = oldItems[position].title
+        Picasso.with(holder.itemView.context).load(createThumbUri(oldItems[position])).into(holder.imgView)
     }
 
     fun setItems(items: List<MapSource>) {
@@ -46,6 +49,10 @@ class SourcesAdapter(private val clickListener: OnItemClickListener): RecyclerVi
 
         diff.dispatchUpdatesTo(this)
         oldItems = items
+    }
+
+    private fun createThumbUri(mapSource: MapSource): Uri {
+        return Uri.parse("osm://mapnik?latN=0&latS=1&lonW=-1&lonE=1")
     }
 }
 

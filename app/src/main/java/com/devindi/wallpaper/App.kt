@@ -17,8 +17,10 @@ import com.devindi.wallpaper.storage.KeyValueStorage
 import com.devindi.wallpaper.storage.SharedPreferencesStorage
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.places.Places
+import com.squareup.picasso.Picasso
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.android.get
+import org.koin.android.ext.android.inject
 import org.koin.android.ext.android.startKoin
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module.Module
@@ -29,6 +31,7 @@ import org.osmdroid.tileprovider.cachemanager.CacheManager
 import org.osmdroid.tileprovider.modules.IFilesystemCache
 import org.osmdroid.tileprovider.modules.SqlTileWriter
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import timber.log.Timber
 
 const val PARAM_TILE_SOURCE = "tile"
@@ -90,6 +93,9 @@ class App : Application() {
             Timber.plant(Timber.DebugTree())
         }
 
+
+
+
         val koinLogger = object : Logger {
             override fun debug(msg: String) {
 //                Timber.d(msg)
@@ -107,6 +113,11 @@ class App : Application() {
         startKoin(this, listOf(applicationModule), logger = koinLogger)
         val reportManager: ReportManager = get()
         reportManager.init(this)
+
+        val factory: WallpaperFactory = get { mapOf(PARAM_TILE_SOURCE to TileSourceFactory.DEFAULT_TILE_SOURCE) }
+
+        val picasso = Picasso.Builder(this).loggingEnabled(true).addRequestHandler(TileRequestHandler(factory)).listener { _, uri, exception -> Timber.e(exception, "Failed to load $uri") }.build()
+        Picasso.setSingletonInstance(picasso)
     }
 }
 
