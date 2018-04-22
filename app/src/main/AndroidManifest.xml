@@ -30,6 +30,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="${googleKey}" />
 
+        <meta-data
+            android:name="THUNDERFOREST_MAPID"
+            android:value="${thunderforestKey}" />
+
     </application>
 
 

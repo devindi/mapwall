@@ -5,20 +5,21 @@ import android.app.WallpaperManager
 import android.os.Bundle
 import android.preference.PreferenceManager
 import com.devindi.wallpaper.home.HomeViewModel
-import com.devindi.wallpaper.home.WallpaperFactory
 import com.devindi.wallpaper.home.createWallpaperHandler
-import com.devindi.wallpaper.misc.FabricReportManager
-import com.devindi.wallpaper.misc.ReportManager
-import com.devindi.wallpaper.misc.SettingsRepo
-import com.devindi.wallpaper.misc.createPermissionManager
+import com.devindi.wallpaper.misc.*
+import com.devindi.wallpaper.model.SettingsRepo
+import com.devindi.wallpaper.model.config.ConfigManager
+import com.devindi.wallpaper.model.map.*
 import com.devindi.wallpaper.search.GoogleApiClientLifecycleObserver
 import com.devindi.wallpaper.search.SearchManager
 import com.devindi.wallpaper.search.SearchViewModel
+import com.devindi.wallpaper.source.MapSourceViewModel
 import com.devindi.wallpaper.splash.SplashViewModel
-import com.devindi.wallpaper.storage.KeyValueStorage
-import com.devindi.wallpaper.storage.SharedPreferencesStorage
+import com.devindi.wallpaper.model.storage.KeyValueStorage
+import com.devindi.wallpaper.model.storage.SharedPreferencesStorage
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.places.Places
+import com.squareup.picasso.Picasso
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.startKoin
@@ -40,12 +41,12 @@ class App : Application() {
     private val applicationModule : Module = applicationContext {
         bean { SharedPreferencesStorage(PreferenceManager.getDefaultSharedPreferences(get())) as KeyValueStorage }
         viewModel { SplashViewModel(get()) }
-        bean { SettingsRepo(get()) }
+        bean { SettingsRepo(get(), get()) }
         bean { createPermissionManager() }
         bean { createWallpaperHandler(WallpaperManager.getInstance(androidApplication())) }
         bean { Configuration.getInstance() }
         bean { SqlTileWriter() as IFilesystemCache }
-        viewModel { HomeViewModel(get()) }
+        viewModel { HomeViewModel(get(), get(), get()) }
         factory { params ->
             CacheManager(params.get<OnlineTileSourceBase>(PARAM_TILE_SOURCE),
                     get(),
@@ -74,6 +75,12 @@ class App : Application() {
                     .build()
         }
         bean { GoogleApiClientLifecycleObserver(get()) }
+        viewModel { MapSourceViewModel(get(), get()) }
+        bean { ConfigManager() }
+        bean { SyncMapTileProvider(get(), get()) }
+        bean { MapAreaManager(get(), get()) }
+        bean { CacheManagerFactory(get()) }
+        bean { TileSourceFactory(get()) }
     }
 
     override fun onCreate() {
@@ -106,6 +113,11 @@ class App : Application() {
         startKoin(this, listOf(applicationModule), logger = koinLogger)
         val reportManager: ReportManager = get()
         reportManager.init(this)
+
+        val manager: MapAreaManager = get()
+
+        val picasso = Picasso.Builder(this).loggingEnabled(true).addRequestHandler(TileRequestHandler(manager)).listener { _, uri, exception -> Timber.e(exception, "Failed to load $uri") }.build()
+        Picasso.setSingletonInstance(picasso)
     }
 }
 

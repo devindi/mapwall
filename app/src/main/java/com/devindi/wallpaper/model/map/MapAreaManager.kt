@@ -1,27 +1,17 @@
-package com.devindi.wallpaper.home
+package com.devindi.wallpaper.model.map
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.drawable.BitmapDrawable
-import com.devindi.wallpaper.misc.ReportManager
 import org.osmdroid.tileprovider.cachemanager.CacheManager
-import org.osmdroid.tileprovider.modules.IFilesystemCache
-import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.MapTileIndex
 import timber.log.Timber
 
-class WallpaperFactory(private val cacheManager: CacheManager, private var tileSource: OnlineTileSourceBase, private val cache: IFilesystemCache, private val reportManager: ReportManager) {
+class MapAreaManager(private val tileProvider: SyncMapTileProvider, private val sourceFactory: TileSourceFactory) {
 
-    fun createWallpaper(rect: BoundingBox, zoom: Int): Bitmap {
-        var tilesCoverage = CacheManager.getTilesCoverage(rect, zoom)
-        tilesCoverage.forEach {
-            if (cacheManager.downloadingAction.tileAction(it)) {
-                val error = IllegalStateException("Failed to load tile")
-                reportManager.reportError(error)
-                throw error
-            }
-        }
+    fun generateBitmap(sourceId: String, area: BoundingBox, zoom: Int): Bitmap {
+        val tileSource = sourceFactory.getTileSource(sourceId)
+        var tilesCoverage = CacheManager.getTilesCoverage(area, zoom)
         tilesCoverage = tilesCoverage.sortedWith(compareBy({ MapTileIndex.getX(it) }, { MapTileIndex.getY(it) }))
         val startX = MapTileIndex.getX(tilesCoverage[0])
         val tilesY = tilesCoverage
@@ -29,20 +19,24 @@ class WallpaperFactory(private val cacheManager: CacheManager, private var tileS
                 .size
         val tilesX = tilesCoverage.size / tilesY
         val tileSize = tileSource.tileSizePixels
-        val left = calculateLeftOffset(rect, zoom, tileSize)
-        val top = calculateTopOffset(rect, zoom, tileSize)
-        val right = calculateRightOffset(rect, zoom, tileSize)
-        val bottom = calculateBottomOffset(rect, zoom, tileSize)
+        val left = calculateLeftOffset(area, zoom, tileSize)
+        val top = calculateTopOffset(area, zoom, tileSize)
+        val right = calculateRightOffset(area, zoom, tileSize)
+        val bottom = calculateBottomOffset(area, zoom, tileSize)
         val target = Bitmap.createBitmap(tilesX * tileSize - left - right, tilesY * tileSize - top - bottom, Bitmap.Config.RGB_565)
         val canvas = Canvas(target)
         for (i in 0 until tilesCoverage.size) {
             val pxLeft = (i / tilesY) * tileSize.toFloat() - left
             val pxTop = (i % tilesY) * tileSize.toFloat() - top
-            val drawable = cache.loadTile(tileSource, tilesCoverage[i]) as BitmapDrawable
+            val bitmap = tileProvider.getTile(tileSource, tilesCoverage[i])
             Timber.d("Drawing tile ${MapTileIndex.getZoom(tilesCoverage[i])} / ${MapTileIndex.getX(tilesCoverage[i])} / ${MapTileIndex.getY(tilesCoverage[i])} at $pxLeft $pxTop ")
-            canvas.drawBitmap(drawable.bitmap, pxLeft, pxTop, null)
+            canvas.drawBitmap(bitmap, pxLeft, pxTop, null)
         }
         return target
+    }
+
+    fun generateBitmap(sourceId: String, north: Double, east: Double, south: Double, west: Double, zoom: Int): Bitmap {
+        return generateBitmap(sourceId, BoundingBox(north, east, south, west), zoom)
     }
 
     private fun calculateLeftOffset(rect: BoundingBox, zoom: Int, tileSize: Int): Int {

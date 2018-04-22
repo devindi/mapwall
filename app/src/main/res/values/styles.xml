@@ -1,11 +1,17 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+    <color name="dialog_background">#fafafa</color>
+    <dimen name="dialog_elevation">6dp</dimen>
+    <dimen name="dialog_corners">2dp</dimen>
+    <color name="immersive_background">#88000000</color>
+    <string name="fab_dialog_transition_name">transition.fab</string>
 
 </resources>
