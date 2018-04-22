@@ -36,7 +36,9 @@ import java.util.ArrayList;
 
 /**
  * Utility methods for working with animations.
+ * Copied from conductor demo
  */
+@SuppressWarnings({"squid:ModifiersOrderCheck", "squid:S1319", "squid:CommentedOutCodeLine", })
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 public class AnimUtils {
 

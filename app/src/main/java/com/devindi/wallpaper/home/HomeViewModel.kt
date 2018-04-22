@@ -5,7 +5,9 @@ import com.devindi.wallpaper.model.SettingsRepo
 import com.devindi.wallpaper.model.map.MapAreaManager
 import org.osmdroid.util.BoundingBox
 
-class HomeViewModel(private val manager: MapAreaManager, private val handler: WallpaperHandler, settings: SettingsRepo): ViewModel() {
+class HomeViewModel(private val manager: MapAreaManager,
+                    private val handler: WallpaperHandler,
+                    settings: SettingsRepo): ViewModel() {
 
     var currentTileSource = settings.currentMapSource()
 

@@ -28,7 +28,11 @@ import org.osmdroid.util.TileSystem
 import org.osmdroid.views.MapView
 import java.io.File
 
+private const val PLACE_ZOOM = 12.0
+
 class HomeController : LifecycleController(), OnPlacePickedListener {
+
+
 
     private lateinit var map:MapView
     private var place: Place? = null
@@ -78,10 +82,15 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
 
         view.findViewById<View>(R.id.btn_select_source).setOnClickListener {
 
-            val pushHandler = TransitionChangeHandlerCompat(FabToDialogTransitionChangeHandler(), FadeChangeHandler(false))
-            val popHandler = TransitionChangeHandlerCompat(FabToDialogTransitionChangeHandler(), FadeChangeHandler())
+            val pushHandler = TransitionChangeHandlerCompat(
+                    FabToDialogTransitionChangeHandler(),
+                    FadeChangeHandler(false))
+            val popHandler = TransitionChangeHandlerCompat(
+                    FabToDialogTransitionChangeHandler(),
+                    FadeChangeHandler())
 
-            router.pushController(RouterTransaction.with(MapSourceController()).pushChangeHandler(pushHandler).popChangeHandler(popHandler))
+            router.pushController(RouterTransaction.with(MapSourceController())
+                    .pushChangeHandler(pushHandler).popChangeHandler(popHandler))
         }
         return view
     }
@@ -91,7 +100,7 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
         map.onResume()
 
         place?.let {
-            map.controller.setZoom(12.0)
+            map.controller.setZoom(PLACE_ZOOM)
             map.controller.animateTo(GeoPoint(it.lat, it.lon))
             place = null
         }

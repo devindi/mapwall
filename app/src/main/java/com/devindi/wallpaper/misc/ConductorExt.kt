@@ -1,3 +1,4 @@
+@file:SuppressWarnings("detekt-kotlin:MatchingDeclarationName")
 package com.devindi.wallpaper.misc
 
 import android.arch.lifecycle.ViewModel

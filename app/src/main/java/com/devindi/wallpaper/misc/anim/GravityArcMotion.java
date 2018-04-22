@@ -33,7 +33,6 @@ import android.util.AttributeSet;
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class GravityArcMotion extends ArcMotion {
 
-    private static final float DEFAULT_MIN_ANGLE_DEGREES = 0;
     private static final float DEFAULT_MAX_ANGLE_DEGREES = 70;
     private static final float DEFAULT_MAX_TANGENT = (float)
             Math.tan(Math.toRadians(DEFAULT_MAX_ANGLE_DEGREES/2));
