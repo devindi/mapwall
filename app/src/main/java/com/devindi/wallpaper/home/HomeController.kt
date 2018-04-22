@@ -1,6 +1,7 @@
 package com.devindi.wallpaper.home
 
 import android.annotation.SuppressLint
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
@@ -15,6 +16,8 @@ import com.devindi.wallpaper.model.SettingsRepo
 import com.devindi.wallpaper.misc.inject
 import com.devindi.wallpaper.misc.viewModel
 import com.devindi.wallpaper.misc.anim.FabToDialogTransitionChangeHandler
+import com.devindi.wallpaper.model.map.MapSource
+import com.devindi.wallpaper.model.map.TileSourceFactory
 import com.devindi.wallpaper.search.OnPlacePickedListener
 import com.devindi.wallpaper.search.Place
 import com.devindi.wallpaper.search.SearchController
@@ -33,6 +36,7 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
     private val settings: SettingsRepo by inject()
     private val osmConfig: IConfigurationProvider by inject()
     private val viewModel: HomeViewModel by viewModel()
+    private val factory: TileSourceFactory by inject()
 
     init {
         osmConfig.osmdroidBasePath = File(settings.getMapCachePath())
@@ -47,11 +51,24 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
         map.setBuiltInZoomControls(false)
         map.setScrollableAreaLimitLatitude(TileSystem.MaxLatitude,-TileSystem.MaxLatitude, 0)
 
-        val root = view.findViewById<ViewGroup>(R.id.root)
-
         view.findViewById<View>(R.id.button).setOnClickListener {
             viewModel.createWallpaper(map.boundingBox, map.zoomLevel)
         }
+
+        viewModel.currentTileSource.observe(this, Observer<MapSource> { t ->
+            val tileSource = factory.getTileSource(t!!.id)
+            map.setTileSource(tileSource)
+
+            val metrics = DisplayMetrics()
+            activity!!.windowManager.defaultDisplay.getMetrics(metrics)
+            val screenHeight = metrics.heightPixels
+
+            val minZoom = calculateMinZoom(screenHeight, tileSource.tileSizePixels)
+            map.minZoomLevel = minZoom
+            if (map.zoomLevelDouble < minZoom) {
+                map.controller.setZoom(minZoom)
+            }
+        })
 
         view.findViewById<View>(R.id.search_edit_fake).setOnClickListener {
             val target = SearchController()
@@ -71,17 +88,6 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
 
     override fun onAttach(view: View) {
         super.onAttach(view)
-        val tileSource = viewModel.currentTileSource
-        map.setTileSource(tileSource)
-
-        val metrics = DisplayMetrics()
-        activity!!.windowManager.defaultDisplay.getMetrics(metrics)
-        val screenHeight = metrics.heightPixels
-        val minZoom = calculateMinZoom(screenHeight, tileSource.tileSizePixels)
-        map.minZoomLevel = minZoom
-        if (map.zoomLevelDouble < minZoom) {
-            map.controller.setZoom(minZoom)
-        }
         map.onResume()
 
         place?.let {

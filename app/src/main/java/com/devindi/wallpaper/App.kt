@@ -5,14 +5,11 @@ import android.app.WallpaperManager
 import android.os.Bundle
 import android.preference.PreferenceManager
 import com.devindi.wallpaper.home.HomeViewModel
-import com.devindi.wallpaper.model.map.WallpaperFactory
 import com.devindi.wallpaper.home.createWallpaperHandler
 import com.devindi.wallpaper.misc.*
 import com.devindi.wallpaper.model.SettingsRepo
 import com.devindi.wallpaper.model.config.ConfigManager
-import com.devindi.wallpaper.model.map.MapSource
-import com.devindi.wallpaper.model.map.TileRequestHandler
-import com.devindi.wallpaper.model.map.TileSourceSerializer
+import com.devindi.wallpaper.model.map.*
 import com.devindi.wallpaper.search.GoogleApiClientLifecycleObserver
 import com.devindi.wallpaper.search.SearchManager
 import com.devindi.wallpaper.search.SearchViewModel
@@ -35,7 +32,6 @@ import org.osmdroid.tileprovider.cachemanager.CacheManager
 import org.osmdroid.tileprovider.modules.IFilesystemCache
 import org.osmdroid.tileprovider.modules.SqlTileWriter
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import timber.log.Timber
 
 const val PARAM_TILE_SOURCE = "tile"
@@ -46,12 +42,11 @@ class App : Application() {
         bean { SharedPreferencesStorage(PreferenceManager.getDefaultSharedPreferences(get())) as KeyValueStorage }
         viewModel { SplashViewModel(get()) }
         bean { SettingsRepo(get(), get()) }
-        bean { TileSourceSerializer() }
         bean { createPermissionManager() }
         bean { createWallpaperHandler(WallpaperManager.getInstance(androidApplication())) }
         bean { Configuration.getInstance() }
         bean { SqlTileWriter() as IFilesystemCache }
-        viewModel { HomeViewModel(get()) }
+        viewModel { HomeViewModel(get(), get(), get()) }
         factory { params ->
             CacheManager(params.get<OnlineTileSourceBase>(PARAM_TILE_SOURCE),
                     get(),
@@ -82,6 +77,10 @@ class App : Application() {
         bean { GoogleApiClientLifecycleObserver(get()) }
         viewModel { MapSourceViewModel(get(), get()) }
         bean { ConfigManager() }
+        bean { SyncMapTileProvider(get(), get()) }
+        bean { MapAreaManager(get(), get()) }
+        bean { CacheManagerFactory(get()) }
+        bean { TileSourceFactory(get()) }
     }
 
     override fun onCreate() {
@@ -115,9 +114,9 @@ class App : Application() {
         val reportManager: ReportManager = get()
         reportManager.init(this)
 
-        val factory: WallpaperFactory = get { mapOf(PARAM_TILE_SOURCE to TileSourceFactory.DEFAULT_TILE_SOURCE) }
+        val manager: MapAreaManager = get()
 
-        val picasso = Picasso.Builder(this).loggingEnabled(true).addRequestHandler(TileRequestHandler(factory)).listener { _, uri, exception -> Timber.e(exception, "Failed to load $uri") }.build()
+        val picasso = Picasso.Builder(this).loggingEnabled(true).addRequestHandler(TileRequestHandler(manager)).listener { _, uri, exception -> Timber.e(exception, "Failed to load $uri") }.build()
         Picasso.setSingletonInstance(picasso)
     }
 }

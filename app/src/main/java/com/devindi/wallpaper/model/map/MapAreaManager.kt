@@ -3,16 +3,14 @@ package com.devindi.wallpaper.model.map
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import org.osmdroid.tileprovider.cachemanager.CacheManager
-import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.MapTileIndex
 import timber.log.Timber
 
-class MapAreaManager(private val tileProvider: SyncMapTileProvider) {
+class MapAreaManager(private val tileProvider: SyncMapTileProvider, private val sourceFactory: TileSourceFactory) {
 
     fun generateBitmap(sourceId: String, area: BoundingBox, zoom: Int): Bitmap {
-        val tileSource = createTileSource(sourceId)
+        val tileSource = sourceFactory.getTileSource(sourceId)
         var tilesCoverage = CacheManager.getTilesCoverage(area, zoom)
         tilesCoverage = tilesCoverage.sortedWith(compareBy({ MapTileIndex.getX(it) }, { MapTileIndex.getY(it) }))
         val startX = MapTileIndex.getX(tilesCoverage[0])
@@ -69,10 +67,5 @@ class MapAreaManager(private val tileProvider: SyncMapTileProvider) {
 
     private fun latToTile(lat: Double, zoom: Int): Double {
         return (1 shl zoom) * (1 - (Math.log(Math.tan(Math.toRadians(lat)) + 1 / (Math.cos(Math.toRadians(lat))))) / Math.PI) / 2
-    }
-
-    private fun createTileSource(id: String): OnlineTileSourceBase {
-        //todo implement
-        return TileSourceFactory.DEFAULT_TILE_SOURCE
     }
 }

@@ -13,52 +13,100 @@ import com.devindi.wallpaper.model.map.MapSource
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.map_source_item.view.*
 
-class SourcesAdapter(private val clickListener: OnItemClickListener): RecyclerView.Adapter<SourceViewHolder>() {
+class SourcesAdapter(private val sourceListener: OnSourceSelected): RecyclerView.Adapter<SourceViewHolder>(), OnItemClickListener {
 
-    private var oldItems = emptyList<MapSource>()
+    private var items = emptyList<MapSource>()
+    private var selectedItem: MapSource = MapSource("", "")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SourceViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.map_source_item, parent, false)
-        return SourceViewHolder(view, clickListener)
+        return SourceViewHolder(view, this)
     }
 
-    override fun getItemCount() = oldItems.size
+    override fun getItemCount() = items.size
 
     override fun onBindViewHolder(holder: SourceViewHolder, position: Int) {
-        holder.titleView.text = oldItems[position].title
-        Picasso.with(holder.itemView.context).load(createThumbUri(oldItems[position])).into(holder.imgView)
+        holder.titleView.text = items[position].title
+        Picasso.with(holder.itemView.context).load(createThumbUri(items[position])).into(holder.imgView)
+        holder.mark.visibility = if (position == items.indexOf(selectedItem)) {
+            View.VISIBLE
+        } else {
+            View.INVISIBLE
+        }
+    }
+
+    override fun onItemClick(position: Int, view: View) {
+        val selectedItem = items[position]
+        if (selectedItem == this.selectedItem) {
+            sourceListener.onSourceSelected(selectedItem, false)
+            return
+        }
+        sourceListener.onSourceSelected(selectedItem, true)
+        changeCurrentMapSource(selectedItem)
     }
 
     fun setItems(items: List<MapSource>) {
         val diff = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
 
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                val old = oldItems[oldItemPosition]
+                val old = this@SourcesAdapter.items[oldItemPosition]
                 val new = items[newItemPosition]
                 return old == new
             }
 
-            override fun getOldListSize() = oldItems.size
+            override fun getOldListSize() = this@SourcesAdapter.items.size
 
             override fun getNewListSize() = items.size
 
             override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                return areItemsTheSame(oldItemPosition, newItemPosition)
+                return true
             }
         })
 
         diff.dispatchUpdatesTo(this)
-        oldItems = items
+        this.items = items
+    }
+
+    fun setCurrentItem(selectedSource: MapSource) {
+        if (selectedItem == selectedSource) {
+            return
+        }
+        changeCurrentMapSource(selectedSource)
     }
 
     private fun createThumbUri(mapSource: MapSource): Uri {
-        return Uri.parse("osm://mapnik?latN=0&latS=1&lonW=-1&lonE=1")
+        return Uri.parse("osm://${mapSource.id}?latNorth=85&latSouth=-85&lonWest=-170&lonEast=170&zoom=0")
+    }
+
+    private fun changeCurrentMapSource(selectedSource: MapSource) {
+        val diff = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return true
+            }
+
+            override fun getOldListSize(): Int {
+                return items.size
+            }
+
+            override fun getNewListSize(): Int {
+                return items.size
+            }
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                if (items[oldItemPosition] == selectedSource) return false
+                return true
+            }
+        })
+        diff.dispatchUpdatesTo(this)
+
+        selectedItem = selectedSource
     }
 }
 
 class SourceViewHolder(val view: View, listener: OnItemClickListener): RecyclerView.ViewHolder(view) {
     val titleView: TextView = view.title
     val imgView: ImageView = view.imageView
+    val mark: View = view.selected
 
     init {
         view.setOnClickListener {
@@ -69,4 +117,8 @@ class SourceViewHolder(val view: View, listener: OnItemClickListener): RecyclerV
 
 interface OnItemClickListener {
     fun onItemClick(position: Int, view: View)
+}
+
+interface OnSourceSelected {
+    fun onSourceSelected(source: MapSource, changed: Boolean)
 }

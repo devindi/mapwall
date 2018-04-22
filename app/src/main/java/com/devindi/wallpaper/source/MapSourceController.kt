@@ -17,10 +17,12 @@ class MapSourceController: LifecycleController() {
 
     private val viewModel: MapSourceViewModel by viewModel()
 
-    private val adapter = SourcesAdapter(object : OnItemClickListener {
-        override fun onItemClick(position: Int, view: View) {
-            TODO()
-//            viewModel.setCurrentSource()
+    private val adapter = SourcesAdapter(object : OnSourceSelected {
+        override fun onSourceSelected(source: MapSource, changed: Boolean) {
+            if (changed) {
+                viewModel.setCurrentSource(source)
+            }
+            router.popCurrentController()
         }
     })
 
@@ -39,19 +41,9 @@ class MapSourceController: LifecycleController() {
             router.popCurrentController()
         }
 
-        viewModel.mapSourceList.observe(this, Observer { list -> list?.let { adapter.setItems(it) }; Timber.d("items: $list") })
+        viewModel.mapSourceList.observe(this, Observer<List<MapSource>> { list -> list?.let { adapter.setItems(it) } })
+        viewModel.currentMapSource.observe(this, Observer { selected -> selected?.let { adapter.setCurrentItem(it) } })
 
         return view
-    }
-
-    override fun onAttach(view: View) {
-        super.onAttach(view)
-        Timber.d("Attach")
-        viewModel.currentMapSource.observe(this, Observer<MapSource> { Timber.d("New tile source: $it") })
-    }
-
-    override fun onDetach(view: View) {
-        super.onDetach(view)
-        Timber.d("Detach")
     }
 }
