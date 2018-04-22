@@ -4,7 +4,6 @@ import android.arch.lifecycle.MutableLiveData
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.places.AutocompleteFilter
 import com.google.android.gms.location.places.Places
-import timber.log.Timber
 import com.google.android.gms.location.places.Place as GooglePlace
 
 class SearchManager(private val apiClient: GoogleApiClient) {
@@ -22,8 +21,11 @@ class SearchManager(private val apiClient: GoogleApiClient) {
                     if (it.status.isSuccess) {
                         suggests.value = it
                                 .map { prediction ->
-                                    Timber.d("Prediction item ${prediction.placeId} / ${prediction.placeTypes} / ${prediction.getFullText(null)} / ${prediction.getPrimaryText(null)} / ${prediction.getSecondaryText(null)} ")
-                                    PlaceSuggest(prediction.getPrimaryText(null).toString(), prediction.getSecondaryText(null).toString(), prediction.placeId) }
+                                    PlaceSuggest(
+                                            prediction.getPrimaryText(null).toString(),
+                                            prediction.getSecondaryText(null).toString(),
+                                            prediction.placeId)
+                                }
                     }
                     it.release()
                 }
@@ -33,7 +35,6 @@ class SearchManager(private val apiClient: GoogleApiClient) {
         Places.GeoDataApi.getPlaceById(apiClient, placeId).setResultCallback {
             if (it.status.isSuccess) {
                 it.firstOrNull()?.let { googlePlace ->
-                    Timber.d("Posting new place ${googlePlace.latLng}")
                     place.value = Place(googlePlace.latLng.latitude, googlePlace.latLng.longitude)
                 }
             }

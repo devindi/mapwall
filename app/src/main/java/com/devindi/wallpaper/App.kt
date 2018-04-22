@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import com.devindi.wallpaper.home.HomeViewModel
 import com.devindi.wallpaper.home.createWallpaperHandler
-import com.devindi.wallpaper.misc.*
+import com.devindi.wallpaper.misc.FabricReportManager
+import com.devindi.wallpaper.misc.ReportManager
+import com.devindi.wallpaper.misc.createPermissionManager
 import com.devindi.wallpaper.model.SettingsRepo
 import com.devindi.wallpaper.model.config.ConfigManager
 import com.devindi.wallpaper.model.map.*
@@ -98,15 +100,15 @@ class App : Application() {
 
         val koinLogger = object : Logger {
             override fun debug(msg: String) {
-//                Timber.d(msg)
+                Timber.d(msg)
             }
 
             override fun err(msg: String) {
-//                Timber.e(msg)
+                Timber.e(msg)
             }
 
             override fun log(msg: String) {
-//                Timber.v(msg)
+                Timber.v(msg)
             }
         }
 
@@ -116,7 +118,11 @@ class App : Application() {
 
         val manager: MapAreaManager = get()
 
-        val picasso = Picasso.Builder(this).loggingEnabled(true).addRequestHandler(TileRequestHandler(manager)).listener { _, uri, exception -> Timber.e(exception, "Failed to load $uri") }.build()
+        val picasso = Picasso.Builder(this)
+                .loggingEnabled(true)
+                .addRequestHandler(TileRequestHandler(manager))
+                .listener { _, uri, exception -> Timber.e(exception, "Failed to load $uri") }
+                .build()
         Picasso.setSingletonInstance(picasso)
     }
 }

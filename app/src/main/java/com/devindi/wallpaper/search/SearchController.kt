@@ -82,7 +82,8 @@ class SearchController: LifecycleController() {
         list?.forEachIndexed { index, suggest ->
             var itemView = suggestsContainer.getChildAt(index)
             if (itemView == null) {
-                itemView = LayoutInflater.from(suggestsContainer.context).inflate(R.layout.search_suggest_item, suggestsContainer, false)
+                itemView = LayoutInflater.from(suggestsContainer.context)
+                        .inflate(R.layout.search_suggest_item, suggestsContainer, false)
                 suggestsContainer.addView(itemView)
             }
             itemView.findViewById<TextView>(R.id.title).text = suggest.title
