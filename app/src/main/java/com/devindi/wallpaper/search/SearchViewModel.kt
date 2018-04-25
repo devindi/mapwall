@@ -2,8 +2,11 @@ package com.devindi.wallpaper.search
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import com.devindi.wallpaper.model.places.GoogleApiErrorHandler
 
-class SearchViewModel(private val manager: SearchManager): ViewModel() {
+class SearchViewModel(private val manager: SearchManager, googleApiErrorHandler: GoogleApiErrorHandler): ViewModel() {
+
+    val googleErrorData = googleApiErrorHandler.errorData
 
     fun requestSuggests(query: String) {
         manager.requestSuggests(query)

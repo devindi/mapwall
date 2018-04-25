@@ -33,13 +33,12 @@ class FabricReportManager : ReportManager {
     }
 
     override fun reportError(error: Throwable) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //todo implement
+        Timber.e(error,"Error!")
     }
 
     override fun reportEvent(event: Any) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //todo implement
+        Timber.i("Analytics event: $event")
     }
-
 }
-
-

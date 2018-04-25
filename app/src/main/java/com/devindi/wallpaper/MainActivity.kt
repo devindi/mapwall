@@ -7,17 +7,14 @@ import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.devindi.wallpaper.home.HomeController
-import com.devindi.wallpaper.search.GoogleApiClientLifecycleObserver
 import com.devindi.wallpaper.splash.SplashController
 import com.devindi.wallpaper.splash.SplashViewModel
 import org.koin.android.architecture.ext.viewModel
-import org.koin.android.ext.android.inject
 
 class MainActivity: AppCompatActivity() {
 
     private lateinit var router: Router
     private val splashViewModel: SplashViewModel by viewModel()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
