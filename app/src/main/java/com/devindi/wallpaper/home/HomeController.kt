@@ -20,6 +20,7 @@ import com.devindi.wallpaper.model.map.MapSource
 import com.devindi.wallpaper.model.map.TileSourceFactory
 import com.devindi.wallpaper.search.OnPlacePickedListener
 import com.devindi.wallpaper.search.Place
+import com.devindi.wallpaper.search.SearchChangeHandler
 import com.devindi.wallpaper.search.SearchController
 import com.devindi.wallpaper.source.MapSourceController
 import org.osmdroid.config.IConfigurationProvider
@@ -32,15 +33,13 @@ private const val PLACE_ZOOM = 12.0
 
 class HomeController : LifecycleController(), OnPlacePickedListener {
 
-
-
-    private lateinit var map:MapView
-    private var place: Place? = null
-
     private val settings: SettingsRepo by inject()
     private val osmConfig: IConfigurationProvider by inject()
     private val viewModel: HomeViewModel by viewModel()
     private val factory: TileSourceFactory by inject()
+
+    private lateinit var map:MapView
+    private var place: Place? = null
 
     init {
         osmConfig.osmdroidBasePath = File(settings.getMapCachePath())
@@ -77,7 +76,11 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
         view.findViewById<View>(R.id.search_edit_fake).setOnClickListener {
             val target = SearchController()
             target.targetController = this
-            router.pushController(RouterTransaction.with(target))
+            router.pushController(RouterTransaction
+                    .with(target)
+                    .pushChangeHandler(SearchChangeHandler(removesFromViewOnPush = false))
+                    .popChangeHandler(SearchChangeHandler())
+            )
         }
 
         view.findViewById<View>(R.id.btn_select_source).setOnClickListener {

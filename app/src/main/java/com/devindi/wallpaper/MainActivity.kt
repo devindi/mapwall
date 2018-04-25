@@ -17,13 +17,11 @@ class MainActivity: AppCompatActivity() {
 
     private lateinit var router: Router
     private val splashViewModel: SplashViewModel by viewModel()
-    private val googleApiClientObserver: GoogleApiClientLifecycleObserver by inject()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.root_screen)
-
-        lifecycle.addObserver(googleApiClientObserver)
 
         val target: Controller = if(splashViewModel.haveMapCachePath()) HomeController() else SplashController()
 

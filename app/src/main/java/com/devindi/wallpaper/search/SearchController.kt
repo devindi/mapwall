@@ -7,27 +7,32 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.TextView
+import com.bluelinelabs.conductor.ControllerChangeHandler
+import com.bluelinelabs.conductor.ControllerChangeType
 import com.bluelinelabs.conductor.archlifecycle.LifecycleController
 import com.devindi.wallpaper.R
+import com.devindi.wallpaper.misc.inject
 import com.devindi.wallpaper.misc.viewModel
-import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
-import timber.log.Timber
 
 interface OnPlacePickedListener {
     fun onPlacePicked(place: Place)
 }
 
-class SearchController: LifecycleController() {
+class SearchController : LifecycleController() {
 
     private val viewModel: SearchViewModel by viewModel()
+    private val googleApiClientObserver: GoogleApiClientLifecycleObserver by inject()
 
     private lateinit var search: EditText
     private lateinit var list: View
     private lateinit var suggestsContainer: ViewGroup
+
+    init {
+        lifecycle.addObserver(googleApiClientObserver)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         return inflater.inflate(R.layout.search_screen, container, false)
@@ -37,23 +42,6 @@ class SearchController: LifecycleController() {
         super.onAttach(view)
         search = view.findViewById(R.id.search_edit)
         list = view.findViewById(R.id.list)
-        val animation = AnimationUtils.loadAnimation(view.context, R.anim.vertical_translate)
-        animation.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationRepeat(animation: Animation?) {
-                //do nothing
-            }
-
-            override fun onAnimationStart(animation: Animation?) {
-                //do nothing
-            }
-
-            override fun onAnimationEnd(animation: Animation?) {
-                search.requestFocus()
-                val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.showSoftInput(search, InputMethodManager.SHOW_IMPLICIT)
-            }
-        })
-        list.startAnimation(animation)
         suggestsContainer = view.findViewById(R.id.suggests)
         search.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -69,8 +57,19 @@ class SearchController: LifecycleController() {
             }
         })
 
-        viewModel.suggests().observe(this, Observer<List<PlaceSuggest>> { showSuggests(it) })
+        view.findViewById<View>(R.id.modal_bg).setOnClickListener { router.popCurrentController() }
+
+        viewModel.suggests().observe(this, Observer { showSuggests(it) })
         viewModel.place().observe(this, Observer { showPlace(it) })
+    }
+
+    override fun onChangeEnded(changeHandler: ControllerChangeHandler, changeType: ControllerChangeType) {
+        if (changeType != ControllerChangeType.PUSH_ENTER) {
+            return
+        }
+        search.requestFocus()
+        val imm = search.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(search, InputMethodManager.SHOW_IMPLICIT)
     }
 
     override fun onDetach(view: View) {
@@ -94,16 +93,13 @@ class SearchController: LifecycleController() {
         }
         list?.let {
             while (suggestsContainer.childCount > it.size) {
-                println("Remove ${it.size} by ${suggestsContainer.childCount}")
                 suggestsContainer.removeViewAt(it.size)
             }
         }
     }
 
     private fun showPlace(place: Place?) {
-        Timber.d("Show $place")
         place?.let {
-            Timber.d("Send $place")
             (targetController as OnPlacePickedListener).onPlacePicked(it)
             router.popCurrentController()
             viewModel.place().value = null
