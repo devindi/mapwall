@@ -2,6 +2,7 @@ package com.devindi.wallpaper.search
 
 import android.arch.lifecycle.Observer
 import android.content.Context
+import android.support.design.widget.Snackbar
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -61,6 +62,7 @@ class SearchController : LifecycleController() {
 
         viewModel.suggests().observe(this, Observer { showSuggests(it) })
         viewModel.place().observe(this, Observer { showPlace(it) })
+        viewModel.googleErrorData.observe(this, Observer { Snackbar.make(view, "Something wrong $it", Snackbar.LENGTH_LONG).show() })
     }
 
     override fun onChangeEnded(changeHandler: ControllerChangeHandler, changeType: ControllerChangeType) {
