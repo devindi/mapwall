@@ -39,7 +39,6 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
     private val factory: TileSourceFactory by inject()
 
     private lateinit var map:MapView
-    private var place: Place? = null
 
     init {
         osmConfig.osmdroidBasePath = File(settings.getMapCachePath())
@@ -101,12 +100,6 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
     override fun onAttach(view: View) {
         super.onAttach(view)
         map.onResume()
-
-        place?.let {
-            map.controller.setZoom(PLACE_ZOOM)
-            map.controller.animateTo(GeoPoint(it.lat, it.lon))
-            place = null
-        }
     }
 
     override fun onDetach(view: View) {
@@ -132,7 +125,8 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
     }
 
     override fun onPlacePicked(place: Place) {
-        this.place = place
+        map.controller.setZoom(PLACE_ZOOM)
+        map.controller.animateTo(GeoPoint(place.lat, place.lon))
     }
 
     private fun calculateMinZoom(height: Int, tileSize: Int): Double {
