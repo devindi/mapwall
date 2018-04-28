@@ -2,20 +2,25 @@ package com.devindi.wallpaper.home
 
 import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
+import android.net.Uri
 import android.os.Bundle
+import android.support.design.widget.NavigationView
+import android.support.v4.widget.DrawerLayout
 import android.util.DisplayMetrics
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.archlifecycle.LifecycleController
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.TransitionChangeHandlerCompat
 import com.devindi.wallpaper.R
-import com.devindi.wallpaper.model.SettingsRepo
+import com.devindi.wallpaper.misc.anim.FabToDialogTransitionChangeHandler
 import com.devindi.wallpaper.misc.inject
 import com.devindi.wallpaper.misc.viewModel
-import com.devindi.wallpaper.misc.anim.FabToDialogTransitionChangeHandler
+import com.devindi.wallpaper.model.SettingsRepo
 import com.devindi.wallpaper.model.map.MapSource
 import com.devindi.wallpaper.model.map.TileSourceFactory
 import com.devindi.wallpaper.search.OnPlacePickedListener
@@ -23,10 +28,12 @@ import com.devindi.wallpaper.search.Place
 import com.devindi.wallpaper.search.SearchChangeHandler
 import com.devindi.wallpaper.search.SearchController
 import com.devindi.wallpaper.source.MapSourceController
+import com.squareup.picasso.Picasso
 import org.osmdroid.config.IConfigurationProvider
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.util.TileSystem
 import org.osmdroid.views.MapView
+import timber.log.Timber
 import java.io.File
 
 private const val PLACE_ZOOM = 12.0
@@ -38,7 +45,9 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
     private val viewModel: HomeViewModel by viewModel()
     private val factory: TileSourceFactory by inject()
 
-    private lateinit var map:MapView
+    private lateinit var map: MapView
+    private lateinit var drawer: DrawerLayout
+    private lateinit var navigation: NavigationView
 
     init {
         osmConfig.osmdroidBasePath = File(settings.getMapCachePath())
@@ -53,8 +62,35 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
         map.setBuiltInZoomControls(false)
         map.setScrollableAreaLimitLatitude(TileSystem.MaxLatitude,-TileSystem.MaxLatitude, 0)
 
+        drawer = view.findViewById(R.id.drawer)
+
+        navigation = view.findViewById(R.id.navigation)
+        Picasso.with(container.context)
+                //todo place nice location and tile source (Maybe popular?)
+                .load(Uri.parse("osm://mapnik?latNorth=85&latSouth=-85&lonWest=-170&lonEast=170&zoom=0"))
+                .into(navigation.getHeaderView(0) as ImageView)
+        navigation.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.settings_item -> {
+                    drawer.closeDrawers()
+                    Timber.d("Open settings")
+                    return@setNavigationItemSelectedListener true
+                }
+                R.id.about_item -> {
+                    drawer.closeDrawers()
+                    Timber.d("Open about")
+                    return@setNavigationItemSelectedListener true
+                }
+                else -> false
+            }
+        }
+
         view.findViewById<View>(R.id.button).setOnClickListener {
             viewModel.createWallpaper(map.boundingBox, map.zoomLevel)
+        }
+
+        view.findViewById<View>(R.id.menu_button).setOnClickListener {
+            drawer.openDrawer(Gravity.START)
         }
 
         viewModel.currentTileSource.observe(this, Observer<MapSource> { t ->

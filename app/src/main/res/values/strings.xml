@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">GeoWallpaper</string>
+
+    <string name="home_menu_settings">Settings</string>
+    <string name="home_menu_about">About</string>
+
 </resources>
