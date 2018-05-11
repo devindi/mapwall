@@ -28,6 +28,7 @@ import com.devindi.wallpaper.search.OnPlacePickedListener
 import com.devindi.wallpaper.search.Place
 import com.devindi.wallpaper.search.SearchChangeHandler
 import com.devindi.wallpaper.search.SearchController
+import com.devindi.wallpaper.settings.SettingsController
 import com.devindi.wallpaper.source.MapSourceController
 import com.squareup.picasso.Picasso
 import org.osmdroid.config.IConfigurationProvider
@@ -74,7 +75,7 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
             when (it.itemId) {
                 R.id.settings_item -> {
                     drawer.closeDrawers()
-                    Timber.d("Open settings")
+                    router.pushController(RouterTransaction.with(SettingsController()))
                     return@setNavigationItemSelectedListener true
                 }
                 R.id.about_item -> {
