@@ -17,6 +17,7 @@ import com.bluelinelabs.conductor.archlifecycle.LifecycleController
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.TransitionChangeHandlerCompat
 import com.devindi.wallpaper.R
+import com.devindi.wallpaper.about.AboutController
 import com.devindi.wallpaper.misc.anim.FabToDialogTransitionChangeHandler
 import com.devindi.wallpaper.misc.inject
 import com.devindi.wallpaper.misc.viewModel
@@ -78,7 +79,7 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
                 }
                 R.id.about_item -> {
                     drawer.closeDrawers()
-                    Timber.d("Open about")
+                    router.pushController(RouterTransaction.with(AboutController()))
                     return@setNavigationItemSelectedListener true
                 }
                 else -> false
