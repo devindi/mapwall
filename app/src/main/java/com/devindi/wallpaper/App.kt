@@ -1,22 +1,20 @@
 package com.devindi.wallpaper
 
 import android.app.Application
-import android.app.WallpaperManager
 import android.preference.PreferenceManager
 import com.devindi.wallpaper.home.HomeViewModel
-import com.devindi.wallpaper.home.createWallpaperHandler
+import com.devindi.wallpaper.misc.DependencyStrategy
 import com.devindi.wallpaper.misc.FabricReportManager
 import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.createPermissionManager
 import com.devindi.wallpaper.model.SettingsRepo
 import com.devindi.wallpaper.model.config.ConfigManager
-import com.devindi.wallpaper.model.map.*
 import com.devindi.wallpaper.model.search.searchModule
 import com.devindi.wallpaper.model.storage.KeyValueStorage
+import com.devindi.wallpaper.model.storage.MapCacheStrategy
 import com.devindi.wallpaper.model.storage.SharedPreferencesStorage
 import com.devindi.wallpaper.source.MapSourceViewModel
 import com.devindi.wallpaper.splash.SplashViewModel
-import com.squareup.picasso.Picasso
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.startKoin
@@ -25,10 +23,6 @@ import org.koin.dsl.module.Module
 import org.koin.dsl.module.applicationContext
 import org.koin.log.Logger
 import org.osmdroid.config.Configuration
-import org.osmdroid.tileprovider.cachemanager.CacheManager
-import org.osmdroid.tileprovider.modules.IFilesystemCache
-import org.osmdroid.tileprovider.modules.SqlTileWriter
-import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 import timber.log.Timber
 
 const val PARAM_TILE_SOURCE = "tile"
@@ -37,29 +31,15 @@ class App : Application() {
 
     private val applicationModule : Module = applicationContext {
         bean { SharedPreferencesStorage(PreferenceManager.getDefaultSharedPreferences(get())) as KeyValueStorage }
-        viewModel { SplashViewModel(get()) }
         bean { SettingsRepo(get(), get()) }
         bean { createPermissionManager() }
-        bean { createWallpaperHandler(WallpaperManager.getInstance(androidApplication())) }
-        bean { Configuration.getInstance() }
-        bean { SqlTileWriter() as IFilesystemCache }
-        viewModel { HomeViewModel(get(), get(), get()) }
-        factory { params ->
-            CacheManager(params.get<OnlineTileSourceBase>(PARAM_TILE_SOURCE),
-                    get(),
-                    params.get<OnlineTileSourceBase>(PARAM_TILE_SOURCE).minimumZoomLevel,
-                    params.get<OnlineTileSourceBase>(PARAM_TILE_SOURCE).maximumZoomLevel)
-        }
-        factory { params ->
-            WallpaperFactory(get { params.values }, params[PARAM_TILE_SOURCE], get(), get())
-        }
         bean { FabricReportManager() as ReportManager }
-        viewModel { MapSourceViewModel(get(), get()) }
+        bean { MapCacheStrategy(androidApplication()) }
         bean { ConfigManager() }
-        bean { SyncMapTileProvider(get(), get()) }
-        bean { MapAreaManager(get(), get()) }
-        bean { CacheManagerFactory(get()) }
-        bean { TileSourceFactory(get()) }
+        bean { DependencyStrategy() }
+        viewModel { SplashViewModel(get(), get()) }
+        viewModel { HomeViewModel(get(), get(), get()) }
+        viewModel { MapSourceViewModel(get(), get()) }
     }
 
     override fun onCreate() {
@@ -92,15 +72,6 @@ class App : Application() {
         startKoin(this, listOf(applicationModule, searchModule), logger = koinLogger)
         val reportManager: ReportManager = get()
         reportManager.init(this)
-
-        val manager: MapAreaManager = get()
-
-        val picasso = Picasso.Builder(this)
-                .loggingEnabled(true)
-                .addRequestHandler(TileRequestHandler(manager))
-                .listener { _, uri, exception -> Timber.e(exception, "Failed to load $uri") }
-                .build()
-        Picasso.setSingletonInstance(picasso)
     }
 }
 
