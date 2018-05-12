@@ -23,6 +23,10 @@ class TileSourceFactory(private val context: Context) {
     )
 
     fun getTileSource(id: String): OnlineTileSourceBase {
-        return impl.getOrDefault(id, Impl.DEFAULT_TILE_SOURCE)
+        val tileSourceBase = impl[id]
+        if (tileSourceBase != null) {
+            return tileSourceBase
+        }
+        return Impl.DEFAULT_TILE_SOURCE
     }
 }

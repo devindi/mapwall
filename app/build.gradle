@@ -20,7 +20,7 @@ android {
     defaultConfig {
         applicationId "com.devindi.wallpaper"
         vectorDrawables.useSupportLibrary = true
-        minSdkVersion 16
+        minSdkVersion 18
         targetSdkVersion 27
         versionCode 1
         versionName version
