@@ -30,6 +30,14 @@ android {
                                 thunderforestKey: "$thunderforestKey"]
     }
     buildTypes {
+
+        debugProguard {
+            initWith debug
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro', 'proguard-rules-debug.pro'
+            matchingFallbacks = ['debug']
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
