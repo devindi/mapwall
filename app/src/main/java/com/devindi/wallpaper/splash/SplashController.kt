@@ -11,10 +11,8 @@ import android.view.ViewGroup
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.archlifecycle.LifecycleController
 import com.devindi.wallpaper.home.HomeController
-import com.devindi.wallpaper.misc.DependencyStrategy
-import com.devindi.wallpaper.misc.PermissionManager
-import com.devindi.wallpaper.misc.inject
-import com.devindi.wallpaper.misc.viewModel
+import com.devindi.wallpaper.misc.*
+import com.devindi.wallpaper.model.analytics.ScreenEvent
 import com.devindi.wallpaper.model.map.mapModule
 import org.koin.standalone.StandAloneContext
 
@@ -23,6 +21,7 @@ class SplashController: LifecycleController() {
     private val permissionManager: PermissionManager by inject()
     private val viewModel: SplashViewModel by viewModel()
     private val dependencyStrategy: DependencyStrategy by inject()
+    private val reportManager: ReportManager by inject()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         return View(container.context)
@@ -52,6 +51,11 @@ class SplashController: LifecycleController() {
         activity?.let {
             askForCacheLocation(it)
         }
+    }
+
+    override fun onAttach(view: View) {
+        super.onAttach(view)
+        reportManager.reportEvent(ScreenEvent("splash"))
     }
 
     private fun askForCacheLocation(activity: Activity) {

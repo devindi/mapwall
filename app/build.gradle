@@ -30,6 +30,9 @@ android {
                                 thunderforestKey: "$thunderforestKey"]
     }
     buildTypes {
+        debug {
+            applicationIdSuffix '.debug'
+        }
 
         debugProguard {
             initWith debug

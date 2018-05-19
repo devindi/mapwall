@@ -18,10 +18,12 @@ import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.TransitionChangeHandlerCompat
 import com.devindi.wallpaper.R
 import com.devindi.wallpaper.about.AboutController
+import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.anim.FabToDialogTransitionChangeHandler
 import com.devindi.wallpaper.misc.inject
 import com.devindi.wallpaper.misc.viewModel
 import com.devindi.wallpaper.model.SettingsRepo
+import com.devindi.wallpaper.model.analytics.ScreenEvent
 import com.devindi.wallpaper.model.map.MapSource
 import com.devindi.wallpaper.model.map.TileSourceFactory
 import com.devindi.wallpaper.search.OnPlacePickedListener
@@ -46,6 +48,7 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
     private val osmConfig: IConfigurationProvider by inject()
     private val viewModel: HomeViewModel by viewModel()
     private val factory: TileSourceFactory by inject()
+    private val reportManager: ReportManager by inject()
 
     private lateinit var map: MapView
     private lateinit var drawer: DrawerLayout
@@ -138,6 +141,7 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
     override fun onAttach(view: View) {
         super.onAttach(view)
         map.onResume()
+        reportManager.reportEvent(ScreenEvent("home"))
     }
 
     override fun onDetach(view: View) {

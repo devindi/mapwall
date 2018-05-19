@@ -23,6 +23,7 @@ class SearchManager(private val apiClient: GoogleApiClient, private val googleAp
                         suggests.value = it
                                 .map { prediction ->
                                     PlaceSuggest(
+                                            query,
                                             prediction.getPrimaryText(null).toString(),
                                             prediction.getSecondaryText(null).toString(),
                                             prediction.placeId)

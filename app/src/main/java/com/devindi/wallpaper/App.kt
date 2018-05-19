@@ -38,7 +38,7 @@ class App : Application() {
         bean { ConfigManager() }
         bean { DependencyStrategy() }
         viewModel { SplashViewModel(get(), get()) }
-        viewModel { HomeViewModel(get(), get(), get()) }
+        viewModel { HomeViewModel(get(), get(), get(), get()) }
         viewModel { MapSourceViewModel(get(), get()) }
     }
 

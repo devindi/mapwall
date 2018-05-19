@@ -15,8 +15,12 @@ import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
 import com.bluelinelabs.conductor.archlifecycle.LifecycleController
 import com.devindi.wallpaper.R
+import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.inject
 import com.devindi.wallpaper.misc.viewModel
+import com.devindi.wallpaper.model.analytics.FailedSearchEvent
+import com.devindi.wallpaper.model.analytics.ScreenEvent
+import com.devindi.wallpaper.model.analytics.SuccessSearchEvent
 
 interface OnPlacePickedListener {
     fun onPlacePicked(place: Place)
@@ -26,6 +30,7 @@ class SearchController : LifecycleController() {
 
     private val viewModel: SearchViewModel by viewModel()
     private val googleApiClientObserver: GoogleApiClientLifecycleObserver by inject()
+    private val reportManager: ReportManager by inject()
 
     private lateinit var search: EditText
     private lateinit var list: View
@@ -37,8 +42,8 @@ class SearchController : LifecycleController() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         val view = inflater.inflate(R.layout.search_screen, container, false)
-        view.findViewById<View>(R.id.search_background).setOnClickListener { close() }
-        view.findViewById<View>(R.id.back_button).setOnClickListener { close() }
+        view.findViewById<View>(R.id.search_background).setOnClickListener { cancel() }
+        view.findViewById<View>(R.id.back_button).setOnClickListener { cancel() }
         search = view.findViewById(R.id.search_edit)
         list = view.findViewById(R.id.list)
         suggestsContainer = view.findViewById(R.id.suggests)
@@ -70,6 +75,11 @@ class SearchController : LifecycleController() {
         imm.showSoftInput(search, InputMethodManager.SHOW_IMPLICIT)
     }
 
+    override fun onAttach(view: View) {
+        super.onAttach(view)
+        reportManager.reportEvent(ScreenEvent("search"))
+    }
+
     private fun showSuggests(list: List<PlaceSuggest>?) {
         list?.forEachIndexed { index, suggest ->
             var itemView = suggestsContainer.getChildAt(index)
@@ -81,6 +91,7 @@ class SearchController : LifecycleController() {
             itemView.findViewById<TextView>(R.id.title).text = suggest.title
             itemView.findViewById<TextView>(R.id.description).text = suggest.description
             itemView.setOnClickListener {
+                reportManager.reportEvent(SuccessSearchEvent(suggest.query))
                 viewModel.requestPlace(suggest)
             }
         }
@@ -98,6 +109,14 @@ class SearchController : LifecycleController() {
             viewModel.place().value = null
             viewModel.suggests().value = null
         }
+    }
+
+    private fun cancel() {
+        val query = search.text.toString()
+        if (!query.isEmpty()) {
+            reportManager.reportEvent(FailedSearchEvent(query))
+        }
+        close()
     }
 
     private fun close() {

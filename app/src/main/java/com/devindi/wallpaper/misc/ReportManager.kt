@@ -3,6 +3,8 @@ package com.devindi.wallpaper.misc
 import android.content.Context
 import android.content.pm.PackageManager
 import com.crashlytics.android.Crashlytics
+import com.crashlytics.android.answers.Answers
+import com.devindi.wallpaper.model.analytics.*
 import io.fabric.sdk.android.Fabric
 import timber.log.Timber
 
@@ -15,7 +17,7 @@ interface ReportManager {
 
     fun reportError(error: Throwable)
 
-    fun reportEvent(event: Any)
+    fun reportEvent(event: AnswerEvent<Any>)
 }
 
 class FabricReportManager : ReportManager {
@@ -33,12 +35,18 @@ class FabricReportManager : ReportManager {
     }
 
     override fun reportError(error: Throwable) {
-        //todo implement
-        Timber.e(error,"Error!")
+        Crashlytics.logException(error)
     }
 
-    override fun reportEvent(event: Any) {
-        //todo implement
-        Timber.i("Analytics event: $event")
+    override fun reportEvent(event: AnswerEvent<Any>) {
+        Timber.d("Reporting to fabric $event")
+        val answers = Answers.getInstance()
+        when (event) {
+            is ScreenEvent -> answers.logContentView(event.toEvent())
+            is SuccessSearchEvent -> answers.logSearch(event.toEvent())
+            is FailedSearchEvent -> answers.logSearch(event.toEvent())
+            is ChooseMapEvent -> answers.logCustom(event.toEvent())
+            is CreateWallpaperEvent -> answers.logCustom(event.toEvent())
+        }
     }
 }
