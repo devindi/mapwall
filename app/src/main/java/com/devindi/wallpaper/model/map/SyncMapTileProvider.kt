@@ -20,9 +20,8 @@ class SyncMapTileProvider(private val factory: CacheManagerFactory, private val 
      */
     fun getTile(tileSource: OnlineTileSourceBase, tileIndex: Long): Bitmap {
         val cacheManager = getCacheManager(tileSource)
-        if (!cacheManager.checkTile(tileIndex) &&
-                !cacheManager.downloadingAction.run { preCheck() && tileAction(tileIndex) }) {
-            throw Exception("Failed to load tile")
+        if (!cacheManager.checkTile(tileIndex)) {
+            cacheManager.downloadingAction.run { preCheck() && tileAction(tileIndex) }
         }
         val tileDrawable = cache.loadTile(tileSource, tileIndex) as BitmapDrawable
         return tileDrawable.bitmap
