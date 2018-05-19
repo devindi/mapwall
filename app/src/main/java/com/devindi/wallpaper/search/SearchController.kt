@@ -36,11 +36,9 @@ class SearchController : LifecycleController() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-        return inflater.inflate(R.layout.search_screen, container, false)
-    }
-
-    override fun onAttach(view: View) {
-        super.onAttach(view)
+        val view = inflater.inflate(R.layout.search_screen, container, false)
+        view.findViewById<View>(R.id.search_background).setOnClickListener { close() }
+        view.findViewById<View>(R.id.back_button).setOnClickListener { close() }
         search = view.findViewById(R.id.search_edit)
         list = view.findViewById(R.id.list)
         suggestsContainer = view.findViewById(R.id.suggests)
@@ -57,12 +55,10 @@ class SearchController : LifecycleController() {
                 viewModel.requestSuggests(s.toString())
             }
         })
-
-        view.findViewById<View>(R.id.modal_bg).setOnClickListener { router.popCurrentController() }
-
         viewModel.suggests().observe(this, Observer { showSuggests(it) })
         viewModel.place().observe(this, Observer { showPlace(it) })
         viewModel.googleErrorData.observe(this, Observer { Snackbar.make(view, "Something wrong $it", Snackbar.LENGTH_LONG).show() })
+        return view
     }
 
     override fun onChangeEnded(changeHandler: ControllerChangeHandler, changeType: ControllerChangeType) {
@@ -72,11 +68,6 @@ class SearchController : LifecycleController() {
         search.requestFocus()
         val imm = search.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(search, InputMethodManager.SHOW_IMPLICIT)
-    }
-
-    override fun onDetach(view: View) {
-        super.onDetach(view)
-        viewModel.suggests().removeObservers(this)
     }
 
     private fun showSuggests(list: List<PlaceSuggest>?) {
@@ -103,9 +94,15 @@ class SearchController : LifecycleController() {
     private fun showPlace(place: Place?) {
         place?.let {
             (targetController as OnPlacePickedListener).onPlacePicked(it)
-            router.popCurrentController()
+            close()
             viewModel.place().value = null
             viewModel.suggests().value = null
         }
+    }
+
+    private fun close() {
+        val imm = search.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(search.windowToken, 0)
+        router.popCurrentController()
     }
 }

@@ -30,3 +30,5 @@
 
 #Picasso rules
 -dontwarn com.squareup.okhttp.**
+
+-keepnames class * extends java.lang.Exception

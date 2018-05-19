@@ -4,4 +4,8 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
+    <dimen name="search_marginTop">48dp</dimen>
+    <dimen name="search_result_top">112dp</dimen>
+    <dimen name="status_bar_height">25dp</dimen>
+
 </resources>

@@ -16,4 +16,8 @@
     <color name="immersive_background">#88000000</color>
     <string name="fab_dialog_transition_name">transition.fab</string>
 
+    <dimen name="search_marginTop">16dp</dimen>
+    <dimen name="search_result_top">80dp</dimen>
+    <dimen name="status_bar_height">0dp</dimen>
+
 </resources>
