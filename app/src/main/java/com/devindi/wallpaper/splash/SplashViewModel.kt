@@ -11,12 +11,16 @@ class SplashViewModel(private val settings: SettingsRepo, private val mapCacheSt
     val appInitialized = SingleLiveEvent<Boolean>()
 
     init {
-        val defaultPath = mapCacheStrategy.defaultCachePath()
-        if (defaultPath == null) {
-            shouldAskFroCacheLocation.sendEvent(true)
+        val userPath = settings.getMapCachePath()
+        if (userPath != null) {
+            appInitialized.sendEvent(true)
         } else {
-            shouldAskFroCacheLocation.sendEvent(false)
-            saveMapCachePath(defaultPath)
+            val defaultPath = mapCacheStrategy.defaultCachePath()
+            if (defaultPath == null) {
+                shouldAskFroCacheLocation.sendEvent(true)
+            } else {
+                saveMapCachePath(defaultPath)
+            }
         }
     }
 
