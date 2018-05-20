@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,20 +15,25 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_launcher_foreground"/>
+        android:layout_height="100dp"
+        android:layout_marginTop="25dp"
+        app:srcCompat="@drawable/app_icon"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:layout_marginBottom="25dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
         android:text="@string/app_name"/>
-    <include layout="@layout/common_divider"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:id="@+id/about_author"
-        android:textAppearance="@style/TextAppearance.AppCompat.Button"
-        android:text="Author"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:id="@+id/about_version"
+        android:layout_marginBottom="8dp"
+        tools:text="Version 1.0"/>
+
 </LinearLayout>
