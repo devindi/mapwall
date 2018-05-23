@@ -10,15 +10,18 @@ class Config {
 
     val availableSources = listOf(
             default,
-            MapSource("public_transport", "Public Transport"),
-            MapSource("cloudmate", "CloudMade"),
             MapSource("thunder.spinal", "Spinal"),
             MapSource("thunder.transport_dark", "Transport Dark"),
             MapSource("thunder.outdoor", "Outdoors"),
-            MapSource("thunder.cycle", "OpenCycleMap"),
-            MapSource("thunder.transport", "Transport"),
-            MapSource("thunder.landscape", "Landscape"),
             MapSource("thunder.pioneer", "Pioneer"),
             MapSource("thunder.atlas", "Atlas"),
-            MapSource("thunder.neighbourhood", "NEIGHBOURHOOD"))
+            MapSource("thunder.neighbourhood", "NEIGHBOURHOOD"),
+            MapSource("stamen.toner", "Toner"),
+            MapSource("stamen.watercolor", "Water color"),
+            MapSource("stamen.terrain", "Terrain"),
+            MapSource("mapbox.satellite", "Satellite"),
+            MapSource( "mapbox.pencil", "Pencil"),
+            MapSource("mapbox.pirates", "Pirates"),
+            MapSource("mapbox.comic", "Comic")
+    )
 }

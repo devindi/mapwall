@@ -1,6 +1,8 @@
 package com.devindi.wallpaper.model.map
 
 import android.content.Context
+import com.devindi.wallpaper.model.map.source.*
+import org.osmdroid.tileprovider.tilesource.MapBoxTileSource
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 import org.osmdroid.tileprovider.tilesource.ThunderforestTileSource
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory as Impl
@@ -19,7 +21,14 @@ class TileSourceFactory(private val context: Context) {
             "thunder.landscape" to ThunderforestTileSource(context, ThunderforestTileSource.LANDSCAPE),
             "thunder.pioneer" to ThunderforestTileSource(context, ThunderforestTileSource.PIONEER),
             "thunder.atlas" to ThunderforestTileSource(context, ThunderforestTileSource.MOBILE_ATLAS),
-            "thunder.neighbourhood" to ThunderforestTileSource(context, ThunderforestTileSource.NEIGHBOURHOOD)
+            "thunder.neighbourhood" to ThunderforestTileSource(context, ThunderforestTileSource.NEIGHBOURHOOD),
+            "stamen.toner" to createToner(),
+            "stamen.watercolor" to createWatercolor(),
+            "stamen.terrain" to createTerrain(),
+            "mapbox.satellite" to createMapBoxTerrain(),
+            "mapbox.pencil" to createMapBoxPencil(),
+            "mapbox.pirates" to createMapBoxPirates(),
+            "mapbox.comic" to createMapBoxComic()
     )
 
     fun getTileSource(id: String): OnlineTileSourceBase {
