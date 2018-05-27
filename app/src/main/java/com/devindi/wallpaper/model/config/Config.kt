@@ -22,6 +22,7 @@ class Config {
             MapSource("mapbox.satellite", "Satellite"),
             MapSource( "mapbox.pencil", "Pencil"),
             MapSource("mapbox.pirates", "Pirates"),
-            MapSource("mapbox.comic", "Comic")
+            MapSource("mapbox.comic", "Comic"),
+            MapSource("composite", "Random")
     )
 }

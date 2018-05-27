@@ -28,7 +28,8 @@ class TileSourceFactory(private val context: Context) {
             "mapbox.satellite" to createMapBoxTerrain(),
             "mapbox.pencil" to createMapBoxPencil(),
             "mapbox.pirates" to createMapBoxPirates(),
-            "mapbox.comic" to createMapBoxComic()
+            "mapbox.comic" to createMapBoxComic(),
+            "composite" to CompositeSource(listOf(createMapBoxTerrain(), createWatercolor(), createToner(), ThunderforestTileSource(context, ThunderforestTileSource.PIONEER), createTerrain(), Impl.MAPNIK))
     )
 
     fun getTileSource(id: String): OnlineTileSourceBase {
