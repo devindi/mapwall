@@ -33,7 +33,7 @@ class MapAreaManager(private val tileProvider: SyncMapTileProvider, private val 
             val pxLeft = (i / tilesY) * tileSize.toFloat() - left
             val pxTop = (i % tilesY) * tileSize.toFloat() - top
             val bitmap = tileProvider.getTile(tileSource, tilesCoverage[i])
-            Timber.d("Drawing tile %s / %s / %s at %f %f",
+            Timber.d("Drawing tile %s / %s / %s at %s %s",
                     MapTileIndex.getZoom(tilesCoverage[i]),
                     MapTileIndex.getX(tilesCoverage[i]),
                     MapTileIndex.getY(tilesCoverage[i]),
