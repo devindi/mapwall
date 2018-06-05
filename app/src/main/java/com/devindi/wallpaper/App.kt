@@ -9,12 +9,14 @@ import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.createPermissionManager
 import com.devindi.wallpaper.model.SettingsRepo
 import com.devindi.wallpaper.model.config.ConfigManager
+import com.devindi.wallpaper.model.map.TileRequestHandler
 import com.devindi.wallpaper.model.search.searchModule
 import com.devindi.wallpaper.model.storage.KeyValueStorage
 import com.devindi.wallpaper.model.storage.MapCacheStrategy
 import com.devindi.wallpaper.model.storage.SharedPreferencesStorage
 import com.devindi.wallpaper.source.MapSourceViewModel
 import com.devindi.wallpaper.splash.SplashViewModel
+import com.squareup.picasso.Picasso
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.startKoin
@@ -22,6 +24,7 @@ import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module.Module
 import org.koin.dsl.module.applicationContext
 import org.koin.log.Logger
+import org.koin.standalone.get
 import org.osmdroid.config.Configuration
 import timber.log.Timber
 
@@ -36,7 +39,8 @@ class App : Application() {
         bean { FabricReportManager() as ReportManager }
         bean { MapCacheStrategy(androidApplication()) }
         bean { ConfigManager() }
-        bean { DependencyStrategy() }
+        bean { DependencyStrategy(get(), get()) }
+        bean { Configuration.getInstance() }
         viewModel { SplashViewModel(get(), get()) }
         viewModel { HomeViewModel(get(), get(), get(), get()) }
         viewModel { MapSourceViewModel(get(), get()) }
@@ -72,6 +76,13 @@ class App : Application() {
         startKoin(this, listOf(applicationModule, searchModule), logger = koinLogger)
         val reportManager: ReportManager = get()
         reportManager.init(this)
+
+        val picasso = Picasso.Builder(get())
+                .loggingEnabled(true)
+                .addRequestHandler(TileRequestHandler())
+                .listener { _, uri, exception -> Timber.e(exception, "Failed to load $uri") }
+                .build()
+        Picasso.setSingletonInstance(picasso)
     }
 }
 

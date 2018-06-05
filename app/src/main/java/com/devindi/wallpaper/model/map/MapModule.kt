@@ -13,8 +13,7 @@ import org.osmdroid.tileprovider.modules.SqlTileWriter
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 
 val mapModule: Module = applicationContext {
-    bean { SqlTileWriter() as IFilesystemCache }
-    bean { Configuration.getInstance() }
+    bean { SqlTileCache(get()) as IFilesystemCache }
     bean { createWallpaperHandler(WallpaperManager.getInstance(androidApplication())) }
     factory { params ->
         CacheManager(params.get<OnlineTileSourceBase>(PARAM_TILE_SOURCE),

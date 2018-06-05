@@ -26,4 +26,8 @@ class MainActivity: AppCompatActivity() {
             super.onBackPressed()
         }
     }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
 }
