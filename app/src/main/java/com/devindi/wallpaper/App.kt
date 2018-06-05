@@ -36,7 +36,8 @@ class App : Application() {
         bean { FabricReportManager() as ReportManager }
         bean { MapCacheStrategy(androidApplication()) }
         bean { ConfigManager() }
-        bean { DependencyStrategy() }
+        bean { DependencyStrategy(get(), get()) }
+        bean { Configuration.getInstance() }
         viewModel { SplashViewModel(get(), get()) }
         viewModel { HomeViewModel(get(), get(), get(), get()) }
         viewModel { MapSourceViewModel(get(), get()) }

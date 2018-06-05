@@ -22,7 +22,6 @@ import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.anim.FabToDialogTransitionChangeHandler
 import com.devindi.wallpaper.misc.inject
 import com.devindi.wallpaper.misc.viewModel
-import com.devindi.wallpaper.model.SettingsRepo
 import com.devindi.wallpaper.model.analytics.ScreenEvent
 import com.devindi.wallpaper.model.map.MapSource
 import com.devindi.wallpaper.model.map.TileSourceFactory
@@ -33,19 +32,14 @@ import com.devindi.wallpaper.search.SearchController
 import com.devindi.wallpaper.settings.SettingsController
 import com.devindi.wallpaper.source.MapSourceController
 import com.squareup.picasso.Picasso
-import org.osmdroid.config.IConfigurationProvider
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.util.TileSystem
 import org.osmdroid.views.MapView
-import timber.log.Timber
-import java.io.File
 
 private const val PLACE_ZOOM = 12.0
 
 class HomeController : LifecycleController(), OnPlacePickedListener {
 
-    private val settings: SettingsRepo by inject()
-    private val osmConfig: IConfigurationProvider by inject()
     private val viewModel: HomeViewModel by viewModel()
     private val factory: TileSourceFactory by inject()
     private val reportManager: ReportManager by inject()
@@ -53,10 +47,6 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
     private lateinit var map: MapView
     private lateinit var drawer: DrawerLayout
     private lateinit var navigation: NavigationView
-
-    init {
-        osmConfig.osmdroidBasePath = File(settings.getMapCachePath())
-    }
 
     @SuppressLint("NewApi")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {

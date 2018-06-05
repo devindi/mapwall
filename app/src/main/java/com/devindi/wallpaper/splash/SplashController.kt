@@ -41,12 +41,12 @@ class SplashController: LifecycleController() {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         val granted = permissions
                 .filterIndexed { index, _ -> grantResults[index] == PackageManager.PERMISSION_GRANTED }
                 .any { it == Manifest.permission.WRITE_EXTERNAL_STORAGE }
         if (granted) {
             viewModel.useExternalStorage()
+            return
         }
         activity?.let {
             askForCacheLocation(it)
@@ -69,7 +69,7 @@ class SplashController: LifecycleController() {
                     if (requiredPermissions.isEmpty()) {
                         viewModel.useExternalStorage()
                     } else {
-                        permissionManager.requestPermissions(requiredPermissions, activity)
+                        permissionManager.requestPermissions(requiredPermissions, this)
                     }
                 }
                 .show()

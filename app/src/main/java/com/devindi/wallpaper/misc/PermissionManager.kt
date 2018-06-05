@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Build
 import android.support.annotation.RequiresApi
+import com.bluelinelabs.conductor.Controller
 
 private const val REQUEST_CODE = 42
 
@@ -25,7 +26,7 @@ interface PermissionManager {
     /**
      * Requests provided [permissions]
      */
-    fun requestPermissions(permissions: List<String>, resolver: Activity)
+    fun requestPermissions(permissions: List<String>, resolver: Controller)
 }
 
 class PermissionManagerImpl:PermissionManager {
@@ -34,7 +35,7 @@ class PermissionManagerImpl:PermissionManager {
         return emptyList()
     }
 
-    override fun requestPermissions(permissions: List<String>, resolver: Activity) {
+    override fun requestPermissions(permissions: List<String>, resolver: Controller) {
         throw UnsupportedOperationException()
     }
 }
@@ -47,7 +48,7 @@ class PermissionManagerApiMImpl : PermissionManager {
                 .filter { resolver.checkSelfPermission(it) == PackageManager.PERMISSION_DENIED }
     }
 
-    override fun requestPermissions(permissions: List<String>, resolver: Activity) {
+    override fun requestPermissions(permissions: List<String>, resolver: Controller) {
         resolver.requestPermissions(permissions.toTypedArray(), REQUEST_CODE)
     }
 }
