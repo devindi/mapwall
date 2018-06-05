@@ -20,13 +20,7 @@ class DependencyStrategy(private val settings: SettingsRepo, private val osmConf
     fun initMapModule() {
         osmConfig.osmdroidBasePath = File(settings.getMapCachePath())
         StandAloneContext.loadKoinModules(mapModule)
-        val manager: MapAreaManager = get()
 
-        val picasso = Picasso.Builder(get())
-                .loggingEnabled(true)
-                .addRequestHandler(TileRequestHandler(manager))
-                .listener { _, uri, exception -> Timber.e(exception, "Failed to load $uri") }
-                .build()
-        Picasso.setSingletonInstance(picasso)
+
     }
 }
