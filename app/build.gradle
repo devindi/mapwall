@@ -12,6 +12,12 @@ def thunderforestKey = resolveProperty('thunderforest')
 if (fabricKey != null) {
     apply plugin: 'io.fabric'
 }
+if (rootProject.file('signing.gradle').exists()) {
+    println 'Applying release signing'
+    apply from: "${rootProject.file('signing.gradle')}", to: android
+} else {
+    println 'Failed to apply release signing'
+}
 
 def version = '0.1'
 
@@ -42,8 +48,10 @@ android {
         }
 
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 
