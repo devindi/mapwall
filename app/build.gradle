@@ -12,12 +12,6 @@ def thunderforestKey = resolveProperty('thunderforest')
 if (fabricKey != null) {
     apply plugin: 'io.fabric'
 }
-if (rootProject.file('signing.gradle').exists()) {
-    println 'Applying release signing'
-    apply from: "${rootProject.file('signing.gradle')}", to: android
-} else {
-    println 'Failed to apply release signing'
-}
 
 def version = '0.1.1'
 
@@ -35,9 +29,28 @@ android {
                                 googleKey: "$googleKey",
                                 thunderforestKey: "$thunderforestKey"]
     }
+
+
+    signingConfigs {
+        //I wouldn't override default debug config
+        debugg {
+            storeFile rootProject.file("files/debug.jks")
+            storePassword 'mapwall'
+            keyAlias 'debug-key'
+            keyPassword 'mapwall'
+        }
+    }
+    if (rootProject.file('signing.gradle').exists()) {
+        println 'Applying release signing'
+        apply from: "${rootProject.file('signing.gradle')}", to: android
+    } else {
+        println 'Failed to apply release signing'
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix '.debug'
+            signingConfig signingConfigs.debugg
         }
 
         debugProguard {
@@ -51,7 +64,13 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            if (signingConfigs.properties.get('names').collect().contains('release')) {
+                signingConfig signingConfigs.release
+                println 'Using \'release\' signing config for release build'
+            } else {
+                signingConfig signingConfigs.debug
+                println 'Using default signing config for release build'
+            }
         }
     }
 
