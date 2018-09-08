@@ -21,6 +21,9 @@ interface ReportManager {
 }
 
 class FabricReportManager : ReportManager {
+
+    private var initialized = false
+
     override fun init(context: Context) {
         try {
             val info = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
@@ -28,6 +31,7 @@ class FabricReportManager : ReportManager {
             if (!fabricKey.isNullOrEmpty() && fabricKey != "null") {
                 Timber.d("Initializing fabric")
                 Fabric.with(context, Crashlytics())
+                initialized = true
             }
         } catch (e: PackageManager.NameNotFoundException) {
             return
@@ -35,10 +39,18 @@ class FabricReportManager : ReportManager {
     }
 
     override fun reportError(error: Throwable) {
+        if (!initialized) {
+            Timber.w("Skipping error $error")
+            return
+        }
         Crashlytics.logException(error)
     }
 
     override fun reportEvent(event: AnswerEvent<Any>) {
+        if (!initialized) {
+            Timber.w("Skipping event $event")
+            return
+        }
         Timber.d("Reporting to fabric $event")
         val answers = Answers.getInstance()
         when (event) {
