@@ -116,6 +116,7 @@ dependencies {
 
 def resolveProperty(String key) {
     if (hasProperty(key)) return findProperty(key)
+    if (!project.rootProject.file('local.properties').exists()) return null
     Properties properties = new Properties()
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
     return properties.getProperty(key)
