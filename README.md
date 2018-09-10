@@ -11,7 +11,7 @@ Android application to create wallpaper from map. Inspired by [Background Genera
 
 <a href="https://play.google.com/store/apps/details?id=com.devindi.wallpaper">
   <img height="50" alt="Get it on Google Play"
-      src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" />
+      src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" /></a>
 
 Getting started
 ---------------
