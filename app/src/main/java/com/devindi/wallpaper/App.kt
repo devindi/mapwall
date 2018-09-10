@@ -16,6 +16,8 @@ import com.devindi.wallpaper.model.search.searchModule
 import com.devindi.wallpaper.model.storage.KeyValueStorage
 import com.devindi.wallpaper.model.storage.MapCacheStrategy
 import com.devindi.wallpaper.model.storage.SharedPreferencesStorage
+import com.devindi.wallpaper.settings.model.SettingsManager
+import com.devindi.wallpaper.settings.size.edit.EditSizeViewModel
 import com.devindi.wallpaper.source.MapSourceViewModel
 import com.devindi.wallpaper.splash.SplashViewModel
 import com.squareup.picasso.Picasso
@@ -44,9 +46,11 @@ class App : Application() {
         single { ConfigManager() }
         single { DependencyStrategy(get(), get()) }
         single { Configuration.getInstance() }
+        single { SettingsManager(PreferenceManager.getDefaultSharedPreferences(get())) }
         viewModel { SplashViewModel(get(), get()) }
         viewModel { HomeViewModel(get(), get(), get(), get()) }
         viewModel { MapSourceViewModel(get(), get()) }
+        viewModel { EditSizeViewModel(get()) }
     }
 
     override fun onCreate() {
