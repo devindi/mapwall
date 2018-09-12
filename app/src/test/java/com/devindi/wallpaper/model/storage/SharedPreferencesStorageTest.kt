@@ -20,23 +20,23 @@ import org.robolectric.annotation.Config
 @Config(manifest = Config.NONE)
 class SharedPreferencesStorageTest {
 
-    private var STRING_KEY = "STRING_KEY"
-    private var STRING_ANY_VALUE = "STRING_ANY_VALUE"
-    private var STRING_DEFAULT_VALUE = ""
-    private var INT_KEY = "INT_KEY"
-    private var INT_ANY_VALUE = Integer.MAX_VALUE
-    private var INT_DEFAULT_VALUE = 0
-    private var BOOLEAN_KEY = "BOOLEAN_KEY"
-    private var BOOLEAN_ANY_VALUE = true
-    private var BOOLEAN_DEFAULT_VALUE = false
-    private var FLOAT_KEY = "FLOAT_KEY"
-    private var FLOAT_ANY_VALUE = Float.MAX_VALUE
-    private var FLOAT_DEFAULT_VALUE = 0f
-    private var LONG_KEY = "LONG_KEY"
-    private var LONG_ANY_VALUE = Long.MAX_VALUE
-    private var LONG_DEFAULT_VALUE = 0L
+    private val STRING_KEY = "STRING_KEY"
+    private val STRING_ANY_VALUE = "STRING_ANY_VALUE"
+    private val STRING_DEFAULT_VALUE = ""
+    private val INT_KEY = "INT_KEY"
+    private val INT_ANY_VALUE = Integer.MAX_VALUE
+    private val INT_DEFAULT_VALUE = 0
+    private val BOOLEAN_KEY = "BOOLEAN_KEY"
+    private val BOOLEAN_ANY_VALUE = true
+    private val BOOLEAN_DEFAULT_VALUE = false
+    private val FLOAT_KEY = "FLOAT_KEY"
+    private val FLOAT_ANY_VALUE = Float.MAX_VALUE
+    private val FLOAT_DEFAULT_VALUE = 0f
+    private val LONG_KEY = "LONG_KEY"
+    private val LONG_ANY_VALUE = Long.MAX_VALUE
+    private val LONG_DEFAULT_VALUE = 0L
 
-    private lateinit var mockKeyValueStorage: KeyValueStorage
+    private lateinit var keyValueStorage: KeyValueStorage
 
     private lateinit var mockSharedPreferences: SharedPreferences
     private lateinit var mockSharedPreferencesEditor: SharedPreferences.Editor
@@ -46,58 +46,84 @@ class SharedPreferencesStorageTest {
         mockSharedPreferences = PreferenceManager.getDefaultSharedPreferences(RuntimeEnvironment.application.applicationContext)
         mockSharedPreferencesEditor = mockSharedPreferences.edit()
 
-        mockKeyValueStorage = SharedPreferencesStorage(mockSharedPreferences)
+        keyValueStorage = SharedPreferencesStorage(mockSharedPreferences)
     }
 
     @Test
     fun saveNewValueCorrectType() {
-        mockKeyValueStorage.save(STRING_KEY, STRING_ANY_VALUE)
+        keyValueStorage.save(STRING_KEY, STRING_ANY_VALUE)
         assertEquals(STRING_ANY_VALUE, mockSharedPreferences.getString(STRING_KEY, STRING_DEFAULT_VALUE))
     }
 
     @Test
-    fun readSavedBeforeValueReturnValue() {
+    fun readSavedBeforeStringValueReturnValue() {
         mockSharedPreferencesEditor.putString(STRING_KEY, STRING_ANY_VALUE).commit()
-        assertEquals(STRING_ANY_VALUE, mockKeyValueStorage.read(STRING_KEY, String::class))
 
-        mockSharedPreferencesEditor.putInt(INT_KEY, INT_ANY_VALUE).apply()
-        assertEquals(INT_ANY_VALUE, mockKeyValueStorage.read(INT_KEY, Int::class))
-
-        mockSharedPreferencesEditor.putBoolean(BOOLEAN_KEY, BOOLEAN_ANY_VALUE).apply()
-        assertEquals(BOOLEAN_ANY_VALUE, mockKeyValueStorage.read(BOOLEAN_KEY, Boolean::class))
-
-        mockSharedPreferencesEditor.putFloat(FLOAT_KEY, FLOAT_ANY_VALUE).apply()
-        assertEquals(FLOAT_ANY_VALUE, mockKeyValueStorage.read(FLOAT_KEY, Float::class))
-
-        mockSharedPreferencesEditor.putLong(LONG_KEY, LONG_ANY_VALUE).apply()
-        assertEquals(LONG_ANY_VALUE, mockKeyValueStorage.read(LONG_KEY, Long::class))
-
+        assertEquals(STRING_ANY_VALUE, keyValueStorage.read(STRING_KEY, String::class))
     }
 
     @Test
-    fun readNotExistingKeyReturnDefault() {
-        assertEquals(mockKeyValueStorage.read(STRING_KEY, String::class, STRING_DEFAULT_VALUE), STRING_DEFAULT_VALUE)
+    fun readSavedBeforeIntValueReturnValue() {
+        mockSharedPreferencesEditor.putInt(INT_KEY, INT_ANY_VALUE).apply()
 
-        assertEquals(mockKeyValueStorage.read(INT_KEY, Int::class, INT_DEFAULT_VALUE), INT_DEFAULT_VALUE)
+        assertEquals(INT_ANY_VALUE, keyValueStorage.read(INT_KEY, Int::class))
+    }
 
-        assertEquals(mockKeyValueStorage.read(BOOLEAN_KEY, Boolean::class, BOOLEAN_DEFAULT_VALUE), BOOLEAN_DEFAULT_VALUE)
+    @Test
+    fun readSavedBeforeBooleanValueReturnValue() {
+        mockSharedPreferencesEditor.putBoolean(BOOLEAN_KEY, BOOLEAN_ANY_VALUE).apply()
 
-        assertEquals(mockKeyValueStorage.read(FLOAT_KEY, Float::class, FLOAT_DEFAULT_VALUE), FLOAT_DEFAULT_VALUE)
+        assertEquals(BOOLEAN_ANY_VALUE, keyValueStorage.read(BOOLEAN_KEY, Boolean::class))
+    }
 
-        assertEquals(mockKeyValueStorage.read(LONG_KEY, Long::class, LONG_DEFAULT_VALUE), LONG_DEFAULT_VALUE)
+    @Test
+    fun readSavedBeforeFloatValueReturnValue() {
+        mockSharedPreferencesEditor.putFloat(FLOAT_KEY, FLOAT_ANY_VALUE).apply()
+
+        assertEquals(FLOAT_ANY_VALUE, keyValueStorage.read(FLOAT_KEY, Float::class))
+    }
+
+    @Test
+    fun readSavedBeforeLongValueReturnValue() {
+        mockSharedPreferencesEditor.putLong(LONG_KEY, LONG_ANY_VALUE).apply()
+
+        assertEquals(LONG_ANY_VALUE, keyValueStorage.read(LONG_KEY, Long::class))
+    }
+
+    @Test
+    fun readNotExistingKeyReturnDefaultString() {
+        assertEquals(keyValueStorage.read(STRING_KEY, String::class, STRING_DEFAULT_VALUE), STRING_DEFAULT_VALUE)
+    }
+
+    @Test
+    fun readNotExistingKeyReturnDefaultInt() {
+        assertEquals(keyValueStorage.read(INT_KEY, Int::class, INT_DEFAULT_VALUE), INT_DEFAULT_VALUE)
+    }
+
+    @Test
+    fun readNotExistingKeyReturnDefaultBoolean() {
+        assertEquals(keyValueStorage.read(BOOLEAN_KEY, Boolean::class, BOOLEAN_DEFAULT_VALUE), BOOLEAN_DEFAULT_VALUE)
+    }
+
+    @Test
+    fun readNotExistingKeyReturnDefaultFloat() {
+        assertEquals(keyValueStorage.read(FLOAT_KEY, Float::class, FLOAT_DEFAULT_VALUE), FLOAT_DEFAULT_VALUE)
+    }
+
+    @Test
+    fun readNotExistingKeyReturnDefaultLong() {
+        assertEquals(keyValueStorage.read(LONG_KEY, Long::class, LONG_DEFAULT_VALUE), LONG_DEFAULT_VALUE)
     }
 
     @Test(expected = UnsupportedOperationException::class)
     fun saveNewValueIncorrectTypeThrowException() {
         val value = 0
-        mockKeyValueStorage.save(STRING_KEY, value)
+        keyValueStorage.save(STRING_KEY, value)
     }
 
     @Test(expected = UnsupportedOperationException::class)
     fun readIncorrectTypeKeyThrowException() {
-        val value = HashSet<String>()
-        mockSharedPreferencesEditor.putStringSet(STRING_KEY, value)
-        mockKeyValueStorage.read(STRING_KEY, Set::class)
+        keyValueStorage.read(STRING_KEY, Set::class)
     }
 
 }
