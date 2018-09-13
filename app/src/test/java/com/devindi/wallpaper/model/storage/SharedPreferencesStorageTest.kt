@@ -38,54 +38,55 @@ class SharedPreferencesStorageTest {
 
     private lateinit var keyValueStorage: KeyValueStorage
 
-    private lateinit var mockSharedPreferences: SharedPreferences
-    private lateinit var mockSharedPreferencesEditor: SharedPreferences.Editor
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var sharedPreferencesEditor: SharedPreferences.Editor
 
     @Before
-    fun initMocks() {
-        mockSharedPreferences = PreferenceManager.getDefaultSharedPreferences(RuntimeEnvironment.application.applicationContext)
-        mockSharedPreferencesEditor = mockSharedPreferences.edit()
+    fun setup() {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(RuntimeEnvironment.application.applicationContext)
+        sharedPreferencesEditor = sharedPreferences.edit()
 
-        keyValueStorage = SharedPreferencesStorage(mockSharedPreferences)
+        keyValueStorage = SharedPreferencesStorage(sharedPreferences)
     }
 
     @Test
     fun saveNewValueCorrectType() {
         keyValueStorage.save(STRING_KEY, STRING_ANY_VALUE)
-        assertEquals(STRING_ANY_VALUE, mockSharedPreferences.getString(STRING_KEY, STRING_DEFAULT_VALUE))
+
+        assertEquals(STRING_ANY_VALUE, sharedPreferences.getString(STRING_KEY, STRING_DEFAULT_VALUE))
     }
 
     @Test
     fun readSavedBeforeStringValueReturnValue() {
-        mockSharedPreferencesEditor.putString(STRING_KEY, STRING_ANY_VALUE).commit()
+        sharedPreferencesEditor.putString(STRING_KEY, STRING_ANY_VALUE).apply()
 
         assertEquals(STRING_ANY_VALUE, keyValueStorage.read(STRING_KEY, String::class))
     }
 
     @Test
     fun readSavedBeforeIntValueReturnValue() {
-        mockSharedPreferencesEditor.putInt(INT_KEY, INT_ANY_VALUE).apply()
+        sharedPreferencesEditor.putInt(INT_KEY, INT_ANY_VALUE).apply()
 
         assertEquals(INT_ANY_VALUE, keyValueStorage.read(INT_KEY, Int::class))
     }
 
     @Test
     fun readSavedBeforeBooleanValueReturnValue() {
-        mockSharedPreferencesEditor.putBoolean(BOOLEAN_KEY, BOOLEAN_ANY_VALUE).apply()
+        sharedPreferencesEditor.putBoolean(BOOLEAN_KEY, BOOLEAN_ANY_VALUE).apply()
 
         assertEquals(BOOLEAN_ANY_VALUE, keyValueStorage.read(BOOLEAN_KEY, Boolean::class))
     }
 
     @Test
     fun readSavedBeforeFloatValueReturnValue() {
-        mockSharedPreferencesEditor.putFloat(FLOAT_KEY, FLOAT_ANY_VALUE).apply()
+        sharedPreferencesEditor.putFloat(FLOAT_KEY, FLOAT_ANY_VALUE).apply()
 
         assertEquals(FLOAT_ANY_VALUE, keyValueStorage.read(FLOAT_KEY, Float::class))
     }
 
     @Test
     fun readSavedBeforeLongValueReturnValue() {
-        mockSharedPreferencesEditor.putLong(LONG_KEY, LONG_ANY_VALUE).apply()
+        sharedPreferencesEditor.putLong(LONG_KEY, LONG_ANY_VALUE).apply()
 
         assertEquals(LONG_ANY_VALUE, keyValueStorage.read(LONG_KEY, Long::class))
     }
