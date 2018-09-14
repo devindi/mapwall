@@ -7,9 +7,11 @@ import com.devindi.wallpaper.misc.DependencyStrategy
 import com.devindi.wallpaper.misc.FabricReportManager
 import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.createPermissionManager
+import com.devindi.wallpaper.model.AndroidInfo
+import com.devindi.wallpaper.model.DeviceInfo
+import com.devindi.wallpaper.model.DisplayInfo
 import com.devindi.wallpaper.model.SettingsRepo
 import com.devindi.wallpaper.model.config.ConfigManager
-import com.devindi.wallpaper.model.device.*
 import com.devindi.wallpaper.model.map.TileRequestHandler
 import com.devindi.wallpaper.model.search.searchModule
 import com.devindi.wallpaper.model.storage.KeyValueStorage
@@ -25,7 +27,6 @@ import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module.Module
 import org.koin.dsl.module.applicationContext
 import org.koin.log.Logger
-import org.koin.standalone.get
 import org.osmdroid.config.Configuration
 import timber.log.Timber
 
@@ -38,8 +39,7 @@ class App : Application() {
         bean { SettingsRepo(get(), get()) }
         bean { createPermissionManager() }
         bean { FabricReportManager() as ReportManager }
-        bean { DeviceInfoProvider(DisplayInfoProvider(androidApplication()) as DisplayInfo, OsInfoProvider() as OsInfo) as DeviceInfo }
-        bean { MapCacheStrategy(androidApplication(), get()) }
+        bean { MapCacheStrategy(androidApplication(), DeviceInfo(androidApplication()) as AndroidInfo) }
         bean { ConfigManager() }
         bean { DependencyStrategy(get(), get()) }
         bean { Configuration.getInstance() }
