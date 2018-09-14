@@ -9,6 +9,7 @@ import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.createPermissionManager
 import com.devindi.wallpaper.model.SettingsRepo
 import com.devindi.wallpaper.model.config.ConfigManager
+import com.devindi.wallpaper.model.device.*
 import com.devindi.wallpaper.model.map.TileRequestHandler
 import com.devindi.wallpaper.model.search.searchModule
 import com.devindi.wallpaper.model.storage.KeyValueStorage
@@ -32,12 +33,13 @@ const val PARAM_TILE_SOURCE = "tile"
 
 class App : Application() {
 
-    private val applicationModule : Module = applicationContext {
+    private val applicationModule: Module = applicationContext {
         bean { SharedPreferencesStorage(PreferenceManager.getDefaultSharedPreferences(get())) as KeyValueStorage }
         bean { SettingsRepo(get(), get()) }
         bean { createPermissionManager() }
         bean { FabricReportManager() as ReportManager }
-        bean { MapCacheStrategy(androidApplication()) }
+        bean { DeviceInfoProvider(DisplayInfoProvider(androidApplication()) as DisplayInfo, OsInfoProvider() as OsInfo) as DeviceInfo }
+        bean { MapCacheStrategy(androidApplication(), get()) }
         bean { ConfigManager() }
         bean { DependencyStrategy(get(), get()) }
         bean { Configuration.getInstance() }
