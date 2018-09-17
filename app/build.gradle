@@ -25,8 +25,8 @@ android {
         versionCode 2
         versionName version
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        manifestPlaceholders = [fabricKey: "$fabricKey",
-                                googleKey: "$googleKey",
+        manifestPlaceholders = [fabricKey       : "$fabricKey",
+                                googleKey       : "$googleKey",
                                 thunderforestKey: "$thunderforestKey"]
     }
 

@@ -3,16 +3,17 @@ package com.devindi.wallpaper.model.storage
 import android.content.Context
 import android.os.Build
 import android.os.Environment
+import com.devindi.wallpaper.model.AndroidInfo
 import java.io.File
 
-class MapCacheStrategy(private val context: Context) {
+class MapCacheStrategy(private val context: Context, private val androidInfo: AndroidInfo) {
 
     /**
      * Defines default storage for osm cache.
      * @return path to cache or null if user should select it
      */
     fun defaultCachePath(): String? {
-        return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+        return if (androidInfo.version() < Build.VERSION_CODES.M) {
             if (isExternalStorageWritable()) {
                 createExternalPath()
             } else {
