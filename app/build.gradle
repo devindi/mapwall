@@ -92,7 +92,7 @@ ktlint  {
     version = "0.28.0"
     android = true
     reporters = ["CHECKSTYLE"]
-    ignoreFailures = true
+    ignoreFailures = false
 }
 
 dependencies {
