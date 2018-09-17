@@ -39,7 +39,8 @@ class App : Application() {
         bean { SettingsRepo(get(), get()) }
         bean { createPermissionManager() }
         bean { FabricReportManager() as ReportManager }
-        bean { MapCacheStrategy(androidApplication(), DeviceInfo(androidApplication()) as AndroidInfo) }
+        bean { DeviceInfo(androidApplication()) as AndroidInfo }
+        bean { MapCacheStrategy(androidApplication(), get()) }
         bean { ConfigManager() }
         bean { DependencyStrategy(get(), get()) }
         bean { Configuration.getInstance() }
