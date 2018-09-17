@@ -27,5 +27,5 @@ before_script:
   - adb shell input keyevent 82 &
 
 script:
-  - ./gradlew assembleDebug ktlintCheck
-  - bundle exec danger
+  - ./gradlew assembleDebug ktlintDebugCheck
+  #- bundle exec danger
