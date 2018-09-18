@@ -29,7 +29,7 @@ interface PermissionManager {
     fun requestPermissions(permissions: List<String>, resolver: Controller)
 }
 
-class PermissionManagerImpl:PermissionManager {
+class PermissionManagerImpl : PermissionManager {
 
     override fun checkPermissions(permissions: List<String>, resolver: Activity): List<String> {
         return emptyList()
@@ -45,7 +45,7 @@ class PermissionManagerApiMImpl : PermissionManager {
 
     override fun checkPermissions(permissions: List<String>, resolver: Activity): List<String> {
         return permissions
-                .filter { resolver.checkSelfPermission(it) == PackageManager.PERMISSION_DENIED }
+            .filter { resolver.checkSelfPermission(it) == PackageManager.PERMISSION_DENIED }
     }
 
     override fun requestPermissions(permissions: List<String>, resolver: Controller) {

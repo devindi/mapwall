@@ -15,17 +15,24 @@ import com.devindi.wallpaper.R
  * Based on conductor demo.
  */
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-class FabToDialogTransitionChangeHandler: TransitionChangeHandler() {
+class FabToDialogTransitionChangeHandler : TransitionChangeHandler() {
 
     private var fab: View? = null
     private var dialogBackground: View? = null
     private var fabParent: ViewGroup? = null
 
-    override fun getTransition(container: ViewGroup, from: View?, to: View?, isPush: Boolean): Transition {
+    override fun getTransition(
+        container: ViewGroup,
+        from: View?,
+        to: View?,
+        isPush: Boolean
+    ): Transition {
         val fade = Fade()
         fade.addTarget(R.id.dialog_background)
 
-        val transition = FabTransform(ContextCompat.getColor(container.context, R.color.colorAccent), R.drawable.ic_map_style)
+        val transition = FabTransform(
+            ContextCompat.getColor(container.context, R.color.colorAccent),
+            R.drawable.ic_map_style)
 
         val set = TransitionSet()
         set.addTransition(fade)
@@ -34,12 +41,14 @@ class FabToDialogTransitionChangeHandler: TransitionChangeHandler() {
         return set
     }
 
-    override fun prepareForTransition(container: ViewGroup,
-                                      from: View?,
-                                      to: View?,
-                                      transition: Transition,
-                                      isPush: Boolean,
-                                      onTransitionPreparedListener: OnTransitionPreparedListener) {
+    override fun prepareForTransition(
+        container: ViewGroup,
+        from: View?,
+        to: View?,
+        transition: Transition,
+        isPush: Boolean,
+        onTransitionPreparedListener: OnTransitionPreparedListener
+    ) {
         fab = (if (isPush) from else to)?.findViewById(R.id.btn_select_source)
 
         fabParent = fab?.parent as? ViewGroup
@@ -64,11 +73,13 @@ class FabToDialogTransitionChangeHandler: TransitionChangeHandler() {
         onTransitionPreparedListener.onPrepared()
     }
 
-    override fun executePropertyChanges(container: ViewGroup,
-                                        from: View?,
-                                        to: View?,
-                                        transition: Transition?,
-                                        isPush: Boolean) {
+    override fun executePropertyChanges(
+        container: ViewGroup,
+        from: View?,
+        to: View?,
+        transition: Transition?,
+        isPush: Boolean
+    ) {
         if (isPush) {
             fabParent?.removeView(fab)
             container.addView(to)
@@ -110,4 +121,3 @@ class FabToDialogTransitionChangeHandler: TransitionChangeHandler() {
         }
     }
 }
-

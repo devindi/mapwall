@@ -7,7 +7,7 @@ interface KeyValueStorage {
 
     fun <T> save(key: String, value: T)
 
-    fun <T: Any> read(key: String, clazz: KClass<T>, defaultValue: T? = null): T?
+    fun <T : Any> read(key: String, clazz: KClass<T>, defaultValue: T? = null): T?
 }
 
 class SharedPreferencesStorage(private val impl: SharedPreferences) : KeyValueStorage {
@@ -19,7 +19,7 @@ class SharedPreferencesStorage(private val impl: SharedPreferences) : KeyValueSt
         }
     }
 
-    override fun <T: Any> read(key: String, clazz: KClass<T>, defaultValue: T?): T? {
+    override fun <T : Any> read(key: String, clazz: KClass<T>, defaultValue: T?): T? {
         return when (clazz) {
             String::class -> impl.getString(key, defaultValue as? String) as T?
             Int::class -> impl.getInt(key, defaultValue as? Int ?: -1) as T?

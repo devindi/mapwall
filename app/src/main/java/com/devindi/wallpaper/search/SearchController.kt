@@ -49,11 +49,11 @@ class SearchController : LifecycleController() {
         suggestsContainer = view.findViewById(R.id.suggests)
         search.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                //do nothing
+                // do nothing
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //do nothing
+                // do nothing
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -62,16 +62,24 @@ class SearchController : LifecycleController() {
         })
         viewModel.suggests().observe(this, Observer { showSuggests(it) })
         viewModel.place().observe(this, Observer { showPlace(it) })
-        viewModel.googleErrorData.observe(this, Observer { Snackbar.make(view, "Something wrong $it", Snackbar.LENGTH_LONG).show() })
+        viewModel.googleErrorData.observe(
+            this,
+            Observer {
+                Snackbar.make(view, "Something wrong $it", Snackbar.LENGTH_LONG).show()
+            })
         return view
     }
 
-    override fun onChangeEnded(changeHandler: ControllerChangeHandler, changeType: ControllerChangeType) {
+    override fun onChangeEnded(
+        changeHandler: ControllerChangeHandler,
+        changeType: ControllerChangeType
+    ) {
         if (changeType != ControllerChangeType.PUSH_ENTER) {
             return
         }
         search.requestFocus()
-        val imm = search.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm = search.context.getSystemService(Context.INPUT_METHOD_SERVICE)
+            as InputMethodManager
         imm.showSoftInput(search, InputMethodManager.SHOW_IMPLICIT)
     }
 
@@ -85,7 +93,7 @@ class SearchController : LifecycleController() {
             var itemView = suggestsContainer.getChildAt(index)
             if (itemView == null) {
                 itemView = LayoutInflater.from(suggestsContainer.context)
-                        .inflate(R.layout.search_suggest_item, suggestsContainer, false)
+                    .inflate(R.layout.search_suggest_item, suggestsContainer, false)
                 suggestsContainer.addView(itemView)
             }
             itemView.findViewById<TextView>(R.id.title).text = suggest.title
@@ -120,7 +128,8 @@ class SearchController : LifecycleController() {
     }
 
     private fun close() {
-        val imm = search.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm = search.context.getSystemService(Context.INPUT_METHOD_SERVICE)
+            as InputMethodManager
         imm.hideSoftInputFromWindow(search.windowToken, 0)
         router.popCurrentController()
     }

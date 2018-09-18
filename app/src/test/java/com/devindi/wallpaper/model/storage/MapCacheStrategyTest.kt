@@ -3,11 +3,11 @@ package com.devindi.wallpaper.model.storage
 import android.content.Context
 import android.os.Environment
 import com.devindi.wallpaper.model.AndroidInfo
-import com.nhaarman.mockito_kotlin.*
-import org.junit.Test
-
-import org.junit.Assert.*
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.whenever
+import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config

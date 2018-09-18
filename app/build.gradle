@@ -93,6 +93,7 @@ ktlint  {
     android = true
     reporters = ["CHECKSTYLE"]
     ignoreFailures = true
+    verbose = true
 }
 
 dependencies {

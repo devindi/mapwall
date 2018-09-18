@@ -18,8 +18,8 @@ val searchModule: Module = applicationContext {
     bean { GoogleApiClientLifecycleObserver(get()) }
     bean {
         GoogleApiClient.Builder(androidApplication())
-                .addApi(Places.GEO_DATA_API)
-                .addOnConnectionFailedListener(get())
-                .build()
+            .addApi(Places.GEO_DATA_API)
+            .addOnConnectionFailedListener(get())
+            .build()
     }
 }

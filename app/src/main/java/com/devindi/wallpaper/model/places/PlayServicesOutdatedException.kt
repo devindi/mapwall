@@ -1,3 +1,3 @@
 package com.devindi.wallpaper.model.places
 
-class PlayServicesOutdatedException: Exception()
+class PlayServicesOutdatedException : Exception()

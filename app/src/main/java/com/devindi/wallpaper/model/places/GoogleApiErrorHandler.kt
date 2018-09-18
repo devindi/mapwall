@@ -8,7 +8,9 @@ import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.places.PlacesStatusCodes
 import timber.log.Timber
 
-class GoogleApiErrorHandler(private val reportManager: ReportManager): GoogleApiClient.OnConnectionFailedListener {
+class GoogleApiErrorHandler(
+    private val reportManager: ReportManager
+) : GoogleApiClient.OnConnectionFailedListener {
 
     val errorData = SingleLiveEvent<Throwable>()
 

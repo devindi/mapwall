@@ -12,9 +12,9 @@ import com.devindi.wallpaper.R
 import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.inject
 import com.devindi.wallpaper.model.analytics.ScreenEvent
-import java.util.*
+import java.util.Locale
 
-class AboutController: LifecycleController() {
+class AboutController : LifecycleController() {
 
     private val reportManager: ReportManager by inject()
 
@@ -29,8 +29,8 @@ class AboutController: LifecycleController() {
         toolbar.setNavigationOnClickListener { router.popCurrentController() }
 
         val versionString = String.format(Locale.US,
-                container.context.getText(R.string.about_version).toString(),
-                BuildConfig.VERSION_NAME)
+            container.context.getText(R.string.about_version).toString(),
+            BuildConfig.VERSION_NAME)
         view.findViewById<TextView>(R.id.about_version).text = versionString
 
         return view

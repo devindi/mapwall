@@ -7,7 +7,7 @@ import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 import timber.log.Timber
 
-class TileRequestHandler: RequestHandler(), KoinComponent {
+class TileRequestHandler : RequestHandler(), KoinComponent {
 
     private val mapAreaManager: MapAreaManager by inject()
 

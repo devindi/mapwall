@@ -8,13 +8,22 @@ import android.view.ViewGroup
 import com.bluelinelabs.conductor.changehandler.AnimatorChangeHandler
 import com.devindi.wallpaper.R
 
-class SearchChangeHandler(duration: Long = -1, removesFromViewOnPush: Boolean = true) : AnimatorChangeHandler(duration, removesFromViewOnPush) {
+class SearchChangeHandler(
+    duration: Long = -1,
+    removesFromViewOnPush: Boolean = true
+) : AnimatorChangeHandler(duration, removesFromViewOnPush) {
 
     override fun resetFromView(from: View) {
-        //do nothing
+        // do nothing
     }
 
-    override fun getAnimator(container: ViewGroup, from: View?, to: View?, isPush: Boolean, toAddedToContainer: Boolean): Animator {
+    override fun getAnimator(
+        container: ViewGroup,
+        from: View?,
+        to: View?,
+        isPush: Boolean,
+        toAddedToContainer: Boolean
+    ): Animator {
         val animator = AnimatorSet()
 
         if (isPush && to != null) {
@@ -23,7 +32,9 @@ class SearchChangeHandler(duration: Long = -1, removesFromViewOnPush: Boolean = 
             animator.play(ObjectAnimator.ofFloat(modalBg, View.ALPHA, start, 1F))
 
             val resultView = to.findViewById<View>(R.id.list)
-            animator.play(ObjectAnimator.ofFloat(resultView, View.TRANSLATION_Y, to.height.toFloat(), 0F))
+            animator.play(
+                ObjectAnimator.ofFloat(resultView, View.TRANSLATION_Y, to.height.toFloat(), 0F)
+            )
         }
 
         if (!isPush && from != null) {
@@ -32,7 +43,9 @@ class SearchChangeHandler(duration: Long = -1, removesFromViewOnPush: Boolean = 
             animator.play(ObjectAnimator.ofFloat(modalBg, View.ALPHA, start, 0F))
 
             val resultView = from.findViewById<View>(R.id.list)
-            animator.play(ObjectAnimator.ofFloat(resultView, View.TRANSLATION_Y, from.height.toFloat()))
+            animator.play(
+                ObjectAnimator.ofFloat(resultView, View.TRANSLATION_Y, from.height.toFloat())
+            )
         }
 
         return animator

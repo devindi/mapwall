@@ -1,3 +1,3 @@
 package com.devindi.wallpaper.model.places
 
-class InvalidPlacesApiKeyException: Exception()
+class InvalidPlacesApiKeyException : Exception()

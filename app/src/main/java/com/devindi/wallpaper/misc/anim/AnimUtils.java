@@ -38,16 +38,17 @@ import java.util.ArrayList;
  * Utility methods for working with animations.
  * Copied from conductor demo
  */
-@SuppressWarnings({"squid:ModifiersOrderCheck", "squid:S1319", "squid:CommentedOutCodeLine", })
+@SuppressWarnings({"squid:ModifiersOrderCheck", "squid:S1319", "squid:CommentedOutCodeLine",})
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 public class AnimUtils {
-
-    private AnimUtils() { }
 
     private static Interpolator fastOutSlowIn;
     private static Interpolator fastOutLinearIn;
     private static Interpolator linearOutSlowIn;
     private static Interpolator linear;
+
+    private AnimUtils() {
+    }
 
     @NonNull
     public static Interpolator getFastOutSlowInInterpolator() {
@@ -89,21 +90,6 @@ public class AnimUtils {
     }
 
     /**
-     * A delegate for creating a {@link Property} of <code>int</code> type.
-     */
-    public static abstract class IntProp<T> {
-
-        public final String name;
-
-        public IntProp(String name) {
-            this.name = name;
-        }
-
-        public abstract void set(T object, int value);
-        public abstract int get(T object);
-    }
-
-    /**
      * The animation framework has an optimization for <code>Properties</code> of type
      * <code>int</code> but it was only made public in API24, so wrap the impl in our own type
      * and conditionally create the appropriate type, delegating the implementation.
@@ -137,21 +123,6 @@ public class AnimUtils {
     }
 
     /**
-     * A delegate for creating a {@link Property} of <code>float</code> type.
-     */
-    public static abstract class FloatProp<T> {
-
-        public final String name;
-
-        protected FloatProp(String name) {
-            this.name = name;
-        }
-
-        public abstract void set(T object, float value);
-        public abstract float get(T object);
-    }
-
-    /**
      * The animation framework has an optimization for <code>Properties</code> of type
      * <code>float</code> but it was only made public in API24, so wrap the impl in our own type
      * and conditionally create the appropriate type, delegating the implementation.
@@ -182,6 +153,38 @@ public class AnimUtils {
                 }
             };
         }
+    }
+
+    /**
+     * A delegate for creating a {@link Property} of <code>int</code> type.
+     */
+    public static abstract class IntProp<T> {
+
+        public final String name;
+
+        public IntProp(String name) {
+            this.name = name;
+        }
+
+        public abstract void set(T object, int value);
+
+        public abstract int get(T object);
+    }
+
+    /**
+     * A delegate for creating a {@link Property} of <code>float</code> type.
+     */
+    public static abstract class FloatProp<T> {
+
+        public final String name;
+
+        protected FloatProp(String name) {
+            this.name = name;
+        }
+
+        public abstract void set(T object, float value);
+
+        public abstract float get(T object);
     }
 
     /**

@@ -4,7 +4,10 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.devindi.wallpaper.model.places.GoogleApiErrorHandler
 
-class SearchViewModel(private val manager: SearchManager, googleApiErrorHandler: GoogleApiErrorHandler): ViewModel() {
+class SearchViewModel(
+    private val manager: SearchManager,
+    googleApiErrorHandler: GoogleApiErrorHandler
+) : ViewModel() {
 
     val googleErrorData = googleApiErrorHandler.errorData
 

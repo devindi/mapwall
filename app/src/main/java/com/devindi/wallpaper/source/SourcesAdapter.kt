@@ -13,13 +13,15 @@ import com.devindi.wallpaper.model.map.MapSource
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.map_source_item.view.*
 
-class SourcesAdapter(private val sourceListener: OnSourceSelected): RecyclerView.Adapter<SourceViewHolder>(), OnItemClickListener {
+class SourcesAdapter(private val sourceListener: OnSourceSelected) :
+    RecyclerView.Adapter<SourceViewHolder>(), OnItemClickListener {
 
     private var items = emptyList<MapSource>()
     private var selectedItem: MapSource = MapSource("", "")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SourceViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.map_source_item, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.map_source_item, parent, false)
         return SourceViewHolder(view, this)
     }
 
@@ -27,7 +29,9 @@ class SourcesAdapter(private val sourceListener: OnSourceSelected): RecyclerView
 
     override fun onBindViewHolder(holder: SourceViewHolder, position: Int) {
         holder.titleView.text = items[position].title
-        Picasso.with(holder.itemView.context).load(createThumbUri(items[position])).into(holder.imgView)
+        Picasso.with(holder.itemView.context)
+            .load(createThumbUri(items[position]))
+            .into(holder.imgView)
         holder.mark.visibility = if (position == items.indexOf(selectedItem)) {
             View.VISIBLE
         } else {
@@ -75,7 +79,12 @@ class SourcesAdapter(private val sourceListener: OnSourceSelected): RecyclerView
     }
 
     private fun createThumbUri(mapSource: MapSource): Uri {
-        return Uri.parse("osm://${mapSource.id}?latNorth=85&latSouth=-85&lonWest=-170&lonEast=170&zoom=0")
+        return Uri.parse("osm://${mapSource.id}?" +
+            "latNorth=85&" +
+            "latSouth=-85&" +
+            "lonWest=-170&" +
+            "lonEast=170&" +
+            "zoom=0")
     }
 
     private fun changeCurrentMapSource(selectedSource: MapSource) {
@@ -103,7 +112,8 @@ class SourcesAdapter(private val sourceListener: OnSourceSelected): RecyclerView
     }
 }
 
-class SourceViewHolder(val view: View, listener: OnItemClickListener): RecyclerView.ViewHolder(view) {
+class SourceViewHolder(val view: View, listener: OnItemClickListener) :
+    RecyclerView.ViewHolder(view) {
     val titleView: TextView = view.title
     val imgView: ImageView = view.imageView
     val mark: View = view.selected

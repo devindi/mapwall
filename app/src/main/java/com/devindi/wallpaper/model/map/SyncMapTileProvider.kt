@@ -9,7 +9,10 @@ import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 /**
  * Synchronous analog of [org.osmdroid.tileprovider.MapTileProviderBase]
  */
-class SyncMapTileProvider(private val factory: CacheManagerFactory, private val cache: IFilesystemCache) {
+class SyncMapTileProvider(
+    private val factory: CacheManagerFactory,
+    private val cache: IFilesystemCache
+) {
 
     private val cacheOfCaches: MutableMap<OnlineTileSourceBase, CacheManager> = mutableMapOf()
 
@@ -28,10 +31,10 @@ class SyncMapTileProvider(private val factory: CacheManagerFactory, private val 
     }
 
     private fun getCacheManager(tileSource: OnlineTileSourceBase) =
-            cacheOfCaches.getOrPut(tileSource) { factory.create(tileSource) }
+        cacheOfCaches.getOrPut(tileSource) { factory.create(tileSource) }
 }
 
 class CacheManagerFactory(private val cache: IFilesystemCache) {
     fun create(tileSource: OnlineTileSourceBase) =
-            CacheManager(tileSource, cache, tileSource.minimumZoomLevel, tileSource.maximumZoomLevel)
+        CacheManager(tileSource, cache, tileSource.minimumZoomLevel, tileSource.maximumZoomLevel)
 }
