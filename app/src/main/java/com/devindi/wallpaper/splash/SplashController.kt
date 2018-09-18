@@ -10,13 +10,16 @@ import android.view.View
 import android.view.ViewGroup
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.archlifecycle.LifecycleController
+import com.devindi.wallpaper.R
 import com.devindi.wallpaper.home.HomeController
-import com.devindi.wallpaper.misc.*
+import com.devindi.wallpaper.misc.DependencyStrategy
+import com.devindi.wallpaper.misc.PermissionManager
+import com.devindi.wallpaper.misc.ReportManager
+import com.devindi.wallpaper.misc.inject
+import com.devindi.wallpaper.misc.viewModel
 import com.devindi.wallpaper.model.analytics.ScreenEvent
-import com.devindi.wallpaper.model.map.mapModule
-import org.koin.standalone.StandAloneContext
 
-class SplashController: LifecycleController() {
+class SplashController : LifecycleController() {
 
     private val permissionManager: PermissionManager by inject()
     private val viewModel: SplashViewModel by viewModel()
@@ -40,10 +43,14 @@ class SplashController: LifecycleController() {
         })
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         val granted = permissions
-                .filterIndexed { index, _ -> grantResults[index] == PackageManager.PERMISSION_GRANTED }
-                .any { it == Manifest.permission.WRITE_EXTERNAL_STORAGE }
+            .filterIndexed { index, _ -> grantResults[index] == PackageManager.PERMISSION_GRANTED }
+            .any { it == Manifest.permission.WRITE_EXTERNAL_STORAGE }
         if (granted) {
             viewModel.useExternalStorage()
             return
@@ -60,18 +67,20 @@ class SplashController: LifecycleController() {
 
     private fun askForCacheLocation(activity: Activity) {
         AlertDialog.Builder(activity)
-                .setMessage("Select map cache location. Disk usage is based on map usage and be up to 1GB. External storage is recommended")
-                .setPositiveButton("Internal") { _, _ ->
-                    viewModel.useInternalStorage()
+            .setMessage(R.string.request_storage_permission_message)
+            .setPositiveButton("Internal") { _, _ ->
+                viewModel.useInternalStorage()
+            }
+            .setNegativeButton("External") { _, _ ->
+                val requiredPermissions = permissionManager.checkPermissions(
+                    listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    activity)
+                if (requiredPermissions.isEmpty()) {
+                    viewModel.useExternalStorage()
+                } else {
+                    permissionManager.requestPermissions(requiredPermissions, this)
                 }
-                .setNegativeButton("External") { _, _ ->
-                    val requiredPermissions = permissionManager.checkPermissions(listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), activity)
-                    if (requiredPermissions.isEmpty()) {
-                        viewModel.useExternalStorage()
-                    } else {
-                        permissionManager.requestPermissions(requiredPermissions, this)
-                    }
-                }
-                .show()
+            }
+            .show()
     }
 }

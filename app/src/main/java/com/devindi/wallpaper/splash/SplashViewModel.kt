@@ -5,7 +5,10 @@ import com.devindi.wallpaper.misc.SingleLiveEvent
 import com.devindi.wallpaper.model.SettingsRepo
 import com.devindi.wallpaper.model.storage.MapCacheStrategy
 
-class SplashViewModel(private val settings: SettingsRepo, private val mapCacheStrategy: MapCacheStrategy) : ViewModel() {
+class SplashViewModel(
+    private val settings: SettingsRepo,
+    private val mapCacheStrategy: MapCacheStrategy
+) : ViewModel() {
 
     val shouldAskFroCacheLocation = SingleLiveEvent<Boolean>()
     val appInitialized = SingleLiveEvent<Boolean>()

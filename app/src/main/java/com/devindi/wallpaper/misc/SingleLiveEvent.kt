@@ -6,7 +6,7 @@ import android.arch.lifecycle.Observer
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
-class SingleLiveEvent<T>: LiveData<T>() {
+class SingleLiveEvent<T> : LiveData<T>() {
 
     private val pending = AtomicBoolean(false)
 

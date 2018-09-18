@@ -5,8 +5,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bluelinelabs.conductor.ControllerChangeHandler
-import com.bluelinelabs.conductor.ControllerChangeType
 import com.bluelinelabs.conductor.archlifecycle.LifecycleController
 import com.devindi.wallpaper.R
 import com.devindi.wallpaper.misc.ReportManager
@@ -16,10 +14,8 @@ import com.devindi.wallpaper.model.analytics.ChooseMapEvent
 import com.devindi.wallpaper.model.analytics.ScreenEvent
 import com.devindi.wallpaper.model.map.MapSource
 import kotlinx.android.synthetic.main.map_source_screen.view.*
-import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
-import timber.log.Timber
 
-class MapSourceController: LifecycleController() {
+class MapSourceController : LifecycleController() {
 
     private val viewModel: MapSourceViewModel by viewModel()
     private val reportManager by inject<ReportManager>()
@@ -49,8 +45,14 @@ class MapSourceController: LifecycleController() {
             router.popCurrentController()
         }
 
-        viewModel.mapSourceList.observe(this, Observer<List<MapSource>> { list -> list?.let { adapter.setItems(it) } })
-        viewModel.currentMapSource.observe(this, Observer { selected -> selected?.let { adapter.setCurrentItem(it) } })
+        viewModel.mapSourceList.observe(
+            this,
+            Observer<List<MapSource>> { list -> list?.let { adapter.setItems(it) } }
+        )
+        viewModel.currentMapSource.observe(
+            this,
+            Observer { selected -> selected?.let { adapter.setCurrentItem(it) } }
+        )
 
         return view
     }

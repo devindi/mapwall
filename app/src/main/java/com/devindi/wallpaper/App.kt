@@ -9,7 +9,6 @@ import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.createPermissionManager
 import com.devindi.wallpaper.model.AndroidInfo
 import com.devindi.wallpaper.model.DeviceInfo
-import com.devindi.wallpaper.model.DisplayInfo
 import com.devindi.wallpaper.model.SettingsRepo
 import com.devindi.wallpaper.model.config.ConfigManager
 import com.devindi.wallpaper.model.map.TileRequestHandler
@@ -35,7 +34,10 @@ const val PARAM_TILE_SOURCE = "tile"
 class App : Application() {
 
     private val applicationModule: Module = applicationContext {
-        bean { SharedPreferencesStorage(PreferenceManager.getDefaultSharedPreferences(get())) as KeyValueStorage }
+        bean {
+            SharedPreferencesStorage(PreferenceManager.getDefaultSharedPreferences(get()))
+                as KeyValueStorage
+        }
         bean { SettingsRepo(get(), get()) }
         bean { createPermissionManager() }
         bean { FabricReportManager() as ReportManager }
@@ -81,15 +83,10 @@ class App : Application() {
         reportManager.init(this)
 
         val picasso = Picasso.Builder(get())
-                .loggingEnabled(true)
-                .addRequestHandler(TileRequestHandler())
-                .listener { _, uri, exception -> Timber.e(exception, "Failed to load $uri") }
-                .build()
+            .loggingEnabled(true)
+            .addRequestHandler(TileRequestHandler())
+            .listener { _, uri, exception -> Timber.e(exception, "Failed to load $uri") }
+            .build()
         Picasso.setSingletonInstance(picasso)
     }
 }
-
-
-
-
-

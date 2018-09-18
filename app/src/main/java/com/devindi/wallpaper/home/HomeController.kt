@@ -37,6 +37,12 @@ import org.osmdroid.util.TileSystem
 import org.osmdroid.views.MapView
 
 private const val PLACE_ZOOM = 12.0
+private const val DEFAULT_URI = "osm://mapnik?" +
+    "latNorth=85&" +
+    "latSouth=-85&" +
+    "lonWest=-170&" +
+    "lonEast=170&" +
+    "zoom=0"
 
 class HomeController : LifecycleController(), OnPlacePickedListener {
 
@@ -55,15 +61,15 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
         map.isVerticalMapRepetitionEnabled = false
         map.setMultiTouchControls(true)
         map.setBuiltInZoomControls(false)
-        map.setScrollableAreaLimitLatitude(TileSystem.MaxLatitude,-TileSystem.MaxLatitude, 0)
+        map.setScrollableAreaLimitLatitude(TileSystem.MaxLatitude, -TileSystem.MaxLatitude, 0)
 
         drawer = view.findViewById(R.id.drawer)
 
         navigation = view.findViewById(R.id.navigation)
         Picasso.with(container.context)
-                //todo place nice location and tile source (Maybe popular?)
-                .load(Uri.parse("osm://mapnik?latNorth=85&latSouth=-85&lonWest=-170&lonEast=170&zoom=0"))
-                .into(navigation.getHeaderView(0) as ImageView)
+            // TODO place nice location and tile source (Maybe popular?)
+            .load(Uri.parse(DEFAULT_URI))
+            .into(navigation.getHeaderView(0) as ImageView)
         navigation.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.settings_item -> {
@@ -107,23 +113,23 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
             val target = SearchController()
             target.targetController = this
             router.pushController(RouterTransaction
-                    .with(target)
-                    .pushChangeHandler(SearchChangeHandler(removesFromViewOnPush = false))
-                    .popChangeHandler(SearchChangeHandler())
+                .with(target)
+                .pushChangeHandler(SearchChangeHandler(removesFromViewOnPush = false))
+                .popChangeHandler(SearchChangeHandler())
             )
         }
 
         view.findViewById<View>(R.id.btn_select_source).setOnClickListener {
 
             val pushHandler = TransitionChangeHandlerCompat(
-                    FabToDialogTransitionChangeHandler(),
-                    FadeChangeHandler(false))
+                FabToDialogTransitionChangeHandler(),
+                FadeChangeHandler(false))
             val popHandler = TransitionChangeHandlerCompat(
-                    FabToDialogTransitionChangeHandler(),
-                    FadeChangeHandler())
+                FabToDialogTransitionChangeHandler(),
+                FadeChangeHandler())
 
             router.pushController(RouterTransaction.with(MapSourceController())
-                    .pushChangeHandler(pushHandler).popChangeHandler(popHandler))
+                .pushChangeHandler(pushHandler).popChangeHandler(popHandler))
         }
         return view
     }
@@ -151,8 +157,11 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
     override fun onRestoreViewState(view: View, savedViewState: Bundle) {
         super.onRestoreViewState(view, savedViewState)
         map.let {
-            it.controller.setCenter(GeoPoint(savedViewState.getDouble("lat"), savedViewState.getDouble("lon")))
-            it.controller.setZoom(savedViewState.getDouble("zoom"))
+            val lat = savedViewState.getDouble("lat")
+            val lon = savedViewState.getDouble("lon")
+            val zoom = savedViewState.getDouble("zoom")
+            it.controller.setCenter(GeoPoint(lat, lon))
+            it.controller.setZoom(zoom)
         }
     }
 
@@ -162,6 +171,6 @@ class HomeController : LifecycleController(), OnPlacePickedListener {
     }
 
     private fun calculateMinZoom(height: Int, tileSize: Int): Double {
-        return Math.log(height/tileSize.toDouble()) / Math.log(2.0)
+        return Math.log(height / tileSize.toDouble()) / Math.log(2.0)
     }
 }

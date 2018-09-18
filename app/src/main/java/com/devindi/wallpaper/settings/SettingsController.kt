@@ -11,7 +11,7 @@ import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.inject
 import com.devindi.wallpaper.model.analytics.ScreenEvent
 
-class SettingsController: LifecycleController() {
+class SettingsController : LifecycleController() {
 
     private val reportManager: ReportManager by inject()
 

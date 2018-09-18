@@ -1,4 +1,5 @@
 @file:SuppressWarnings("detekt-kotlin:MatchingDeclarationName")
+
 package com.devindi.wallpaper.misc
 
 import android.arch.lifecycle.ViewModel
@@ -21,8 +22,8 @@ import kotlin.reflect.KClass
  * @param name - bean name / optional
  */
 inline fun <reified T> Controller.inject(
-        name: String = "",
-        noinline parameters: Parameters = { emptyMap() }
+    name: String = "",
+    noinline parameters: Parameters = { emptyMap() }
 ): Lazy<T> = lazy { get<T>(name, parameters) }
 
 /**
@@ -30,8 +31,8 @@ inline fun <reified T> Controller.inject(
  * @param name - bean name / optional
  */
 inline fun <reified T> Controller.get(
-        name: String = "",
-        noinline parameters: Parameters = { emptyMap() }
+    name: String = "",
+    noinline parameters: Parameters = { emptyMap() }
 ): T = (StandAloneContext.koinContext as KoinContext).get<T>(name, parameters)
 
 /**
@@ -68,9 +69,9 @@ object CustomKoinFactory : ViewModelProvider.Factory, KoinComponent {
  * @param parameters - parameters to pass to the BeanDefinition
  */
 inline fun <reified T : ViewModel> LifecycleController.viewModel(
-        key: String? = null,
-        name: String? = null,
-        noinline parameters: Parameters = { emptyMap() }
+    key: String? = null,
+    name: String? = null,
+    noinline parameters: Parameters = { emptyMap() }
 ): Lazy<T> {
     return viewModelByClass(T::class, key, name, parameters)
 }
@@ -84,10 +85,10 @@ inline fun <reified T : ViewModel> LifecycleController.viewModel(
  * @param parameters - parameters to pass to the BeanDefinition
  */
 fun <T : ViewModel> LifecycleController.viewModelByClass(
-        clazz: KClass<T>,
-        key: String? = null,
-        name: String? = null,
-        parameters: Parameters = { emptyMap() }
+    clazz: KClass<T>,
+    key: String? = null,
+    name: String? = null,
+    parameters: Parameters = { emptyMap() }
 ): Lazy<T> {
     return lazy { getViewModelByClass(clazz, key, name, parameters) }
 }
@@ -102,20 +103,23 @@ fun <T : ViewModel> LifecycleController.viewModelByClass(
  * @param parameters - parameters to pass to the BeanDefinition
  */
 fun <T : ViewModel> LifecycleController.getViewModelByClass(
-        clazz: KClass<T>,
-        key: String? = null,
-        name: String? = null,
-        parameters: Parameters = { emptyMap() }
+    clazz: KClass<T>,
+    key: String? = null,
+    name: String? = null,
+    parameters: Parameters = { emptyMap() }
 ): T {
     CustomKoinFactory.apply {
         this.parameters = parameters
         this.name = name
     }
     Koin.logger.log("[ViewModel] get for Controller @ $this")
-    val viewModelProvider = ViewModelProvider(ViewModelStores.of(this.activity as FragmentActivity), CustomKoinFactory)
+    val viewModelProvider = ViewModelProvider(
+        ViewModelStores.of(this.activity as FragmentActivity),
+        CustomKoinFactory
+    )
     return if (key != null) viewModelProvider.get(
-            key,
-            clazz.java
+        key,
+        clazz.java
     ) else viewModelProvider.get(clazz.java)
 }
 
@@ -124,6 +128,6 @@ fun <T : ViewModel> LifecycleController.getViewModelByClass(
  * @param name - bean name / optional
  */
 inline fun <reified T> ViewModel.get(
-        name: String = "",
-        noinline parameters: Parameters = { emptyMap() }
+    name: String = "",
+    noinline parameters: Parameters = { emptyMap() }
 ): T = (StandAloneContext.koinContext as KoinContext).get<T>(name, parameters)

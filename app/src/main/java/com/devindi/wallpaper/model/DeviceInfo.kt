@@ -39,7 +39,6 @@ class DeviceInfo(private val context: Context) : DisplayInfo, AndroidInfo {
 interface AndroidInfo {
 
     fun version(): Int
-
 }
 
 interface DisplayInfo {
@@ -47,7 +46,4 @@ interface DisplayInfo {
     fun screenWidth(): Int
 
     fun screenHeight(): Int
-
 }
-
-

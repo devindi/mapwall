@@ -8,7 +8,7 @@ fun createToner() = StamenTileSource("Toner", "toner")
 fun createWatercolor() = StamenTileSource("Watercolor", "watercolor")
 fun createTerrain() = StamenTileSource("Terrain", "terrain")
 
-class StamenTileSource(name: String, private val map: String): BaseTileSource(name, baseUrls) {
+class StamenTileSource(name: String, private val map: String) : BaseTileSource(name, baseUrls) {
     override fun getTileUrl(x: Int, y: Int, z: Int): String {
         val url = "$baseUrl/$map/$z/$x/$y.png"
         Timber.d("Tile url = $url")

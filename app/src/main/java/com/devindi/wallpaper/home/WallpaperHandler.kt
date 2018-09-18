@@ -6,7 +6,7 @@ import android.os.Build
 import android.support.annotation.RequiresApi
 import java.io.File
 import java.io.FileOutputStream
-import java.util.*
+import java.util.Date
 
 enum class Target { SYSTEM, LOCK, BOTH }
 
@@ -44,7 +44,7 @@ class WallpaperHandlerApiNImpl(private val impl: WallpaperManager) : WallpaperHa
  * Wallpaper handler implementation before Android 7.0
  * This implementation may be used on 7.0+ but target parameter will be ignored
  */
-class WallpaperHandlerImpl(private val impl: WallpaperManager): WallpaperHandler {
+class WallpaperHandlerImpl(private val impl: WallpaperManager) : WallpaperHandler {
 
     override fun handle(wallpaper: Bitmap, target: Target) {
         impl.setBitmap(wallpaper)
@@ -54,7 +54,7 @@ class WallpaperHandlerImpl(private val impl: WallpaperManager): WallpaperHandler
 /**
  * Useful for debug handler implementation
  */
-class ExportWallpaperHandler(private val targetDir: File): WallpaperHandler {
+class ExportWallpaperHandler(private val targetDir: File) : WallpaperHandler {
 
     override fun handle(wallpaper: Bitmap, target: Target) {
         FileOutputStream(File(targetDir, "${Date()}.png")).use {

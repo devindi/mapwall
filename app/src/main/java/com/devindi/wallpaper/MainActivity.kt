@@ -7,7 +7,7 @@ import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.devindi.wallpaper.splash.SplashController
 
-class MainActivity: AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var router: Router
 
@@ -25,9 +25,5 @@ class MainActivity: AppCompatActivity() {
         if (!router.handleBack()) {
             super.onBackPressed()
         }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 }

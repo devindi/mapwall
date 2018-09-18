@@ -4,7 +4,12 @@ import android.content.Context
 import android.content.pm.PackageManager
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.answers.Answers
-import com.devindi.wallpaper.model.analytics.*
+import com.devindi.wallpaper.model.analytics.AnswerEvent
+import com.devindi.wallpaper.model.analytics.ChooseMapEvent
+import com.devindi.wallpaper.model.analytics.CreateWallpaperEvent
+import com.devindi.wallpaper.model.analytics.FailedSearchEvent
+import com.devindi.wallpaper.model.analytics.ScreenEvent
+import com.devindi.wallpaper.model.analytics.SuccessSearchEvent
 import io.fabric.sdk.android.Fabric
 import timber.log.Timber
 
@@ -26,7 +31,9 @@ class FabricReportManager : ReportManager {
 
     override fun init(context: Context) {
         try {
-            val info = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+            val info = context.packageManager.getApplicationInfo(
+                context.packageName,
+                PackageManager.GET_META_DATA)
             val fabricKey = info.metaData.getString("io.fabric.ApiKey")
             if (!fabricKey.isNullOrEmpty() && fabricKey != "null") {
                 Timber.d("Initializing fabric")
