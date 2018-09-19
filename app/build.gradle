@@ -5,6 +5,7 @@ apply plugin: 'com.getkeepsafe.dexcount'
 apply plugin: 'com.vanniktech.android.apk.size'
 apply plugin: "org.sonarqube"
 apply plugin: "org.jlleitschuh.gradle.ktlint"
+apply plugin: 'jacoco'
 
 def fabricKey = resolveProperty('fabricKey')
 def googleKey = resolveProperty('googleKey')
@@ -26,6 +27,7 @@ android {
         versionCode 2
         versionName version
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments clearPackageData: 'true'
         manifestPlaceholders = [fabricKey       : "$fabricKey",
                                 googleKey       : "$googleKey",
                                 thunderforestKey: "$thunderforestKey"]
@@ -52,6 +54,7 @@ android {
         debug {
             applicationIdSuffix '.debug'
             signingConfig signingConfigs.debugg
+            testCoverageEnabled true
         }
 
         debugProguard {
@@ -78,6 +81,15 @@ android {
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
     }
+
+    testOptions {
+        execution 'ANDROID_TEST_ORCHESTRATOR'
+        animationsDisabled true
+
+//        unitTests {
+//            includeAndroidResources = true
+//        }
+    }
 }
 
 sonarqube {
@@ -88,12 +100,20 @@ sonarqube {
     }
 }
 
-ktlint  {
+ktlint {
     version = "0.28.0"
     android = true
     reporters = ["CHECKSTYLE"]
     ignoreFailures = true
     verbose = true
+}
+
+jacoco {
+    toolVersion = '0.8.1'
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
 }
 
 dependencies {
@@ -123,6 +143,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    androidTestUtil 'com.android.support.test:orchestrator:1.0.2'
 }
 
 def resolveProperty(String key) {
@@ -131,4 +153,25 @@ def resolveProperty(String key) {
     Properties properties = new Properties()
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
     return properties.getProperty(key)
+}
+
+task createTestReports(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    def javaSourceDirs = ["${project.projectDir}/src/main/java"]
+    def kotlinSourceDirs = ["${project.projectDir}/src/main/kotlin"]
+
+    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
+    def javaClasses = fileTree(dir: "${project.buildDir}/intermediates/classes/debug", excludes: fileFilter)
+    def kotlinClasses = fileTree(dir: "${project.buildDir}/tmp/kotlin-classes/debug", excludes: fileFilter)
+
+    sourceDirectories = files(javaSourceDirs, kotlinSourceDirs)
+    classDirectories = files([javaClasses], [kotlinClasses])
+    executionData = fileTree(dir: project.buildDir, includes: [
+            'jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec'
+    ])
 }
