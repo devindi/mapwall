@@ -83,7 +83,6 @@ android {
     }
 
     testOptions {
-        execution 'ANDROID_TEST_ORCHESTRATOR'
         animationsDisabled true
 
 //        unitTests {
@@ -143,8 +142,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-
-    androidTestUtil 'com.android.support.test:orchestrator:1.0.2'
 }
 
 def resolveProperty(String key) {
