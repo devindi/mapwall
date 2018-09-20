@@ -19,33 +19,31 @@ import com.devindi.wallpaper.model.storage.SharedPreferencesStorage
 import com.devindi.wallpaper.source.MapSourceViewModel
 import com.devindi.wallpaper.splash.SplashViewModel
 import com.squareup.picasso.Picasso
-import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.startKoin
 import org.koin.android.ext.koin.androidApplication
+import org.koin.android.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.Module
-import org.koin.dsl.module.applicationContext
+import org.koin.dsl.module.module
 import org.koin.log.Logger
 import org.osmdroid.config.Configuration
 import timber.log.Timber
 
-const val PARAM_TILE_SOURCE = "tile"
-
 class App : Application() {
 
-    private val applicationModule: Module = applicationContext {
-        bean {
+    private val applicationModule: Module = module {
+        single {
             SharedPreferencesStorage(PreferenceManager.getDefaultSharedPreferences(get()))
                 as KeyValueStorage
         }
-        bean { SettingsRepo(get(), get()) }
-        bean { createPermissionManager() }
-        bean { FabricReportManager() as ReportManager }
-        bean { DeviceInfo(androidApplication()) as AndroidInfo }
-        bean { MapCacheStrategy(androidApplication(), get()) }
-        bean { ConfigManager() }
-        bean { DependencyStrategy(get(), get()) }
-        bean { Configuration.getInstance() }
+        single { SettingsRepo(get(), get()) }
+        single { createPermissionManager() }
+        single { FabricReportManager() as ReportManager }
+        single { DeviceInfo(androidApplication()) as AndroidInfo }
+        single { MapCacheStrategy(androidApplication(), get()) }
+        single { ConfigManager() }
+        single { DependencyStrategy(get(), get()) }
+        single { Configuration.getInstance() }
         viewModel { SplashViewModel(get(), get()) }
         viewModel { HomeViewModel(get(), get(), get(), get()) }
         viewModel { MapSourceViewModel(get(), get()) }
@@ -73,8 +71,8 @@ class App : Application() {
                 Timber.e(msg)
             }
 
-            override fun log(msg: String) {
-                Timber.v(msg)
+            override fun info(msg: String) {
+                Timber.i(msg)
             }
         }
 

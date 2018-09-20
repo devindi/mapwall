@@ -15,18 +15,19 @@ import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
 import com.bluelinelabs.conductor.archlifecycle.LifecycleController
 import com.devindi.wallpaper.R
+import com.devindi.wallpaper.misc.BaseController
 import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.inject
-import com.devindi.wallpaper.misc.viewModel
 import com.devindi.wallpaper.model.analytics.FailedSearchEvent
 import com.devindi.wallpaper.model.analytics.ScreenEvent
 import com.devindi.wallpaper.model.analytics.SuccessSearchEvent
+import org.koin.android.viewmodel.ext.android.viewModel
 
 interface OnPlacePickedListener {
     fun onPlacePicked(place: Place)
 }
 
-class SearchController : LifecycleController() {
+class SearchController : BaseController() {
 
     private val viewModel: SearchViewModel by viewModel()
     private val googleApiClientObserver: GoogleApiClientLifecycleObserver by inject()

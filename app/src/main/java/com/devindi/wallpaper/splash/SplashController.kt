@@ -12,14 +12,15 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.archlifecycle.LifecycleController
 import com.devindi.wallpaper.R
 import com.devindi.wallpaper.home.HomeController
+import com.devindi.wallpaper.misc.BaseController
 import com.devindi.wallpaper.misc.DependencyStrategy
 import com.devindi.wallpaper.misc.PermissionManager
 import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.inject
-import com.devindi.wallpaper.misc.viewModel
 import com.devindi.wallpaper.model.analytics.ScreenEvent
+import org.koin.android.viewmodel.ext.android.viewModel
 
-class SplashController : LifecycleController() {
+class SplashController : BaseController() {
 
     private val permissionManager: PermissionManager by inject()
     private val viewModel: SplashViewModel by viewModel()
