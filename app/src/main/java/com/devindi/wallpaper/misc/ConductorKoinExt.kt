@@ -26,7 +26,6 @@ inline fun <reified T : Any> Controller.inject(
     noinline parameters: ParameterDefinition = emptyParameterDefinition()
 ) = lazy { getKoin().get<T>(name, scope, parameters) }
 
-
 /**
  * Access to Koin context
  */

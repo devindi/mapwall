@@ -5,7 +5,6 @@ import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bluelinelabs.conductor.archlifecycle.LifecycleController
 import com.devindi.wallpaper.R
 import com.devindi.wallpaper.misc.BaseController
 import com.devindi.wallpaper.misc.ReportManager

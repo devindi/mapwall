@@ -13,7 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.bluelinelabs.conductor.RouterTransaction
-import com.bluelinelabs.conductor.archlifecycle.LifecycleController
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.TransitionChangeHandlerCompat
 import com.devindi.wallpaper.R
@@ -33,7 +32,6 @@ import com.devindi.wallpaper.settings.SettingsController
 import com.devindi.wallpaper.source.MapSourceController
 import com.squareup.picasso.Picasso
 import org.koin.android.viewmodel.ext.android.viewModel
-import org.koin.android.viewmodel.ext.android.viewModelByClass
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.util.TileSystem
 import org.osmdroid.views.MapView

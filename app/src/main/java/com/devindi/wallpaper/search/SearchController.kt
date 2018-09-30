@@ -13,7 +13,6 @@ import android.widget.EditText
 import android.widget.TextView
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
-import com.bluelinelabs.conductor.archlifecycle.LifecycleController
 import com.devindi.wallpaper.R
 import com.devindi.wallpaper.misc.BaseController
 import com.devindi.wallpaper.misc.ReportManager
