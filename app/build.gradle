@@ -5,6 +5,7 @@ apply plugin: 'com.getkeepsafe.dexcount'
 apply plugin: 'com.vanniktech.android.apk.size'
 apply plugin: "org.sonarqube"
 apply plugin: "org.jlleitschuh.gradle.ktlint"
+apply plugin: 'jacoco'
 
 def fabricKey = resolveProperty('fabricKey')
 def googleKey = resolveProperty('googleKey')
@@ -52,6 +53,7 @@ android {
         debug {
             applicationIdSuffix '.debug'
             signingConfig signingConfigs.debugg
+            testCoverageEnabled true
         }
 
         debugProguard {
@@ -78,6 +80,10 @@ android {
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
     }
+
+    testOptions {
+        animationsDisabled true
+    }
 }
 
 sonarqube {
@@ -88,12 +94,20 @@ sonarqube {
     }
 }
 
-ktlint  {
+ktlint {
     version = "0.28.0"
     android = true
     reporters = ["CHECKSTYLE"]
     ignoreFailures = true
     verbose = true
+}
+
+jacoco {
+    toolVersion = '0.8.1'
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
 }
 
 dependencies {
@@ -131,4 +145,24 @@ def resolveProperty(String key) {
     Properties properties = new Properties()
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
     return properties.getProperty(key)
+}
+
+task createTestReports(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    def javaSourceDirs = ["${project.projectDir}/src/main/java"]
+
+    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
+    def javaClasses = fileTree(dir: "${project.buildDir}/intermediates/classes/debug", excludes: fileFilter)
+    def kotlinClasses = fileTree(dir: "${project.buildDir}/tmp/kotlin-classes/debug", excludes: fileFilter)
+
+    sourceDirectories = files(javaSourceDirs)
+    classDirectories = files([javaClasses], [kotlinClasses])
+    executionData = fileTree(dir: project.buildDir, includes: [
+            'jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec'
+    ])
 }
