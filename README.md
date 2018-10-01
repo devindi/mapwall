@@ -3,6 +3,7 @@ MapWall
 
 [![Build Status](https://travis-ci.org/devindi/mapwall.svg?branch=master)](https://travis-ci.org/devindi/mapwall)
 [![GitHub license](https://img.shields.io/github/license/devindi/mapwall.svg)](https://github.com/devindi/mapwall/blob/master/LICENSE)
+[![codecov](https://codecov.io/gh/devindi/mapwall/branch/master/graph/badge.svg)](https://codecov.io/gh/devindi/mapwall)
 
 Android application to create wallpaper from map. Inspired by [Background Generator by Alvar Carto](https://alvarcarto.com/phone-background/). Application based on OpenStreetMap so any tile-based map source may be used to create wallpaper. Currently Mapwall works with some styles from [Mapbox](https://www.mapbox.com/), [Thunderforest](https://www.thunderforest.com/), [Stamen](http://maps.stamen.com/)
 
