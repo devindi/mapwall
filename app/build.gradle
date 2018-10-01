@@ -27,7 +27,6 @@ android {
         versionCode 2
         versionName version
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunnerArguments clearPackageData: 'true'
         manifestPlaceholders = [fabricKey       : "$fabricKey",
                                 googleKey       : "$googleKey",
                                 thunderforestKey: "$thunderforestKey"]
@@ -84,10 +83,6 @@ android {
 
     testOptions {
         animationsDisabled true
-
-//        unitTests {
-//            includeAndroidResources = true
-//        }
     }
 }
 
@@ -160,13 +155,12 @@ task createTestReports(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'cre
     }
 
     def javaSourceDirs = ["${project.projectDir}/src/main/java"]
-    def kotlinSourceDirs = ["${project.projectDir}/src/main/kotlin"]
 
     def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
     def javaClasses = fileTree(dir: "${project.buildDir}/intermediates/classes/debug", excludes: fileFilter)
     def kotlinClasses = fileTree(dir: "${project.buildDir}/tmp/kotlin-classes/debug", excludes: fileFilter)
 
-    sourceDirectories = files(javaSourceDirs, kotlinSourceDirs)
+    sourceDirectories = files(javaSourceDirs)
     classDirectories = files([javaClasses], [kotlinClasses])
     executionData = fileTree(dir: project.buildDir, includes: [
             'jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec'
