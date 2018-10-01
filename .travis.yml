@@ -26,5 +26,6 @@ before_script:
   - adb shell input keyevent 82 &
 
 script:
-  - ./gradlew testDebugUnitTest connectedDebugAndroidTest ktlintDebugCheck
+  - ./gradlew testDebugUnitTest connectedDebugAndroidTest ktlintDebugCheck createTestReports
   - bundle exec danger
+  - bash <(curl -s https://codecov.io/bash)
