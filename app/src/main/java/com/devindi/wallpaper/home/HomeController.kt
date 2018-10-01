@@ -13,15 +13,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.bluelinelabs.conductor.RouterTransaction
-import com.bluelinelabs.conductor.archlifecycle.LifecycleController
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.TransitionChangeHandlerCompat
 import com.devindi.wallpaper.R
 import com.devindi.wallpaper.about.AboutController
+import com.devindi.wallpaper.misc.BaseController
 import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.anim.FabToDialogTransitionChangeHandler
 import com.devindi.wallpaper.misc.inject
-import com.devindi.wallpaper.misc.viewModel
 import com.devindi.wallpaper.model.analytics.ScreenEvent
 import com.devindi.wallpaper.model.map.MapSource
 import com.devindi.wallpaper.model.map.TileSourceFactory
@@ -32,6 +31,7 @@ import com.devindi.wallpaper.search.SearchController
 import com.devindi.wallpaper.settings.SettingsController
 import com.devindi.wallpaper.source.MapSourceController
 import com.squareup.picasso.Picasso
+import org.koin.android.viewmodel.ext.android.viewModel
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.util.TileSystem
 import org.osmdroid.views.MapView
@@ -44,7 +44,7 @@ private const val DEFAULT_URI = "osm://mapnik?" +
     "lonEast=170&" +
     "zoom=0"
 
-class HomeController : LifecycleController(), OnPlacePickedListener {
+class HomeController : BaseController(), OnPlacePickedListener {
 
     private val viewModel: HomeViewModel by viewModel()
     private val factory: TileSourceFactory by inject()

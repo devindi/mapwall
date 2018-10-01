@@ -6,15 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.bluelinelabs.conductor.archlifecycle.LifecycleController
 import com.devindi.wallpaper.BuildConfig
 import com.devindi.wallpaper.R
+import com.devindi.wallpaper.misc.BaseController
 import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.inject
 import com.devindi.wallpaper.model.analytics.ScreenEvent
 import java.util.Locale
 
-class AboutController : LifecycleController() {
+class AboutController : BaseController() {
 
     private val reportManager: ReportManager by inject()
 

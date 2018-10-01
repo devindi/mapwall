@@ -5,17 +5,17 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bluelinelabs.conductor.archlifecycle.LifecycleController
 import com.devindi.wallpaper.R
+import com.devindi.wallpaper.misc.BaseController
 import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.inject
-import com.devindi.wallpaper.misc.viewModel
 import com.devindi.wallpaper.model.analytics.ChooseMapEvent
 import com.devindi.wallpaper.model.analytics.ScreenEvent
 import com.devindi.wallpaper.model.map.MapSource
 import kotlinx.android.synthetic.main.map_source_screen.view.*
+import org.koin.android.viewmodel.ext.android.viewModel
 
-class MapSourceController : LifecycleController() {
+class MapSourceController : BaseController() {
 
     private val viewModel: MapSourceViewModel by viewModel()
     private val reportManager by inject<ReportManager>()

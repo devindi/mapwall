@@ -1,26 +1,22 @@
 package com.devindi.wallpaper.model.map
 
 import android.app.WallpaperManager
-import com.devindi.wallpaper.PARAM_TILE_SOURCE
 import com.devindi.wallpaper.home.createWallpaperHandler
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module.Module
-import org.koin.dsl.module.applicationContext
+import org.koin.dsl.module.module
 import org.osmdroid.tileprovider.cachemanager.CacheManager
 import org.osmdroid.tileprovider.modules.IFilesystemCache
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 
-val mapModule: Module = applicationContext {
-    bean { SqlTileCache(get()) as IFilesystemCache }
-    bean { createWallpaperHandler(WallpaperManager.getInstance(androidApplication())) }
-    factory { params ->
-        CacheManager(params.get<OnlineTileSourceBase>(PARAM_TILE_SOURCE),
-            get(),
-            params.get<OnlineTileSourceBase>(PARAM_TILE_SOURCE).minimumZoomLevel,
-            params.get<OnlineTileSourceBase>(PARAM_TILE_SOURCE).maximumZoomLevel)
+val mapModule: Module = module {
+    single { SqlTileCache(get()) as IFilesystemCache }
+    single { createWallpaperHandler(WallpaperManager.getInstance(androidApplication())) }
+    factory { (source: OnlineTileSourceBase) ->
+        CacheManager(source, get(), source.minimumZoomLevel, source.maximumZoomLevel)
     }
-    bean { SyncMapTileProvider(get(), get()) }
-    bean { MapAreaManager(get(), get()) }
-    bean { CacheManagerFactory(get()) }
-    bean { TileSourceFactory(get()) }
+    single { SyncMapTileProvider(get(), get()) }
+    single { MapAreaManager(get(), get()) }
+    single { CacheManagerFactory(get()) }
+    single { TileSourceFactory(get()) }
 }
