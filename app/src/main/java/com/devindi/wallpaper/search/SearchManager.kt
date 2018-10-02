@@ -4,9 +4,10 @@ import android.arch.lifecycle.MutableLiveData
 import com.devindi.wallpaper.model.places.GoogleApiErrorHandler
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.places.AutocompleteFilter
-import com.google.android.gms.location.places.Places
+import com.google.android.gms.location.places.GeoDataApi
 
 class SearchManager(
+    private val geoDataApi: GeoDataApi,
     private val apiClient: GoogleApiClient,
     private val googleApiErrorHandler: GoogleApiErrorHandler
 ) {
@@ -19,7 +20,7 @@ class SearchManager(
     val place = MutableLiveData<Place>()
 
     fun requestSuggests(query: String) {
-        Places.GeoDataApi.getAutocompletePredictions(apiClient, query, null, filter)
+        geoDataApi.getAutocompletePredictions(apiClient, query, null, filter)
             .setResultCallback {
                 if (it.status.isSuccess) {
                     suggests.value = it
@@ -38,7 +39,7 @@ class SearchManager(
     }
 
     fun requestPlace(placeId: String) {
-        Places.GeoDataApi.getPlaceById(apiClient, placeId).setResultCallback {
+        geoDataApi.getPlaceById(apiClient, placeId).setResultCallback {
             if (it.status.isSuccess) {
                 it.firstOrNull()?.let { googlePlace ->
                     place.value = Place(googlePlace.latLng.latitude, googlePlace.latLng.longitude)

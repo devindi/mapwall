@@ -14,7 +14,7 @@ import org.koin.dsl.module.module
 val searchModule: Module = module {
     viewModel { SearchViewModel(get(), get()) }
     single { GoogleApiErrorHandler(get()) } bind GoogleApiClient.OnConnectionFailedListener::class
-    single { SearchManager(get(), get()) }
+    single { SearchManager(Places.GeoDataApi, get(), get()) }
     single { GoogleApiClientLifecycleObserver(get()) }
     single {
         GoogleApiClient.Builder(androidApplication())
