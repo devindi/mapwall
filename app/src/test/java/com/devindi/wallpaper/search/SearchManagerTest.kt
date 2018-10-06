@@ -33,6 +33,7 @@ class SearchManagerTest {
 
     private val mockAutocompletePredictionBuffer: AutocompletePredictionBuffer = mock()
     private val mockPendingResult: PendingResult<AutocompletePredictionBuffer> = mock()
+    private val resultCallBackCaptor = argumentCaptor<(AutocompletePredictionBuffer) -> Unit>()
 
     @Before
     fun setup() {
@@ -43,13 +44,11 @@ class SearchManagerTest {
     fun testRequestSuggestWhenNotSuccess() {
         whenever(mockGeoDataApi.getAutocompletePredictions(mockApiClientApi, REQUEST_SUGGESTS_STRING, null, filter))
                 .thenReturn(mockPendingResult)
-        whenever(mockPendingResult.setResultCallback { autocompletePredictionBuffer: AutocompletePredictionBuffer -> Unit })
-                .then {
-                    mockAutocompletePredictionBuffer
-                }
         whenever(mockAutocompletePredictionBuffer.status).thenReturn(statusCanceled)
 
         searchManagerTest.requestSuggests(REQUEST_SUGGESTS_STRING)
+        verify(mockPendingResult).setResultCallback(resultCallBackCaptor.capture())
+        resultCallBackCaptor.firstValue.invoke(mockAutocompletePredictionBuffer)
 
         verify(mockGoogleApiErrorHandler, times(1)).onErrorStatus(statusCanceled)
     }
