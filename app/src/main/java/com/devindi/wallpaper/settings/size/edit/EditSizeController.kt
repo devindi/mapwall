@@ -8,19 +8,25 @@ import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.TextView
 import com.devindi.wallpaper.R
-import com.devindi.wallpaper.misc.*
-import com.devindi.wallpaper.model.DeviceInfo
+import com.devindi.wallpaper.misc.AfterTextChangedListener
+import com.devindi.wallpaper.misc.BaseController
+import com.devindi.wallpaper.misc.SimpleSeekBarChangeListener
+import com.devindi.wallpaper.misc.inject
+import com.devindi.wallpaper.misc.nonNull
+import com.devindi.wallpaper.misc.observe
+import com.devindi.wallpaper.model.DisplayInfo
 import com.devindi.wallpaper.settings.model.DIMENSION_HEIGHT
 import com.devindi.wallpaper.settings.model.DIMENSION_WIDTH
 import kotlinx.android.synthetic.main.settings_size_edit.view.*
+import org.koin.android.viewmodel.ext.android.viewModel
 
 const val TITLE_KEY = "title"
 const val DIMENSION_KEY = "dimen"
 
-class EditSizeController(args: Bundle) : FixedLifecycleController(args) {
+class EditSizeController(args: Bundle) : BaseController(args) {
 
     private val viewModel: EditSizeViewModel by viewModel()
-    private val deviceInfo: DeviceInfo by inject()
+    private val deviceInfo: DisplayInfo by inject()
     private val screenSize = when (args.getString(DIMENSION_KEY)) {
         DIMENSION_HEIGHT -> deviceInfo.screenHeight()
         DIMENSION_WIDTH -> deviceInfo.screenWidth()

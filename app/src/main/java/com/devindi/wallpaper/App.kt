@@ -9,6 +9,7 @@ import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.createPermissionManager
 import com.devindi.wallpaper.model.AndroidInfo
 import com.devindi.wallpaper.model.DeviceInfo
+import com.devindi.wallpaper.model.DisplayInfo
 import com.devindi.wallpaper.model.SettingsRepo
 import com.devindi.wallpaper.model.config.ConfigManager
 import com.devindi.wallpaper.model.map.TileRequestHandler
@@ -41,7 +42,7 @@ class App : Application() {
         single { SettingsRepo(get(), get()) }
         single { createPermissionManager() }
         single { FabricReportManager() as ReportManager }
-        single { DeviceInfo(androidApplication()) as AndroidInfo }
+        single { DeviceInfo(androidApplication()) } bind AndroidInfo::class bind DisplayInfo::class
         single { MapCacheStrategy(androidApplication(), get()) }
         single { ConfigManager() }
         single { DependencyStrategy(get(), get()) }
