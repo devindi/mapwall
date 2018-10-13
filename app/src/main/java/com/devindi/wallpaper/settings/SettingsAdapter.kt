@@ -8,7 +8,13 @@ import com.devindi.wallpaper.settings.model.IntField
 import com.devindi.wallpaper.settings.size.SizeViewHolder
 import com.devindi.wallpaper.source.OnItemClickListener
 
-class SettingsAdapter(private val items: List<IntField>, private val clickListener: OnItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SettingsAdapter(private val clickListener: OnItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    var items: List<IntField> = emptyList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.settings_simple_item, parent, false)

@@ -74,6 +74,10 @@ class EditSizeController(args: Bundle) : BaseController(args) {
         }
 
         viewModel.wallpaperSize().nonNull().observe(this) { size -> initViews(size) }
+
+        view.dialog_window.setOnClickListener {
+            router.popCurrentController()
+        }
     }
 
     private fun setSizeFromSeek(size: Int) {

@@ -20,6 +20,6 @@ class SizeViewHolder(view: View, clickListener: OnItemClickListener) : RecyclerV
 
     fun bindSettingsField(value: IntField) {
         titleLabel.setText(value.titleId)
-        valueLabel.text = "${value.get(1000)} px"
+        valueLabel.text = "${value.get(0)} px"
     }
 }
