@@ -23,8 +23,8 @@ import java.io.File
 @Config(manifest = Config.NONE)
 class MapCacheStrategyTest {
 
-    private val INTERNAL_PATH = "INTERNAL_PATH"
-    private val EXTERNAL_PATH = "EXTERNAL_PATH"
+    private val internalPath = "internalPath"
+    private val externalPath = "externalPath"
 
     private lateinit var expectedCachePath: String
     private val mockAndroidInfo: AndroidInfo = mock()
@@ -34,13 +34,13 @@ class MapCacheStrategyTest {
     @Before
     fun setup() {
         val mockInternalFile: File = mock()
-        val mockExternalFile = File(EXTERNAL_PATH)
+        val mockExternalFile = File(externalPath)
 
         whenever(mockContext.filesDir).thenReturn(mockInternalFile)
-        whenever(mockInternalFile.absolutePath).thenReturn(INTERNAL_PATH)
+        whenever(mockInternalFile.absolutePath).thenReturn(internalPath)
 
         whenever(mockContext.getExternalFilesDir(null)).thenReturn(mockExternalFile)
-        expectedCachePath = File(EXTERNAL_PATH, "map-cache").absolutePath
+        expectedCachePath = File(externalPath, "map-cache").absolutePath
     }
 
     @Test
@@ -60,7 +60,7 @@ class MapCacheStrategyTest {
 
         val path = mapCacheStrategy.defaultCachePath()
 
-        assertEquals(path, INTERNAL_PATH)
+        assertEquals(path, internalPath)
     }
 
     @Test
@@ -80,14 +80,14 @@ class MapCacheStrategyTest {
 
         val path = mapCacheStrategy.defaultCachePath()
 
-        assertEquals(path, INTERNAL_PATH)
+        assertEquals(path, internalPath)
     }
 
     @Test
     fun createInternalPathTest() {
         val path = mapCacheStrategy.createInternalPath()
 
-        assertEquals(path, INTERNAL_PATH)
+        assertEquals(path, internalPath)
     }
 
     @Test

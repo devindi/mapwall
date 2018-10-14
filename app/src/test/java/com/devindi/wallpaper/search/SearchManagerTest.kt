@@ -2,6 +2,7 @@ package com.devindi.wallpaper.search
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.devindi.wallpaper.model.places.GoogleApiErrorHandler
+import com.devindi.wallpaper.search.Place as MapwallPlace
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.PendingResult
 import com.google.android.gms.common.api.ResultCallback
@@ -23,10 +24,10 @@ import org.junit.rules.TestRule
  */
 class SearchManagerTest {
 
-    private val SUGGESTS_QUERY = "SUGGESTS_QUERY"
-    private val PLACE_ID = "PLACE_ID"
-    private val STATUS_CANCELED = Status.RESULT_CANCELED
-    private val STATUS_SUCCESS = Status.RESULT_SUCCESS
+    private val suggestsQuery = "suggestsQuery"
+    private val placeId = "placeId"
+    private val statusCanceled = Status.RESULT_CANCELED
+    private val statusSuccess = Status.RESULT_SUCCESS
 
     private val mockGeoDataApi: GeoDataApi = mock()
     private val mockApiClientApi: GoogleApiClient = mock()
@@ -50,35 +51,38 @@ class SearchManagerTest {
 
     @Test
     fun testRequestSuggestsWhenNotSuccess() {
-        whenever(mockGeoDataApi.getAutocompletePredictions(mockApiClientApi, SUGGESTS_QUERY, null, filter))
+        whenever(mockGeoDataApi.getAutocompletePredictions(mockApiClientApi, suggestsQuery, null, filter))
                 .thenReturn(mockAutocompletePredictionPendingResult)
-        whenever(mockAutocompletePredictionBuffer.status).thenReturn(STATUS_CANCELED)
+        whenever(mockAutocompletePredictionBuffer.status).thenReturn(statusCanceled)
 
-        searchManager.requestSuggests(SUGGESTS_QUERY)
+        searchManager.requestSuggests(suggestsQuery)
         verify(mockAutocompletePredictionPendingResult).setResultCallback(autocompletePredictionCallBackCaptor.capture())
         autocompletePredictionCallBackCaptor.firstValue.onResult(mockAutocompletePredictionBuffer)
 
-        verify(mockGoogleApiErrorHandler).onErrorStatus(STATUS_CANCELED)
+        verify(mockGoogleApiErrorHandler).onErrorStatus(statusCanceled)
     }
 
     @Test
     fun testRequestSuggestsWhenSuccess() {
         val predictions: MutableList<AutocompletePrediction> = mutableListOf(
-                TestAutocompletePrediction("testPlaceId", "testPrimaryText",
-                        "testSecondaryText")
+                TestAutocompletePrediction("testPlaceId1", "testPrimaryText1",
+                        "testSecondaryText1"),
+                TestAutocompletePrediction("testPlaceId2", "testPrimaryText2",
+                        "testSecondaryText2")
         )
 
-        whenever(mockGeoDataApi.getAutocompletePredictions(mockApiClientApi, SUGGESTS_QUERY, null, filter))
+        whenever(mockGeoDataApi.getAutocompletePredictions(mockApiClientApi, suggestsQuery, null, filter))
                 .thenReturn(mockAutocompletePredictionPendingResult)
-        whenever(mockAutocompletePredictionBuffer.status).thenReturn(STATUS_SUCCESS)
+        whenever(mockAutocompletePredictionBuffer.status).thenReturn(statusSuccess)
         whenever(mockAutocompletePredictionBuffer.iterator()).thenReturn(predictions.iterator())
 
-        searchManager.requestSuggests(SUGGESTS_QUERY)
+        searchManager.requestSuggests(suggestsQuery)
         verify(mockAutocompletePredictionPendingResult).setResultCallback(autocompletePredictionCallBackCaptor.capture())
         autocompletePredictionCallBackCaptor.firstValue.onResult(mockAutocompletePredictionBuffer)
 
         val expectedSuggestsList = mutableListOf(
-                PlaceSuggest(SUGGESTS_QUERY, "testPrimaryText", "testSecondaryText", "testPlaceId")
+                PlaceSuggest(suggestsQuery, "testPrimaryText1", "testSecondaryText1", "testPlaceId1"),
+                PlaceSuggest(suggestsQuery, "testPrimaryText2", "testSecondaryText2", "testPlaceId2")
         )
 
         assertArrayEquals(searchManager.suggests.value?.toTypedArray(), expectedSuggestsList.toTypedArray())
@@ -86,32 +90,32 @@ class SearchManagerTest {
 
     @Test
     fun testRequestPlaceWhenNotSuccess() {
-        whenever(mockGeoDataApi.getPlaceById(mockApiClientApi, PLACE_ID))
+        whenever(mockGeoDataApi.getPlaceById(mockApiClientApi, placeId))
                 .thenReturn(mockPlaceBufferPendingResult)
-        whenever(mockPlaceBuffer.status).thenReturn(STATUS_CANCELED)
+        whenever(mockPlaceBuffer.status).thenReturn(statusCanceled)
 
-        searchManager.requestPlace(PLACE_ID)
+        searchManager.requestPlace(placeId)
         verify(mockPlaceBufferPendingResult).setResultCallback(placeBufferCallBackCaptor.capture())
         placeBufferCallBackCaptor.firstValue.onResult(mockPlaceBuffer)
 
-        verify(mockGoogleApiErrorHandler).onErrorStatus(STATUS_CANCELED)
+        verify(mockGoogleApiErrorHandler).onErrorStatus(statusCanceled)
     }
 
     @Test
     fun testRequestPlaceWhenSuccess() {
         val expectedPlace: MutableList<Place> = mutableListOf(
-            TestPlace(LatLng(0.0, 0.0))
+                TestPlace(LatLng(0.0, 0.0))
         )
 
-        whenever(mockGeoDataApi.getPlaceById(mockApiClientApi, PLACE_ID))
+        whenever(mockGeoDataApi.getPlaceById(mockApiClientApi, placeId))
                 .thenReturn(mockPlaceBufferPendingResult)
-        whenever(mockPlaceBuffer.status).thenReturn(STATUS_SUCCESS)
+        whenever(mockPlaceBuffer.status).thenReturn(statusSuccess)
         whenever(mockPlaceBuffer.iterator()).thenReturn(expectedPlace.iterator())
 
-        searchManager.requestPlace(PLACE_ID)
+        searchManager.requestPlace(placeId)
         verify(mockPlaceBufferPendingResult).setResultCallback(placeBufferCallBackCaptor.capture())
         placeBufferCallBackCaptor.firstValue.onResult(mockPlaceBuffer)
 
-        assertEquals(searchManager.place.value, com.devindi.wallpaper.search.Place(0.0, 0.0))
+        assertEquals(searchManager.place.value, MapwallPlace(0.0, 0.0))
     }
 }

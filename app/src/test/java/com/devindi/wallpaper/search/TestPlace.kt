@@ -1,6 +1,5 @@
 package com.devindi.wallpaper.search
 
-
 import android.net.Uri
 import com.google.android.gms.location.places.Place
 import com.google.android.gms.maps.model.LatLng
