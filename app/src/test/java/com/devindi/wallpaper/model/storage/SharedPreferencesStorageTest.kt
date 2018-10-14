@@ -19,21 +19,21 @@ import org.robolectric.annotation.Config
 @Config(manifest = Config.NONE)
 class SharedPreferencesStorageTest {
 
-    private val STRING_KEY = "STRING_KEY"
-    private val STRING_ANY_VALUE = "STRING_ANY_VALUE"
-    private val STRING_DEFAULT_VALUE = ""
-    private val INT_KEY = "INT_KEY"
-    private val INT_ANY_VALUE = Integer.MAX_VALUE
-    private val INT_DEFAULT_VALUE = 0
-    private val BOOLEAN_KEY = "BOOLEAN_KEY"
-    private val BOOLEAN_ANY_VALUE = true
-    private val BOOLEAN_DEFAULT_VALUE = false
-    private val FLOAT_KEY = "FLOAT_KEY"
-    private val FLOAT_ANY_VALUE = Float.MAX_VALUE
-    private val FLOAT_DEFAULT_VALUE = 0f
-    private val LONG_KEY = "LONG_KEY"
-    private val LONG_ANY_VALUE = Long.MAX_VALUE
-    private val LONG_DEFAULT_VALUE = 0L
+    private val stringKey = "stringKey"
+    private val stringAnyValue = "stringAnyValue"
+    private val stringDefaultValue = ""
+    private val intKey = "intKey"
+    private val intAnyValue = Integer.MAX_VALUE
+    private val intFefaultvalue = 0
+    private val booleanKey = "booleanKey"
+    private val booleanAnyValue = true
+    private val booleanDefaultValue = false
+    private val floatKey = "floatKey"
+    private val floatAnyValue = Float.MAX_VALUE
+    private val floatDefaultValue = 0f
+    private val longKey = "longKey"
+    private val longAnyValue = Long.MAX_VALUE
+    private val longDefaultValue = 0L
 
     private lateinit var keyValueStorage: KeyValueStorage
 
@@ -50,80 +50,80 @@ class SharedPreferencesStorageTest {
 
     @Test
     fun saveNewValueCorrectType() {
-        keyValueStorage.save(STRING_KEY, STRING_ANY_VALUE)
+        keyValueStorage.save(stringKey, stringAnyValue)
 
-        assertEquals(STRING_ANY_VALUE, sharedPreferences.getString(STRING_KEY, STRING_DEFAULT_VALUE))
+        assertEquals(stringAnyValue, sharedPreferences.getString(stringKey, stringDefaultValue))
     }
 
     @Test
     fun readSavedBeforeStringValueReturnValue() {
-        sharedPreferencesEditor.putString(STRING_KEY, STRING_ANY_VALUE).apply()
+        sharedPreferencesEditor.putString(stringKey, stringAnyValue).apply()
 
-        assertEquals(STRING_ANY_VALUE, keyValueStorage.read(STRING_KEY, String::class))
+        assertEquals(stringAnyValue, keyValueStorage.read(stringKey, String::class))
     }
 
     @Test
     fun readSavedBeforeIntValueReturnValue() {
-        sharedPreferencesEditor.putInt(INT_KEY, INT_ANY_VALUE).apply()
+        sharedPreferencesEditor.putInt(intKey, intAnyValue).apply()
 
-        assertEquals(INT_ANY_VALUE, keyValueStorage.read(INT_KEY, Int::class))
+        assertEquals(intAnyValue, keyValueStorage.read(intKey, Int::class))
     }
 
     @Test
     fun readSavedBeforeBooleanValueReturnValue() {
-        sharedPreferencesEditor.putBoolean(BOOLEAN_KEY, BOOLEAN_ANY_VALUE).apply()
+        sharedPreferencesEditor.putBoolean(booleanKey, booleanAnyValue).apply()
 
-        assertEquals(BOOLEAN_ANY_VALUE, keyValueStorage.read(BOOLEAN_KEY, Boolean::class))
+        assertEquals(booleanAnyValue, keyValueStorage.read(booleanKey, Boolean::class))
     }
 
     @Test
     fun readSavedBeforeFloatValueReturnValue() {
-        sharedPreferencesEditor.putFloat(FLOAT_KEY, FLOAT_ANY_VALUE).apply()
+        sharedPreferencesEditor.putFloat(floatKey, floatAnyValue).apply()
 
-        assertEquals(FLOAT_ANY_VALUE, keyValueStorage.read(FLOAT_KEY, Float::class))
+        assertEquals(floatAnyValue, keyValueStorage.read(floatKey, Float::class))
     }
 
     @Test
     fun readSavedBeforeLongValueReturnValue() {
-        sharedPreferencesEditor.putLong(LONG_KEY, LONG_ANY_VALUE).apply()
+        sharedPreferencesEditor.putLong(longKey, longAnyValue).apply()
 
-        assertEquals(LONG_ANY_VALUE, keyValueStorage.read(LONG_KEY, Long::class))
+        assertEquals(longAnyValue, keyValueStorage.read(longKey, Long::class))
     }
 
     @Test
     fun readNotExistingKeyReturnDefaultString() {
-        assertEquals(keyValueStorage.read(STRING_KEY, String::class, STRING_DEFAULT_VALUE), STRING_DEFAULT_VALUE)
+        assertEquals(keyValueStorage.read(stringKey, String::class, stringDefaultValue), stringDefaultValue)
     }
 
     @Test
     fun readNotExistingKeyReturnDefaultInt() {
-        assertEquals(keyValueStorage.read(INT_KEY, Int::class, INT_DEFAULT_VALUE), INT_DEFAULT_VALUE)
+        assertEquals(keyValueStorage.read(intKey, Int::class, intFefaultvalue), intFefaultvalue)
     }
 
     @Test
     fun readNotExistingKeyReturnDefaultBoolean() {
-        assertEquals(keyValueStorage.read(BOOLEAN_KEY, Boolean::class, BOOLEAN_DEFAULT_VALUE), BOOLEAN_DEFAULT_VALUE)
+        assertEquals(keyValueStorage.read(booleanKey, Boolean::class, booleanDefaultValue), booleanDefaultValue)
     }
 
     @Test
     fun readNotExistingKeyReturnDefaultFloat() {
-        assertEquals(keyValueStorage.read(FLOAT_KEY, Float::class, FLOAT_DEFAULT_VALUE), FLOAT_DEFAULT_VALUE)
+        assertEquals(keyValueStorage.read(floatKey, Float::class, floatDefaultValue), floatDefaultValue)
     }
 
     @Test
     fun readNotExistingKeyReturnDefaultLong() {
-        assertEquals(keyValueStorage.read(LONG_KEY, Long::class, LONG_DEFAULT_VALUE), LONG_DEFAULT_VALUE)
+        assertEquals(keyValueStorage.read(longKey, Long::class, longDefaultValue), longDefaultValue)
     }
 
     @Test(expected = UnsupportedOperationException::class)
     fun saveNewValueIncorrectTypeThrowException() {
         val value = 0
-        keyValueStorage.save(STRING_KEY, value)
+        keyValueStorage.save(stringKey, value)
     }
 
     @Test(expected = UnsupportedOperationException::class)
     fun readIncorrectTypeKeyThrowException() {
-        keyValueStorage.read(STRING_KEY, Set::class)
+        keyValueStorage.read(stringKey, Set::class)
     }
 
 }
