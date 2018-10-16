@@ -7,4 +7,7 @@
     <string name="about_version">version %s</string>
     <string name="request_storage_permission_message">Select map cache location. Disk usage is based on map usage and be up to 1GB. External storage is recommended</string>
 
+    <string name="settings_item_width">Width</string>
+    <string name="settings_item_height">Height</string>
+
 </resources>

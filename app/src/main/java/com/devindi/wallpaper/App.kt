@@ -9,6 +9,7 @@ import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.createPermissionManager
 import com.devindi.wallpaper.model.AndroidInfo
 import com.devindi.wallpaper.model.DeviceInfo
+import com.devindi.wallpaper.model.DisplayInfo
 import com.devindi.wallpaper.model.SettingsRepo
 import com.devindi.wallpaper.model.config.ConfigManager
 import com.devindi.wallpaper.model.map.TileRequestHandler
@@ -16,6 +17,9 @@ import com.devindi.wallpaper.model.search.searchModule
 import com.devindi.wallpaper.model.storage.KeyValueStorage
 import com.devindi.wallpaper.model.storage.MapCacheStrategy
 import com.devindi.wallpaper.model.storage.SharedPreferencesStorage
+import com.devindi.wallpaper.settings.SettingsViewModel
+import com.devindi.wallpaper.settings.model.SettingsManager
+import com.devindi.wallpaper.settings.size.edit.EditSizeViewModel
 import com.devindi.wallpaper.source.MapSourceViewModel
 import com.devindi.wallpaper.splash.SplashViewModel
 import com.squareup.picasso.Picasso
@@ -39,14 +43,17 @@ class App : Application() {
         single { SettingsRepo(get(), get()) }
         single { createPermissionManager() }
         single { FabricReportManager() as ReportManager }
-        single { DeviceInfo(androidApplication()) as AndroidInfo }
+        single { DeviceInfo(androidApplication()) } bind AndroidInfo::class bind DisplayInfo::class
         single { MapCacheStrategy(androidApplication(), get()) }
         single { ConfigManager() }
         single { DependencyStrategy(get(), get()) }
         single { Configuration.getInstance() }
+        single { SettingsManager(PreferenceManager.getDefaultSharedPreferences(get())) }
         viewModel { SplashViewModel(get(), get()) }
         viewModel { HomeViewModel(get(), get(), get(), get()) }
         viewModel { MapSourceViewModel(get(), get()) }
+        viewModel { EditSizeViewModel(get()) }
+        viewModel { SettingsViewModel(get()) }
     }
 
     override fun onCreate() {

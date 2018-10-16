@@ -10,6 +10,7 @@ import timber.log.Timber
 private const val HALF_CIRCLE_DEGREES = 180
 private const val CIRCLE_DEGREES = 360
 
+@Deprecated("This class is designed by old me. Use MapImageGenerator instead")
 class MapAreaManager(
     private val tileProvider: SyncMapTileProvider,
     private val sourceFactory: TileSourceFactory
