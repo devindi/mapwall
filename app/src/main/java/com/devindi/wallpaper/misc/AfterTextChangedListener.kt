@@ -9,10 +9,10 @@ class AfterTextChangedListener(val observer: (text: String) -> Unit) : TextWatch
     }
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-        //do nothing
+        // do nothing
     }
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-        //do nothing
+        // do nothing
     }
 }

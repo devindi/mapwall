@@ -7,13 +7,16 @@ import com.devindi.wallpaper.settings.model.IntField
 import com.devindi.wallpaper.source.OnItemClickListener
 import kotlinx.android.synthetic.main.settings_simple_item.view.*
 
-class SizeViewHolder(view: View, clickListener: OnItemClickListener) : RecyclerView.ViewHolder(view) {
+class SizeViewHolder(
+    view: View,
+    clickListener: OnItemClickListener
+) : RecyclerView.ViewHolder(view) {
 
     private val titleLabel: TextView = view.settings_title
     private val valueLabel: TextView = view.settings_value
 
     init {
-        view.setOnClickListener{
+        view.setOnClickListener {
             clickListener.onItemClick(adapterPosition, it)
         }
     }

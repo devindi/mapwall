@@ -13,16 +13,18 @@ import android.widget.SeekBar
  * })
  *
  */
-class SimpleSeekBarChangeListener(private val observer: (progress: Int, fromUser: Boolean) -> Unit) : SeekBar.OnSeekBarChangeListener {
+class SimpleSeekBarChangeListener(
+    private val observer: (progress: Int, fromUser: Boolean) -> Unit
+) : SeekBar.OnSeekBarChangeListener {
     override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
         observer(progress, fromUser)
     }
 
     override fun onStartTrackingTouch(seekBar: SeekBar?) {
-        //do nothing
+        // do nothing
     }
 
     override fun onStopTrackingTouch(seekBar: SeekBar?) {
-        //do nothing
+        // do nothing
     }
 }

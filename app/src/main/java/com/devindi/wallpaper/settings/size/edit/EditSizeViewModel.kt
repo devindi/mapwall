@@ -20,7 +20,7 @@ class EditSizeViewModel(private val settingsManager: SettingsManager) : ViewMode
         field.set(value)
     }
 
-    fun wallpaperSize() : LiveData<Int> {
+    fun wallpaperSize(): LiveData<Int> {
         return wallpaperSize
     }
 }

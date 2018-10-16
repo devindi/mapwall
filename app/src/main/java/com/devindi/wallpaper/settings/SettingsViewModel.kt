@@ -10,7 +10,7 @@ import com.devindi.wallpaper.settings.model.DIMENSION_WIDTH
 import com.devindi.wallpaper.settings.model.SettingsField
 import com.devindi.wallpaper.settings.model.SettingsManager
 
-class SettingsViewModel(private val settingsManager: SettingsManager): ViewModel() {
+class SettingsViewModel(private val settingsManager: SettingsManager) : ViewModel() {
 
     private val items = MutableLiveData<List<SettingsField<*>>>()
     private val settingsObserver = Observer<String> {
