@@ -12,12 +12,11 @@ import org.koin.android.scope.ext.android.getOrCreateScope
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var router: Router
+    lateinit var router: Router
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.root_screen)
-
         router = Conductor.attachRouter(this, findViewById(R.id.container), savedInstanceState)
         if (!router.hasRootController()) {
             router.setRoot(RouterTransaction.with(SplashController()))
