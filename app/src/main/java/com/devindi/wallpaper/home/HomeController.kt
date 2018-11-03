@@ -31,10 +31,7 @@ import com.devindi.wallpaper.search.SearchController
 import com.devindi.wallpaper.settings.SettingsController
 import com.devindi.wallpaper.source.MapSourceController
 import com.squareup.picasso.Picasso
-import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.viewmodel.ext.android.viewModel
-import org.koin.core.KoinContext
-import org.koin.standalone.StandAloneContext
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.util.TileSystem
 import org.osmdroid.views.MapView

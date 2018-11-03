@@ -8,10 +8,8 @@ import android.content.pm.PackageManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bluelinelabs.conductor.RouterTransaction
 import com.devindi.wallpaper.MainActivity
 import com.devindi.wallpaper.R
-import com.devindi.wallpaper.home.HomeController
 import com.devindi.wallpaper.misc.BaseController
 import com.devindi.wallpaper.misc.DependencyStrategy
 import com.devindi.wallpaper.misc.PermissionManager
@@ -19,8 +17,6 @@ import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.inject
 import com.devindi.wallpaper.model.analytics.ScreenEvent
 import org.koin.android.viewmodel.ext.android.viewModel
-import org.koin.core.KoinContext
-import org.koin.standalone.StandAloneContext
 
 class SplashController : BaseController() {
 
