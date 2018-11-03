@@ -13,6 +13,7 @@ import com.devindi.wallpaper.model.DisplayInfo
 import com.devindi.wallpaper.model.SettingsRepo
 import com.devindi.wallpaper.model.config.ConfigManager
 import com.devindi.wallpaper.model.map.TileRequestHandler
+import com.devindi.wallpaper.model.map.mapModule
 import com.devindi.wallpaper.model.search.searchModule
 import com.devindi.wallpaper.model.storage.KeyValueStorage
 import com.devindi.wallpaper.model.storage.MapCacheStrategy
@@ -83,7 +84,7 @@ class App : Application() {
             }
         }
 
-        startKoin(this, listOf(applicationModule, searchModule), logger = koinLogger)
+        startKoin(this, listOf(applicationModule, searchModule, mapModule), logger = koinLogger)
         val reportManager: ReportManager = get()
         reportManager.init(this)
 

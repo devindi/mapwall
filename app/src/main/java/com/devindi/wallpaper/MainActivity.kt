@@ -5,7 +5,10 @@ import android.support.v7.app.AppCompatActivity
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
+import com.devindi.wallpaper.home.HomeController
 import com.devindi.wallpaper.splash.SplashController
+import org.koin.android.scope.ext.android.bindScope
+import org.koin.android.scope.ext.android.getOrCreateScope
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,5 +28,10 @@ class MainActivity : AppCompatActivity() {
         if (!router.handleBack()) {
             super.onBackPressed()
         }
+    }
+
+    fun openMainScreen() {
+        bindScope(getOrCreateScope("map_scope"))
+        router.setRoot(RouterTransaction.with(HomeController()))
     }
 }

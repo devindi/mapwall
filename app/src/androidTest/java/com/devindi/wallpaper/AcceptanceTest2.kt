@@ -7,19 +7,16 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+//Just another acceptance test to demonstrate that it works
+//Remove it after new test merge
 @RunWith(AndroidJUnit4::class)
-class AcceptanceTest {
+class AcceptanceTest2 {
 
     @get:Rule
     private val rule = ActivityTestRule(MainActivity::class.java, false, false)
 
     @Test
-    fun runIt0() {
-        rule.launchActivity(Intent())
-    }
-
-    @Test
-    fun runIt1() {
+    fun runIt() {
         rule.launchActivity(Intent())
     }
 }

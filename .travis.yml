@@ -29,3 +29,12 @@ script:
   - ./gradlew testDebugUnitTest connectedDebugAndroidTest ktlintDebugCheck createTestReports
   - bundle exec danger
   - bash <(curl -s https://codecov.io/bash)
+
+after_failure:
+  - export MY_MOD="app"
+  - export MY_LOG_DIR="$(pwd)/${MY_MOD}/build/outputs/reports/androidTests/connected/"
+  - pwd && cd "${MY_LOG_DIR:-.}" && pwd && ls -al
+  - sudo apt-get install -qq lynx && lynx --dump index.html > myIndex.log
+  - lynx --dump com.android.builder.testing.ConnectedDevice.html > myConnectedDevice.log
+  - lynx --dump com.android.builder.testing.html > myTesting.log
+  - for file in *.log; do echo "$file"; echo "====================="; cat "$file"; done || true
