@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import com.devindi.wallpaper.MainActivity
 import com.devindi.wallpaper.R
 import com.devindi.wallpaper.misc.BaseController
-import com.devindi.wallpaper.misc.DependencyStrategy
 import com.devindi.wallpaper.misc.PermissionManager
 import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.inject
@@ -22,7 +21,6 @@ class SplashController : BaseController() {
 
     private val permissionManager: PermissionManager by inject()
     private val viewModel: SplashViewModel by viewModel()
-    private val dependencyStrategy: DependencyStrategy by inject()
     private val reportManager: ReportManager by inject()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {

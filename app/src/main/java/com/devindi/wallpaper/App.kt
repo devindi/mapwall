@@ -3,7 +3,6 @@ package com.devindi.wallpaper
 import android.app.Application
 import android.preference.PreferenceManager
 import com.devindi.wallpaper.home.HomeViewModel
-import com.devindi.wallpaper.misc.DependencyStrategy
 import com.devindi.wallpaper.misc.FabricReportManager
 import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.createPermissionManager
@@ -47,10 +46,9 @@ class App : Application() {
         single { DeviceInfo(androidApplication()) } bind AndroidInfo::class bind DisplayInfo::class
         single { MapCacheStrategy(androidApplication(), get()) }
         single { ConfigManager() }
-        single { DependencyStrategy(get(), get()) }
         single { Configuration.getInstance() }
         single { SettingsManager(PreferenceManager.getDefaultSharedPreferences(get())) }
-        viewModel { SplashViewModel(get(), get()) }
+        viewModel { SplashViewModel(get(), get(), get()) }
         viewModel { HomeViewModel(get(), get(), get(), get()) }
         viewModel { MapSourceViewModel(get(), get()) }
         viewModel { EditSizeViewModel(get()) }
