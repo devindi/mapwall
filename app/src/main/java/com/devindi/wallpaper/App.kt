@@ -3,7 +3,6 @@ package com.devindi.wallpaper
 import android.app.Application
 import android.preference.PreferenceManager
 import com.devindi.wallpaper.home.HomeViewModel
-import com.devindi.wallpaper.misc.DependencyStrategy
 import com.devindi.wallpaper.misc.FabricReportManager
 import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.createPermissionManager
@@ -13,6 +12,7 @@ import com.devindi.wallpaper.model.DisplayInfo
 import com.devindi.wallpaper.model.SettingsRepo
 import com.devindi.wallpaper.model.config.ConfigManager
 import com.devindi.wallpaper.model.map.TileRequestHandler
+import com.devindi.wallpaper.model.map.mapModule
 import com.devindi.wallpaper.model.search.searchModule
 import com.devindi.wallpaper.model.storage.KeyValueStorage
 import com.devindi.wallpaper.model.storage.MapCacheStrategy
@@ -46,10 +46,9 @@ class App : Application() {
         single { DeviceInfo(androidApplication()) } bind AndroidInfo::class bind DisplayInfo::class
         single { MapCacheStrategy(androidApplication(), get()) }
         single { ConfigManager() }
-        single { DependencyStrategy(get(), get()) }
         single { Configuration.getInstance() }
         single { SettingsManager(PreferenceManager.getDefaultSharedPreferences(get())) }
-        viewModel { SplashViewModel(get(), get()) }
+        viewModel { SplashViewModel(get(), get(), get()) }
         viewModel { HomeViewModel(get(), get(), get(), get()) }
         viewModel { MapSourceViewModel(get(), get()) }
         viewModel { EditSizeViewModel(get()) }
@@ -83,7 +82,7 @@ class App : Application() {
             }
         }
 
-        startKoin(this, listOf(applicationModule, searchModule), logger = koinLogger)
+        startKoin(this, listOf(applicationModule, searchModule, mapModule), logger = koinLogger)
         val reportManager: ReportManager = get()
         reportManager.init(this)
 
