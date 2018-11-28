@@ -155,7 +155,7 @@ def resolveProperty(String key) {
     return properties.getProperty(key)
 }
 
-task createTestReports(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
+task createTestReports(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
 
     reports {
         xml.enabled = true
@@ -170,7 +170,5 @@ task createTestReports(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'cre
 
     sourceDirectories = files(javaSourceDirs)
     classDirectories = files([javaClasses], [kotlinClasses])
-    executionData = fileTree(dir: project.buildDir, includes: [
-            'jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec'
-    ])
+    executionData = fileTree(dir: project.buildDir, includes: ['jacoco/testDebugUnitTest.exec'])
 }
