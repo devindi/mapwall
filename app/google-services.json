@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "012345678987",
+    "firebase_url": "https://mapwall.firebaseio.com",
+    "project_id": "mapwall",
+    "storage_bucket": "mapwall.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:012345678987:android:0123456789876543",
+        "android_client_info": {
+          "package_name": "com.devindi.wallpaper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "hello.apps.googleusercontent.com",
+          "client_type": -1
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "hello"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": -1
+        },
+        "appinvite_service": {
+          "status": -1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": -1
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:012345678987:android:0123456789876543",
+        "android_client_info": {
+          "package_name": "com.devindi.wallpaper.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "hello.apps.googleusercontent.com",
+          "client_type": -1
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "hello"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": -1
+        },
+        "appinvite_service": {
+          "status": -1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": -1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
