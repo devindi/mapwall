@@ -6,6 +6,7 @@ import com.devindi.wallpaper.model.SettingsRepo
 import com.devindi.wallpaper.model.analytics.CreateWallpaperEvent
 import com.devindi.wallpaper.model.map.MapAreaManager
 import org.osmdroid.util.BoundingBox
+import com.google.firebase.perf.FirebasePerformance
 
 class HomeViewModel(
     private val manager: MapAreaManager,
@@ -18,6 +19,8 @@ class HomeViewModel(
 
     fun createWallpaper(boundingBox: BoundingBox, zoomLevel: Int) {
         Thread({
+            val myTrace = FirebasePerformance.getInstance().newTrace("wallpaper gen trace")
+            myTrace.start()
             val target = Target.BOTH
             reportManager.reportEvent(CreateWallpaperEvent(
                 currentTileSource.value!!.id,
@@ -30,6 +33,7 @@ class HomeViewModel(
                 currentTileSource.value!!.id,
                 boundingBox,
                 zoomLevel)
+            myTrace.stop()
             handler.handle(wallpaper, target)
         }).start()
     }
