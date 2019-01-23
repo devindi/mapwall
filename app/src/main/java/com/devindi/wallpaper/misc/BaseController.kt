@@ -8,7 +8,8 @@ import com.bluelinelabs.conductor.archlifecycle.LifecycleController
 /**
  * Inspired by https://github.com/miquelbeltran/conductor-viewmodel
  */
-abstract class BaseController(args: Bundle? = null) : LifecycleController(args), ViewModelStoreOwner {
+abstract class BaseController(args: Bundle? = null) :
+    LifecycleController(args), ViewModelStoreOwner {
 
     private val viewModelStore = ViewModelStore()
 
