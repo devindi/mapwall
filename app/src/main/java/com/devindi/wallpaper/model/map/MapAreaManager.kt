@@ -2,6 +2,7 @@ package com.devindi.wallpaper.model.map
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import com.google.firebase.perf.metrics.AddTrace
 import org.osmdroid.tileprovider.cachemanager.CacheManager
 import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.MapTileIndex
@@ -16,6 +17,7 @@ class MapAreaManager(
     private val sourceFactory: TileSourceFactory
 ) {
 
+    @AddTrace(name = "wallpaper gen")
     fun generateBitmap(sourceId: String, area: BoundingBox, zoom: Int): Bitmap {
         val tileSource = sourceFactory.getTileSource(sourceId)
         var tilesCoverage = CacheManager.getTilesCoverage(area, zoom)

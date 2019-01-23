@@ -17,6 +17,8 @@ buildscript {
         classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2"
         classpath "gradle.plugin.org.jlleitschuh.gradle:ktlint-gradle:5.1.0"
         classpath 'org.jacoco:org.jacoco.core:0.8.1'
+        classpath 'com.google.firebase:firebase-plugins:1.1.5'
+        classpath 'com.google.gms:google-services:4.2.0'
     }
 }
 

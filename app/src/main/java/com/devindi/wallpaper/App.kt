@@ -22,6 +22,7 @@ import com.devindi.wallpaper.settings.model.SettingsManager
 import com.devindi.wallpaper.settings.size.edit.EditSizeViewModel
 import com.devindi.wallpaper.source.MapSourceViewModel
 import com.devindi.wallpaper.splash.SplashViewModel
+import com.google.firebase.FirebaseApp
 import com.squareup.picasso.Picasso
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.startKoin
@@ -57,6 +58,8 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        FirebaseApp.initializeApp(this)
 
         val config = Configuration.getInstance()
         config.isDebugMapTileDownloader = false
