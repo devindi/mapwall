@@ -50,7 +50,7 @@ class App : Application() {
         single { Configuration.getInstance() }
         single { SettingsManager(PreferenceManager.getDefaultSharedPreferences(get())) }
         viewModel { SplashViewModel(get(), get(), get()) }
-        viewModel { HomeViewModel(get(), get(), get(), get()) }
+        viewModel { HomeViewModel(get(), get(), get(), get(), get()) }
         viewModel { MapSourceViewModel(get(), get()) }
         viewModel { EditSizeViewModel(get()) }
         viewModel { SettingsViewModel(get()) }

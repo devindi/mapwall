@@ -4,6 +4,7 @@ import android.app.WallpaperManager
 import android.graphics.Bitmap
 import android.os.Build
 import android.support.annotation.RequiresApi
+import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.util.Date
@@ -57,7 +58,10 @@ class WallpaperHandlerImpl(private val impl: WallpaperManager) : WallpaperHandle
 class ExportWallpaperHandler(private val targetDir: File) : WallpaperHandler {
 
     override fun handle(wallpaper: Bitmap, target: Target) {
-        FileOutputStream(File(targetDir, "${Date()}.png")).use {
+        val targetFile = File(targetDir, "${Date()}.png")
+        targetFile.createNewFile()
+        Timber.d("Saving to file %s", targetFile.absolutePath)
+        FileOutputStream(targetFile).use {
             wallpaper.compress(Bitmap.CompressFormat.PNG, 100, it)
         }
     }

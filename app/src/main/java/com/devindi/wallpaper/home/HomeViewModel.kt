@@ -4,37 +4,46 @@ import android.arch.lifecycle.ViewModel
 import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.model.SettingsRepo
 import com.devindi.wallpaper.model.analytics.CreateWallpaperEvent
-import com.devindi.wallpaper.model.map.MapAreaManager
-import org.osmdroid.util.BoundingBox
+import com.devindi.wallpaper.model.map.MapImageGenerator
+import com.devindi.wallpaper.settings.model.DIMENSION_HEIGHT
+import com.devindi.wallpaper.settings.model.DIMENSION_WIDTH
+import com.devindi.wallpaper.settings.model.SettingsManager
 import com.google.firebase.perf.FirebasePerformance
+import org.osmdroid.util.GeoPoint
 
 class HomeViewModel(
-    private val manager: MapAreaManager,
+    private val imageGenerator: MapImageGenerator,
     private val handler: WallpaperHandler,
     private val reportManager: ReportManager,
-    settings: SettingsRepo
+    settings: SettingsRepo,
+    private val settingsManager: SettingsManager
 ) : ViewModel() {
 
     var currentTileSource = settings.currentMapSource()
 
-    fun createWallpaper(boundingBox: BoundingBox, zoomLevel: Int) {
-        Thread({
+    fun createWallpaper(centerPoint: GeoPoint, zoomLevel: Int) {
+        Thread {
             val myTrace = FirebasePerformance.getInstance().newTrace("wallpaper gen trace")
             myTrace.start()
             val target = Target.BOTH
+            val width = settingsManager.getIntField(DIMENSION_WIDTH).get()
+            val height = settingsManager.getIntField(DIMENSION_HEIGHT).get()
             reportManager.reportEvent(CreateWallpaperEvent(
                 currentTileSource.value!!.id,
-                boundingBox.centerLatitude,
-                boundingBox.centerLongitude,
+                centerPoint.latitude,
+                centerPoint.longitude,
                 zoomLevel,
                 target)
             )
-            val wallpaper = manager.generateBitmap(
+            val wallpaper = imageGenerator.generate(
                 currentTileSource.value!!.id,
-                boundingBox,
-                zoomLevel)
+                zoomLevel,
+                centerPoint.latitude,
+                centerPoint.longitude,
+                width,
+                height)
             myTrace.stop()
             handler.handle(wallpaper, target)
-        }).start()
+        }.start()
     }
 }

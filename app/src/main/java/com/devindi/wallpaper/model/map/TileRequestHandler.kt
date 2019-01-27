@@ -9,7 +9,7 @@ import timber.log.Timber
 
 class TileRequestHandler : RequestHandler(), KoinComponent {
 
-    private val mapAreaManager: MapAreaManager by inject()
+    private val mapAreaManager: MapImageGenerator by inject()
 
     override fun canHandleRequest(data: Request): Boolean {
         return data.uri.scheme == "osm"
@@ -18,12 +18,8 @@ class TileRequestHandler : RequestHandler(), KoinComponent {
     override fun load(request: Request, networkPolicy: Int): Result {
         Timber.d("Loading bitmap for url: ${request.uri}")
         val sourceId = request.uri.host
-        val north = request.uri.getQueryParameter("latNorth").toDouble()
-        val south = request.uri.getQueryParameter("latSouth").toDouble()
-        val west = request.uri.getQueryParameter("lonWest").toDouble()
-        val east = request.uri.getQueryParameter("lonEast").toDouble()
         val zoom = request.uri.getQueryParameter("zoom").toInt()
-        val bitmap = mapAreaManager.generateBitmap(sourceId, north, east, south, west, zoom)
+        val bitmap = mapAreaManager.generate(sourceId, 1, 0.0, 0.0, 50, 50)
         return Result(bitmap, Picasso.LoadedFrom.DISK)
     }
 }

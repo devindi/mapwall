@@ -17,7 +17,8 @@ val mapModule = module {
         CacheManager(source, get(), source.minimumZoomLevel, source.maximumZoomLevel)
     }
     scope("map_scope") { SyncMapTileProvider(get(), get()) }
-    scope("map_scope") { MapAreaManager(get(), get()) }
     scope("map_scope") { CacheManagerFactory(get()) }
     scope("map_scope") { TileSourceFactory(get()) }
+    scope("map_scope") { MapImageGenerator(get(), get(), get()) }
+    scope("map_scope") { TileUtils() }
 }

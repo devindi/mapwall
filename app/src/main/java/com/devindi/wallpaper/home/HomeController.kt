@@ -87,7 +87,7 @@ class HomeController : BaseController(), OnPlacePickedListener {
         }
 
         view.findViewById<View>(R.id.button).setOnClickListener {
-            viewModel.createWallpaper(map.boundingBox, map.zoomLevel)
+            viewModel.createWallpaper(map.boundingBox.centerWithDateLine, map.zoomLevel)
         }
 
         view.findViewById<View>(R.id.menu_button).setOnClickListener {
