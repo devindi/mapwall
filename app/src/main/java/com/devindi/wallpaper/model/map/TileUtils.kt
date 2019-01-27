@@ -13,13 +13,17 @@ class TileUtils {
         Timber.d("Generating bounding box: center $centerTileX $centerTileY")
         Timber.d("Generating bounding box osm: center ${CacheManager.getMapTileFromCoordinates(centerLat, centerLon, zoom)}")
         val tileWidth = width / (2.0 * tileSize)
-        val westTileX = centerTileX - tileWidth
+        var westTileX = centerTileX - tileWidth
         val eastTileX = centerTileX + tileWidth
         val tileHeight = height / (2.0 * tileSize)
         val northTileY = centerTileY - tileHeight
         val southTileY = centerTileY + tileHeight
 
         Timber.d("Tiles rect: $westTileX - $eastTileX; $$northTileY - $southTileY")
+        if (westTileX < 0) {
+            val worldSize = Math.pow(2.0, zoom.toDouble()).toInt()
+            westTileX += worldSize
+        }
 
         return RectD(westTileX, northTileY, eastTileX, southTileY)
     }

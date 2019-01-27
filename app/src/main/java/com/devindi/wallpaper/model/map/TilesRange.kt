@@ -2,7 +2,8 @@ package com.devindi.wallpaper.model.map
 
 class TilesRange(private val from: Int, to: Int, zoom: Int) : Iterable<Int> {
 
-    val actualTo = if (to < from) to + Math.pow(2.0, zoom.toDouble()).toInt() else to
+    private val worldSize = Math.pow(2.0, zoom.toDouble()).toInt()
+    private val actualTo = if (to < from) to + worldSize else to
 
     override fun iterator(): Iterator<Int> {
         return object : IntIterator() {
@@ -20,7 +21,7 @@ class TilesRange(private val from: Int, to: Int, zoom: Int) : Iterable<Int> {
                 } else {
                     next += 1
                 }
-                return value
+                return value % worldSize
             }
         }
     }
