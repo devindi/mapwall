@@ -10,7 +10,6 @@ import com.devindi.wallpaper.settings.model.DIMENSION_WIDTH
 import com.devindi.wallpaper.settings.model.SettingsManager
 import com.google.firebase.perf.FirebasePerformance
 import org.osmdroid.util.GeoPoint
-import timber.log.Timber
 
 class HomeViewModel(
     private val imageGenerator: MapImageGenerator,
@@ -23,7 +22,6 @@ class HomeViewModel(
     var currentTileSource = settings.currentMapSource()
 
     fun createWallpaper(centerPoint: GeoPoint, zoomLevel: Int) {
-        Timber.d("Center point: ${centerPoint.longitude}, ${centerPoint.latitude} ; zoom = $zoomLevel")
         Thread {
             val myTrace = FirebasePerformance.getInstance().newTrace("wallpaper gen trace")
             myTrace.start()

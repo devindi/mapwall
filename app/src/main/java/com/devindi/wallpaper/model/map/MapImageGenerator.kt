@@ -16,10 +16,17 @@ class MapImageGenerator(
     private val tileUtils: TileUtils
 ) {
 
-    fun generate(mapSourceId: String, zoom: Int, centerLat: Double, centerLong: Double, width: Int, height: Int): Bitmap {
+    fun generate(
+        mapSourceId: String,
+        zoom: Int,
+        centerLat: Double,
+        centerLong: Double,
+        width: Int,
+        height: Int
+    ): Bitmap {
         Timber.d("Generate bitmap: $centerLat, $centerLong, $width, $height")
-        val tileSource = sourceFactory.getTileSource(mapSourceId)
-        val tilesRect = tileUtils.getTilesRect(centerLat, centerLong, width, height, tileSource.tileSizePixels, zoom)
+        val tileSize = sourceFactory.getTileSource(mapSourceId).tileSizePixels
+        val tilesRect = tileUtils.getTilesRect(centerLat, centerLong, width, height, tileSize, zoom)
         return generate(mapSourceId, tilesRect, zoom)
     }
 
@@ -56,7 +63,8 @@ class MapImageGenerator(
             yRange.forEachIndexed { yIndex, yTile ->
                 val pxLeft = xIndex * tileSize.toFloat() - left
                 val pxTop = yIndex * tileSize.toFloat() - top
-                val tileBitmap = tileProvider.getTile(tileSource, MapTileIndex.getTileIndex(zoom, xTile, yTile))
+                val tileIndex = MapTileIndex.getTileIndex(zoom, xTile, yTile)
+                val tileBitmap = tileProvider.getTile(tileSource, tileIndex)
                 Timber.d("Drawing tile new %s / %s / %s at %s %s",
                     zoom,
                     xTile,
