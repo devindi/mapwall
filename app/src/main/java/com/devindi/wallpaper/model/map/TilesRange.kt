@@ -25,5 +25,10 @@ class TilesRange(private val from: Int, to: Int, zoom: Int) : Iterable<Int> {
         }
     }
 
-    fun size() = actualTo - from
+    fun size(): Int {
+        if (from == 0) {
+            return actualTo - from + 1
+        }
+        return actualTo - from
+    }
 }

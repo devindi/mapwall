@@ -28,13 +28,15 @@ class MapImageGenerator(
         Timber.d("Generating image for %s", tiles)
         val tileSource = sourceFactory.getTileSource(sourceId)
 
+        val maxIndex = Math.pow(2.0, zoom.toDouble()).toInt() - 1
+
         val startX = Math.floor(tiles.left).toInt()
-        val endX = Math.ceil(tiles.right).toInt()
+        val endX = Math.min(maxIndex, Math.ceil(tiles.right).toInt())
 
         val xRange = TilesRange(startX, endX, zoom)
 
         val startY = Math.floor(tiles.top).toInt()
-        val endY = Math.ceil(tiles.bottom).toInt()
+        val endY = Math.min(maxIndex, Math.ceil(tiles.bottom).toInt())
 
         val yRange = TilesRange(startY, endY, zoom)
 
