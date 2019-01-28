@@ -17,6 +17,7 @@ import com.devindi.wallpaper.model.search.searchModule
 import com.devindi.wallpaper.model.storage.KeyValueStorage
 import com.devindi.wallpaper.model.storage.MapCacheStrategy
 import com.devindi.wallpaper.model.storage.SharedPreferencesStorage
+import com.devindi.wallpaper.model.storage.dbModule
 import com.devindi.wallpaper.settings.SettingsViewModel
 import com.devindi.wallpaper.settings.model.SettingsManager
 import com.devindi.wallpaper.settings.size.edit.EditSizeViewModel
@@ -50,7 +51,7 @@ class App : Application() {
         single { Configuration.getInstance() }
         single { SettingsManager(PreferenceManager.getDefaultSharedPreferences(get())) }
         viewModel { SplashViewModel(get(), get(), get()) }
-        viewModel { HomeViewModel(get(), get(), get(), get(), get()) }
+        viewModel { HomeViewModel(get(), get(), get(), get(), get(), get()) }
         viewModel { MapSourceViewModel(get(), get()) }
         viewModel { EditSizeViewModel(get()) }
         viewModel { SettingsViewModel(get()) }
@@ -85,7 +86,7 @@ class App : Application() {
             }
         }
 
-        startKoin(this, listOf(applicationModule, searchModule, mapModule), logger = koinLogger)
+        startKoin(this, listOf(applicationModule, searchModule, mapModule, dbModule), logger = koinLogger)
         val reportManager: ReportManager = get()
         reportManager.init(this)
 

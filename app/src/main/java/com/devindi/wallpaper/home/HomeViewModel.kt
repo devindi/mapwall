@@ -4,19 +4,23 @@ import android.arch.lifecycle.ViewModel
 import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.model.SettingsRepo
 import com.devindi.wallpaper.model.analytics.CreateWallpaperEvent
+import com.devindi.wallpaper.model.history.HistoryManager
+import com.devindi.wallpaper.model.history.WallpaperEntry
 import com.devindi.wallpaper.model.map.MapImageGenerator
 import com.devindi.wallpaper.settings.model.DIMENSION_HEIGHT
 import com.devindi.wallpaper.settings.model.DIMENSION_WIDTH
 import com.devindi.wallpaper.settings.model.SettingsManager
 import com.google.firebase.perf.FirebasePerformance
 import org.osmdroid.util.GeoPoint
+import java.util.Calendar
 
 class HomeViewModel(
     private val imageGenerator: MapImageGenerator,
     private val handler: WallpaperHandler,
     private val reportManager: ReportManager,
     settings: SettingsRepo,
-    private val settingsManager: SettingsManager
+    private val settingsManager: SettingsManager,
+    private val historyManager: HistoryManager
 ) : ViewModel() {
 
     var currentTileSource = settings.currentMapSource()
@@ -43,6 +47,7 @@ class HomeViewModel(
                 width,
                 height)
             myTrace.stop()
+            historyManager.addEntry(WallpaperEntry(currentTileSource.value!!.id, centerPoint.latitude, centerPoint.longitude, Calendar.getInstance()))
             handler.handle(wallpaper, target)
         }.start()
     }
