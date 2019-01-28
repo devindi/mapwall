@@ -47,7 +47,14 @@ class HomeViewModel(
                 width,
                 height)
             myTrace.stop()
-            historyManager.addEntry(WallpaperEntry(currentTileSource.value!!.id, centerPoint.latitude, centerPoint.longitude, Calendar.getInstance()))
+            historyManager.addEntry(
+                WallpaperEntry(
+                    currentTileSource.value!!.id,
+                    centerPoint.latitude,
+                    centerPoint.longitude,
+                    width,
+                    height,
+                    Calendar.getInstance()))
             handler.handle(wallpaper, target)
         }.start()
     }
