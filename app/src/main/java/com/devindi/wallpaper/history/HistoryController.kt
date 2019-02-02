@@ -28,7 +28,6 @@ class HistoryController : BaseController() {
         layoutParams.topMargin = getTopInset()
         toolbar.setNavigationOnClickListener { router.popCurrentController() }
 
-
         val listView = view.list
         val adapter = HistoryAdapter(configManager)
         listView.layoutManager = LinearLayoutManager(activity)
@@ -40,6 +39,4 @@ class HistoryController : BaseController() {
 
         return view
     }
-
-
 }
