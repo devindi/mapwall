@@ -68,19 +68,17 @@ class HomeController : BaseController(), OnPlacePickedListener {
             .load(Uri.parse(DEFAULT_URI))
             .into(navigation.getHeaderView(0) as ImageView)
         navigation.setNavigationItemSelectedListener {
+            drawer.closeDrawer(Gravity.START, false)
             when (it.itemId) {
                 R.id.settings_item -> {
-                    drawer.closeDrawers()
                     router.pushController(RouterTransaction.with(SettingsController()))
                     return@setNavigationItemSelectedListener true
                 }
                 R.id.about_item -> {
-                    drawer.closeDrawers()
                     router.pushController(RouterTransaction.with(AboutController()))
                     return@setNavigationItemSelectedListener true
                 }
                 R.id.history_item -> {
-                    drawer.closeDrawers()
                     router.pushController(RouterTransaction.with(HistoryController()))
                     return@setNavigationItemSelectedListener true
                 }

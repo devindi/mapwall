@@ -13,6 +13,8 @@ abstract class BaseController(args: Bundle? = null) :
 
     private val viewModelStore = ViewModelStore()
 
+    protected fun getTopInset() = (activity as InsetsProvider).topInset()
+
     override fun getViewModelStore(): ViewModelStore {
         return viewModelStore
     }
