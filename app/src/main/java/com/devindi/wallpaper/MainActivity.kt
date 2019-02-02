@@ -3,7 +3,6 @@ package com.devindi.wallpaper
 import android.os.Bundle
 import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
-import android.view.View
 import android.view.ViewGroup
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
@@ -13,7 +12,6 @@ import com.devindi.wallpaper.misc.InsetsProvider
 import com.devindi.wallpaper.splash.SplashController
 import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.scope.ext.android.getOrCreateScope
-import timber.log.Timber
 
 class MainActivity : AppCompatActivity(), InsetsProvider {
 
