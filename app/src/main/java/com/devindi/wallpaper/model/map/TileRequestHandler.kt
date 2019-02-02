@@ -7,7 +7,14 @@ import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 import timber.log.Timber
 
-fun buildTileRequest(mapSourceId: String = "mapnik", width: Int = 100, height: Int = 100, zoom: Int = 0, centerLat: Double = 0.0, centerLon: Double = 0.0): String {
+fun buildTileRequest(
+    mapSourceId: String = "mapnik",
+    width: Int = 100,
+    height: Int = 100,
+    zoom: Int = 0,
+    centerLat: Double = 0.0,
+    centerLon: Double = 0.0
+): String {
     return "osm://$mapSourceId?" +
         "width=$width&" +
         "height=$height&" +

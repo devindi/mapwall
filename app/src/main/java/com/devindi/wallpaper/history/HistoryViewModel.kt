@@ -5,7 +5,7 @@ import com.devindi.wallpaper.model.history.HistoryManager
 
 class HistoryViewModel(
     historyManager: HistoryManager
-): ViewModel() {
+) : ViewModel() {
 
     val historyLiveData = historyManager.getHistory()
 }

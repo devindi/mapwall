@@ -16,7 +16,9 @@ import kotlinx.android.synthetic.main.history_item.view.*
 import timber.log.Timber
 import java.text.SimpleDateFormat
 
-class HistoryAdapter(private val configManager: ConfigManager): RecyclerView.Adapter<HistoryAdapter.HistoryItemVh>() {
+class HistoryAdapter(
+    private val configManager: ConfigManager
+) : RecyclerView.Adapter<HistoryAdapter.HistoryItemVh>() {
 
     var items: List<WallpaperEntry> = emptyList()
         set(value) {
@@ -25,7 +27,8 @@ class HistoryAdapter(private val configManager: ConfigManager): RecyclerView.Ada
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryItemVh {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.history_item, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.history_item, parent, false)
         return HistoryItemVh(view)
     }
 
@@ -38,18 +41,24 @@ class HistoryAdapter(private val configManager: ConfigManager): RecyclerView.Ada
         val entry = items[position]
         val mapSource = configManager.config.availableSources.find { it.id == entry.mapSourceId }!!
 
-        val tileRequest = buildTileRequest(mapSource.id, entry.width, entry.height, 15, entry.centerLat, entry.centerLon)
+        val tileRequest = buildTileRequest(
+            mapSource.id,
+            entry.width,
+            entry.height,
+            15,
+            entry.centerLat,
+            entry.centerLon)
         Timber.d("Binding history item $entry, $mapSource $tileRequest")
         Picasso.with(holder.itemView.context)
             .load(Uri.parse(tileRequest))
             .into(holder.mapPreview)
         holder.mapTitle.text = mapSource.title
-        holder.wallpaperCoordinates.text = String.format(locationFormat, entry.centerLat, entry.centerLon)
+        holder.wallpaperCoordinates.text = String.format(
+            locationFormat, entry.centerLat, entry.centerLon)
         holder.tileLabel.text = timeFormat.format(entry.createdAt.time)
-
     }
 
-    class HistoryItemVh(view: View): RecyclerView.ViewHolder(view) {
+    class HistoryItemVh(view: View) : RecyclerView.ViewHolder(view) {
         val mapPreview: ImageView = view.map_preview
         val mapTitle: TextView = view.style_title
         val wallpaperCoordinates: TextView = view.location_title

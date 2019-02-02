@@ -88,7 +88,11 @@ class App : Application() {
             }
         }
 
-        startKoin(this, listOf(applicationModule, searchModule, mapModule, dbModule), logger = koinLogger)
+        startKoin(
+            this,
+            listOf(applicationModule, searchModule, mapModule, dbModule),
+            logger = koinLogger
+        )
         val reportManager: ReportManager = get()
         reportManager.init(this)
 
