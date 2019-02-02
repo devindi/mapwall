@@ -5,6 +5,10 @@
         android:title="@string/home_menu_settings"
         android:id="@+id/settings_item"/>
 
+    <item android:icon="@drawable/ic_settings"
+        android:title="@string/home_menu_history"
+        android:id="@+id/history_item"/>
+
     <item android:icon="@drawable/ic_about"
         android:title="@string/home_menu_about"
         android:id="@+id/about_item"/>

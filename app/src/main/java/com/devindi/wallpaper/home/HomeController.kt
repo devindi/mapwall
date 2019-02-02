@@ -17,6 +17,7 @@ import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.TransitionChangeHandlerCompat
 import com.devindi.wallpaper.R
 import com.devindi.wallpaper.about.AboutController
+import com.devindi.wallpaper.history.HistoryController
 import com.devindi.wallpaper.misc.BaseController
 import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.anim.FabToDialogTransitionChangeHandler
@@ -24,6 +25,7 @@ import com.devindi.wallpaper.misc.inject
 import com.devindi.wallpaper.model.analytics.ScreenEvent
 import com.devindi.wallpaper.model.map.MapSource
 import com.devindi.wallpaper.model.map.TileSourceFactory
+import com.devindi.wallpaper.model.map.buildTileRequest
 import com.devindi.wallpaper.search.OnPlacePickedListener
 import com.devindi.wallpaper.search.Place
 import com.devindi.wallpaper.search.SearchChangeHandler
@@ -37,12 +39,7 @@ import org.osmdroid.util.TileSystem
 import org.osmdroid.views.MapView
 
 private const val PLACE_ZOOM = 12.0
-private const val DEFAULT_URI = "osm://mapnik?" +
-    "latNorth=85&" +
-    "latSouth=-85&" +
-    "lonWest=-170&" +
-    "lonEast=170&" +
-    "zoom=0"
+private val DEFAULT_URI = buildTileRequest()
 
 class HomeController : BaseController(), OnPlacePickedListener {
 
@@ -80,6 +77,11 @@ class HomeController : BaseController(), OnPlacePickedListener {
                 R.id.about_item -> {
                     drawer.closeDrawers()
                     router.pushController(RouterTransaction.with(AboutController()))
+                    return@setNavigationItemSelectedListener true
+                }
+                R.id.history_item -> {
+                    drawer.closeDrawers()
+                    router.pushController(RouterTransaction.with(HistoryController()))
                     return@setNavigationItemSelectedListener true
                 }
                 else -> false

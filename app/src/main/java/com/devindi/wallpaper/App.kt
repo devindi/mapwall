@@ -2,6 +2,7 @@ package com.devindi.wallpaper
 
 import android.app.Application
 import android.preference.PreferenceManager
+import com.devindi.wallpaper.history.HistoryViewModel
 import com.devindi.wallpaper.home.HomeViewModel
 import com.devindi.wallpaper.misc.FabricReportManager
 import com.devindi.wallpaper.misc.ReportManager
@@ -55,6 +56,7 @@ class App : Application() {
         viewModel { MapSourceViewModel(get(), get()) }
         viewModel { EditSizeViewModel(get()) }
         viewModel { SettingsViewModel(get()) }
+        viewModel { HistoryViewModel(get()) }
     }
 
     override fun onCreate() {
