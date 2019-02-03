@@ -52,6 +52,7 @@ class HomeViewModel(
                     currentTileSource.value!!.id,
                     centerPoint.latitude,
                     centerPoint.longitude,
+                    zoomLevel.toDouble(),
                     width,
                     height,
                     Calendar.getInstance()))

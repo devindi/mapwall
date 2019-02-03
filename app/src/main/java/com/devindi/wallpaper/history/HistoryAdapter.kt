@@ -45,7 +45,7 @@ class HistoryAdapter(
             mapSource.id,
             entry.width,
             entry.height,
-            15,
+            entry.zoom.toInt(),
             entry.centerLat,
             entry.centerLon)
         Timber.d("Binding history item $entry, $mapSource $tileRequest")

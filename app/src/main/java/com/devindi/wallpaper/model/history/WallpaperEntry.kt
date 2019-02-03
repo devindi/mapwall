@@ -9,6 +9,7 @@ data class WallpaperEntry(
     val mapSourceId: String,
     val centerLat: Double,
     val centerLon: Double,
+    val zoom: Double,
     val width: Int,
     val height: Int,
     val createdAt: Calendar
