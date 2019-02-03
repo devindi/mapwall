@@ -7,6 +7,7 @@ apply plugin: "org.sonarqube"
 apply plugin: "org.jlleitschuh.gradle.ktlint"
 apply plugin: 'jacoco'
 apply plugin: 'com.google.firebase.firebase-perf'
+apply plugin: 'kotlin-kapt'
 
 def fabricKey = resolveProperty('fabricKey')
 def googleKey = resolveProperty('googleKey')
@@ -139,6 +140,9 @@ dependencies {
     implementation 'com.android.support:cardview-v7:27.1.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
+
+    implementation "android.arch.persistence.room:runtime:1.1.1"
+    kapt "android.arch.persistence.room:compiler:1.1.1"
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'com.nhaarman:mockito-kotlin-kt1.1:1.5.0'

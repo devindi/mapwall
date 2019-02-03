@@ -2,6 +2,7 @@ package com.devindi.wallpaper
 
 import android.app.Application
 import android.preference.PreferenceManager
+import com.devindi.wallpaper.history.HistoryViewModel
 import com.devindi.wallpaper.home.HomeViewModel
 import com.devindi.wallpaper.misc.FabricReportManager
 import com.devindi.wallpaper.misc.ReportManager
@@ -17,6 +18,7 @@ import com.devindi.wallpaper.model.search.searchModule
 import com.devindi.wallpaper.model.storage.KeyValueStorage
 import com.devindi.wallpaper.model.storage.MapCacheStrategy
 import com.devindi.wallpaper.model.storage.SharedPreferencesStorage
+import com.devindi.wallpaper.model.storage.dbModule
 import com.devindi.wallpaper.settings.SettingsViewModel
 import com.devindi.wallpaper.settings.model.SettingsManager
 import com.devindi.wallpaper.settings.size.edit.EditSizeViewModel
@@ -50,10 +52,11 @@ class App : Application() {
         single { Configuration.getInstance() }
         single { SettingsManager(PreferenceManager.getDefaultSharedPreferences(get())) }
         viewModel { SplashViewModel(get(), get(), get()) }
-        viewModel { HomeViewModel(get(), get(), get(), get(), get()) }
+        viewModel { HomeViewModel(get(), get(), get(), get(), get(), get()) }
         viewModel { MapSourceViewModel(get(), get()) }
         viewModel { EditSizeViewModel(get()) }
         viewModel { SettingsViewModel(get()) }
+        viewModel { HistoryViewModel(get()) }
     }
 
     override fun onCreate() {
@@ -85,7 +88,11 @@ class App : Application() {
             }
         }
 
-        startKoin(this, listOf(applicationModule, searchModule, mapModule), logger = koinLogger)
+        startKoin(
+            this,
+            listOf(applicationModule, searchModule, mapModule, dbModule),
+            logger = koinLogger
+        )
         val reportManager: ReportManager = get()
         reportManager.init(this)
 

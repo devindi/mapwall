@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.devindi.wallpaper.R
 import com.devindi.wallpaper.model.map.MapSource
+import com.devindi.wallpaper.model.map.buildTileRequest
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.map_source_item.view.*
 
@@ -30,7 +31,7 @@ class SourcesAdapter(private val sourceListener: OnSourceSelected) :
     override fun onBindViewHolder(holder: SourceViewHolder, position: Int) {
         holder.titleView.text = items[position].title
         Picasso.with(holder.itemView.context)
-            .load(createThumbUri(items[position]))
+            .load(Uri.parse(buildTileRequest(items[position].id)))
             .into(holder.imgView)
         holder.mark.visibility = if (position == items.indexOf(selectedItem)) {
             View.VISIBLE
@@ -76,15 +77,6 @@ class SourcesAdapter(private val sourceListener: OnSourceSelected) :
             return
         }
         changeCurrentMapSource(selectedSource)
-    }
-
-    private fun createThumbUri(mapSource: MapSource): Uri {
-        return Uri.parse("osm://${mapSource.id}?" +
-            "latNorth=85&" +
-            "latSouth=-85&" +
-            "lonWest=-170&" +
-            "lonEast=170&" +
-            "zoom=0")
     }
 
     private fun changeCurrentMapSource(selectedSource: MapSource) {
