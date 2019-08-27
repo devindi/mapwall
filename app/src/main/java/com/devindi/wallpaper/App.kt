@@ -34,6 +34,7 @@ import org.koin.dsl.module.Module
 import org.koin.dsl.module.module
 import org.koin.log.Logger
 import org.osmdroid.config.Configuration
+import org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants
 import timber.log.Timber
 
 class App : Application() {
@@ -69,6 +70,7 @@ class App : Application() {
         config.isDebugMapView = false
         config.isDebugMode = false
         config.isDebugTileProviders = false
+        config.userAgentValue = BuildConfig.APPLICATION_ID
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
