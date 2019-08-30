@@ -1,6 +1,7 @@
 package com.devindi.wallpaper.model.map
 
 import android.app.WallpaperManager
+import android.preference.PreferenceManager
 import com.devindi.wallpaper.home.createWallpaperHandler
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module.module
@@ -11,7 +12,7 @@ import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 val mapModule = module {
     scope("map_scope") { SqlTileCache(get()) as IFilesystemCache }
     scope("map_scope") {
-        createWallpaperHandler(WallpaperManager.getInstance(androidApplication()))
+        createWallpaperHandler(WallpaperManager.getInstance(androidApplication()), PreferenceManager.getDefaultSharedPreferences(androidApplication()))
     }
     factory { (source: OnlineTileSourceBase) ->
         CacheManager(source, get(), source.minimumZoomLevel, source.maximumZoomLevel)
