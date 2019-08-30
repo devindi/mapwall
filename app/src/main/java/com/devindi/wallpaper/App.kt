@@ -34,7 +34,6 @@ import org.koin.dsl.module.Module
 import org.koin.dsl.module.module
 import org.koin.log.Logger
 import org.osmdroid.config.Configuration
-import org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants
 import timber.log.Timber
 
 class App : Application() {
@@ -56,7 +55,7 @@ class App : Application() {
         viewModel { HomeViewModel(get(), get(), get(), get(), get(), get()) }
         viewModel { MapSourceViewModel(get(), get()) }
         viewModel { EditSizeViewModel(get()) }
-        viewModel { SettingsViewModel(get()) }
+        viewModel { SettingsViewModel(get(), PreferenceManager.getDefaultSharedPreferences(get())) }
         viewModel { HistoryViewModel(get()) }
     }
 

@@ -3,11 +3,11 @@ package com.devindi.wallpaper.settings.model
 import android.content.SharedPreferences
 import android.support.annotation.StringRes
 
-class IntField(
+open class IntField(
     private val storage: SharedPreferences,
-    @StringRes public val titleId: Int,
+    @StringRes override val titleId: Int,
     override val key: String
-) : SettingsField<Int> {
+) : SettingsField<Int>() {
 
     override fun get(): Int {
         return get(0)
@@ -18,6 +18,7 @@ class IntField(
     }
 
     override fun set(value: Int) {
+        super.set(value)
         storage.edit().putInt(key, value).apply()
     }
 }

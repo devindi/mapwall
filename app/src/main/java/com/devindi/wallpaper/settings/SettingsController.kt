@@ -48,7 +48,7 @@ class SettingsController : BaseController(), OnItemClickListener {
         reportManager.reportEvent(ScreenEvent("settings"))
 
         viewModel.settings().observe(this) {
-            settings -> adapter.items = settings.map { it as IntField }
+            settings -> adapter.items = settings
         }
     }
 

@@ -8,6 +8,7 @@ import com.devindi.wallpaper.R
 const val DIMENSION_HEIGHT = "wallpaper_height"
 const val DIMENSION_WIDTH = "wallpaper_width"
 
+@Deprecated("Same as KeyValueStorage")
 class SettingsManager(storage: SharedPreferences) {
 
     private val map = HashMap<String, SettingsField<*>>()
