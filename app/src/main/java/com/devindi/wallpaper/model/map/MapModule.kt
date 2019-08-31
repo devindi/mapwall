@@ -1,7 +1,6 @@
 package com.devindi.wallpaper.model.map
 
 import android.app.WallpaperManager
-import android.preference.PreferenceManager
 import com.devindi.wallpaper.home.createWallpaperHandler
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module.module
