@@ -4,15 +4,15 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.devindi.wallpaper.settings.model.IntField
-import com.devindi.wallpaper.settings.model.SettingsManager
+import com.devindi.wallpaper.settings.model.SizeSettingsFactory
 
-class EditSizeViewModel(private val settingsManager: SettingsManager) : ViewModel() {
+class EditSizeViewModel(private val factory: SizeSettingsFactory) : ViewModel() {
 
     private lateinit var field: IntField
     private val wallpaperSize = MutableLiveData<Int>()
 
     fun loadSize(key: String) {
-        field = settingsManager.getIntField(key)
+        field = factory.createField(key)
         wallpaperSize.value = field.get()
     }
 

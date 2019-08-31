@@ -3,6 +3,10 @@ package com.devindi.wallpaper.model.storage
 import android.content.SharedPreferences
 import kotlin.reflect.KClass
 
+/**
+ * Old style storage, use [com.devindi.wallpaper.settings.model.SettingsField]"
+ */
+@Deprecated("")
 interface KeyValueStorage {
 
     fun <T> save(key: String, value: T)

@@ -11,7 +11,7 @@ import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 val mapModule = module {
     scope("map_scope") { SqlTileCache(get()) as IFilesystemCache }
     scope("map_scope") {
-        createWallpaperHandler(WallpaperManager.getInstance(androidApplication()))
+        createWallpaperHandler(WallpaperManager.getInstance(androidApplication()), get())
     }
     factory { (source: OnlineTileSourceBase) ->
         CacheManager(source, get(), source.minimumZoomLevel, source.maximumZoomLevel)

@@ -1,11 +1,13 @@
 package com.devindi.wallpaper.settings.model
 
 import android.content.SharedPreferences
+import android.support.annotation.StringRes
 
-class StringField(
+abstract class StringField(
     private val storage: SharedPreferences,
+    @StringRes override val titleId: Int,
     override val key: String
-) : SettingsField<String> {
+) : SettingsField<String>() {
 
     override fun get(): String {
         return get("")

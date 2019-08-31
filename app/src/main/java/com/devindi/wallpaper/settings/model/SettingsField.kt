@@ -1,12 +1,25 @@
 package com.devindi.wallpaper.settings.model
 
-interface SettingsField<T> {
+import android.arch.lifecycle.MutableLiveData
+import com.devindi.wallpaper.misc.NonNullMediatorLiveData
+import com.devindi.wallpaper.misc.nonNull
 
-    val key: String
+abstract class SettingsField<T> {
 
-    fun get(): T
+    protected val liveData = MutableLiveData<T>()
 
-    fun get(fallback: T): T
+    abstract val key: String
 
-    fun set(value: T)
+    abstract val titleId: Int
+
+    abstract fun get(): T
+
+    abstract fun get(fallback: T): T
+
+    abstract fun set(value: T)
+
+    fun observe(): NonNullMediatorLiveData<T> {
+        liveData.value = this.get()
+        return liveData.nonNull()
+    }
 }

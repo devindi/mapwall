@@ -1,6 +1,7 @@
 package com.devindi.wallpaper
 
 import android.app.Application
+import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import com.devindi.wallpaper.history.HistoryViewModel
 import com.devindi.wallpaper.home.HomeViewModel
@@ -20,7 +21,9 @@ import com.devindi.wallpaper.model.storage.MapCacheStrategy
 import com.devindi.wallpaper.model.storage.SharedPreferencesStorage
 import com.devindi.wallpaper.model.storage.dbModule
 import com.devindi.wallpaper.settings.SettingsViewModel
-import com.devindi.wallpaper.settings.model.SettingsManager
+import com.devindi.wallpaper.settings.model.HeightField
+import com.devindi.wallpaper.settings.model.SizeSettingsFactory
+import com.devindi.wallpaper.settings.model.WidthField
 import com.devindi.wallpaper.settings.size.edit.EditSizeViewModel
 import com.devindi.wallpaper.source.MapSourceViewModel
 import com.devindi.wallpaper.splash.SplashViewModel
@@ -50,12 +53,16 @@ class App : Application() {
         single { MapCacheStrategy(androidApplication(), get()) }
         single { ConfigManager() }
         single { Configuration.getInstance() }
-        single { SettingsManager(PreferenceManager.getDefaultSharedPreferences(get())) }
+        factory { SizeSettingsFactory(PreferenceManager.getDefaultSharedPreferences(get()), get()) }
+        factory { PreferenceManager.getDefaultSharedPreferences(get()) } bind SharedPreferences::class
         viewModel { SplashViewModel(get(), get(), get()) }
-        viewModel { HomeViewModel(get(), get(), get(), get(), get(), get()) }
+        viewModel {
+            HomeViewModel(get(), get(), get(), get(), get(),
+                WidthField(get(), get()), HeightField(get(), get()))
+        }
         viewModel { MapSourceViewModel(get(), get()) }
         viewModel { EditSizeViewModel(get()) }
-        viewModel { SettingsViewModel(get()) }
+        viewModel { SettingsViewModel(PreferenceManager.getDefaultSharedPreferences(get()), get()) }
         viewModel { HistoryViewModel(get()) }
     }
 
@@ -69,6 +76,7 @@ class App : Application() {
         config.isDebugMapView = false
         config.isDebugMode = false
         config.isDebugTileProviders = false
+        config.userAgentValue = BuildConfig.APPLICATION_ID
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())

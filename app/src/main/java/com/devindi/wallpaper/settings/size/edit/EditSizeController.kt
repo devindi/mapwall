@@ -13,7 +13,6 @@ import com.devindi.wallpaper.misc.BaseController
 import com.devindi.wallpaper.misc.SimpleSeekBarChangeListener
 import com.devindi.wallpaper.misc.inject
 import com.devindi.wallpaper.misc.nonNull
-import com.devindi.wallpaper.misc.observe
 import com.devindi.wallpaper.model.DisplayInfo
 import com.devindi.wallpaper.settings.model.DIMENSION_HEIGHT
 import com.devindi.wallpaper.settings.model.DIMENSION_WIDTH

@@ -1,36 +1,42 @@
 package com.devindi.wallpaper.settings
 
+import android.arch.lifecycle.MediatorLiveData
 import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
+import android.content.SharedPreferences
 import com.devindi.wallpaper.misc.NonNullMediatorLiveData
 import com.devindi.wallpaper.misc.nonNull
 import com.devindi.wallpaper.settings.model.DIMENSION_HEIGHT
 import com.devindi.wallpaper.settings.model.DIMENSION_WIDTH
 import com.devindi.wallpaper.settings.model.SettingsField
-import com.devindi.wallpaper.settings.model.SettingsManager
+import com.devindi.wallpaper.settings.model.SizeSettingsFactory
+import com.devindi.wallpaper.settings.model.StorageTargetField
+import com.devindi.wallpaper.settings.model.WallpaperTargetField
+import timber.log.Timber
 
-class SettingsViewModel(private val settingsManager: SettingsManager) : ViewModel() {
+class SettingsViewModel(
+    storage: SharedPreferences,
+    sizeSettingsFactory: SizeSettingsFactory
+) : ViewModel() {
 
-    private val items = MutableLiveData<List<SettingsField<*>>>()
-    private val settingsObserver = Observer<String> {
-        notifySettingsChange()
-    }
+    private val mediator = MediatorLiveData<List<SettingsField<*>>>()
 
     init {
-        notifySettingsChange()
-        settingsManager.fieldChange().observeForever(settingsObserver)
+        val fields = listOf(
+            sizeSettingsFactory.createField(DIMENSION_HEIGHT),
+            sizeSettingsFactory.createField(DIMENSION_WIDTH),
+            WallpaperTargetField(storage),
+            StorageTargetField(storage))
+
+        mediator.value = fields
+
+        fields.forEach { a ->
+            mediator.addSource(a.observe()) { b ->
+                Timber.e("Somth changed $a $b")
+                mediator.value = fields
+            }
+        }
     }
 
-    fun settings(): NonNullMediatorLiveData<List<SettingsField<*>>> = items.nonNull()
-
-    override fun onCleared() {
-        settingsManager.fieldChange().removeObserver(settingsObserver)
-    }
-
-    private fun notifySettingsChange() {
-        items.value = listOf(
-            settingsManager.getIntField(DIMENSION_HEIGHT),
-            settingsManager.getIntField(DIMENSION_WIDTH))
-    }
+    fun settings(): NonNullMediatorLiveData<List<SettingsField<*>>> = mediator.nonNull()
 }

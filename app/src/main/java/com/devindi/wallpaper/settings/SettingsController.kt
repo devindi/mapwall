@@ -13,9 +13,7 @@ import com.devindi.wallpaper.R
 import com.devindi.wallpaper.misc.BaseController
 import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.inject
-import com.devindi.wallpaper.misc.observe
 import com.devindi.wallpaper.model.analytics.ScreenEvent
-import com.devindi.wallpaper.settings.model.IntField
 import com.devindi.wallpaper.settings.size.edit.DIMENSION_KEY
 import com.devindi.wallpaper.settings.size.edit.EditSizeController
 import com.devindi.wallpaper.settings.size.edit.TITLE_KEY
@@ -48,7 +46,8 @@ class SettingsController : BaseController(), OnItemClickListener {
         reportManager.reportEvent(ScreenEvent("settings"))
 
         viewModel.settings().observe(this) {
-            settings -> adapter.items = settings.map { it as IntField }
+            settings ->
+            adapter.items = settings
         }
     }
 
