@@ -11,6 +11,7 @@
     <string name="settings_item_width">Width</string>
     <string name="settings_item_height">Height</string>
     <string name="settings_item_wallpaper">Wallpaper</string>
+    <string name="settings_item_wallpaper_mode">Wallpaper mode</string>
     <string name="settings_item_storage">Storage</string>
 
 </resources>

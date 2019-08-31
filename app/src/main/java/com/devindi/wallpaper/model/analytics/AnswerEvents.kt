@@ -2,7 +2,7 @@ package com.devindi.wallpaper.model.analytics
 
 import com.crashlytics.android.answers.ContentViewEvent
 import com.crashlytics.android.answers.CustomEvent
-import com.devindi.wallpaper.home.Target
+import com.devindi.wallpaper.settings.model.WallpaperMode
 import com.crashlytics.android.answers.SearchEvent as ImplSearchEvent
 
 sealed class AnswerEvent<out T> {
@@ -40,7 +40,7 @@ class CreateWallpaperEvent(
     private val lat: Double,
     private val lon: Double,
     private val zoom: Number,
-    private val target: Target
+    private val target: WallpaperMode
 ) : AnswerEvent<CustomEvent>() {
     override fun toEvent(): CustomEvent =
         CustomEvent("create wallpaper")

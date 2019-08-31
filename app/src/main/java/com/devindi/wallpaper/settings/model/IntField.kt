@@ -4,10 +4,10 @@ import android.content.SharedPreferences
 import android.support.annotation.StringRes
 
 open class IntField(
-    private val storage: SharedPreferences,
+    storage: SharedPreferences,
     @StringRes override val titleId: Int,
     override val key: String
-) : SettingsField<Int>() {
+) : SharedPreferencesField<Int>(storage) {
 
     override fun get(): Int {
         return get(0)
@@ -18,7 +18,6 @@ open class IntField(
     }
 
     override fun set(value: Int) {
-        super.set(value)
         storage.edit().putInt(key, value).apply()
     }
 }

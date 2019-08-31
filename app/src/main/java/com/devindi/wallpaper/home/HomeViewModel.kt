@@ -7,20 +7,21 @@ import com.devindi.wallpaper.model.analytics.CreateWallpaperEvent
 import com.devindi.wallpaper.model.history.HistoryManager
 import com.devindi.wallpaper.model.history.WallpaperEntry
 import com.devindi.wallpaper.model.map.MapImageGenerator
-import com.devindi.wallpaper.settings.model.DIMENSION_HEIGHT
-import com.devindi.wallpaper.settings.model.DIMENSION_WIDTH
-import com.devindi.wallpaper.settings.model.SettingsManager
+import com.devindi.wallpaper.settings.model.HeightField
+import com.devindi.wallpaper.settings.model.WallpaperMode
+import com.devindi.wallpaper.settings.model.WidthField
 import com.google.firebase.perf.FirebasePerformance
 import org.osmdroid.util.GeoPoint
 import java.util.Calendar
 
 class HomeViewModel(
     private val imageGenerator: MapImageGenerator,
-    private val handler: WallpaperHandler,
+    private val handler: ImageHandler,
     private val reportManager: ReportManager,
     settings: SettingsRepo,
-    private val settingsManager: SettingsManager,
-    private val historyManager: HistoryManager
+    private val historyManager: HistoryManager,
+    private val widthField: WidthField,
+    private val heightField: HeightField
 ) : ViewModel() {
 
     var currentTileSource = settings.currentMapSource()
@@ -29,15 +30,14 @@ class HomeViewModel(
         Thread {
             val myTrace = FirebasePerformance.getInstance().newTrace("wallpaper gen trace")
             myTrace.start()
-            val target = Target.BOTH
-            val width = settingsManager.getIntField(DIMENSION_WIDTH).get()
-            val height = settingsManager.getIntField(DIMENSION_HEIGHT).get()
+            val width = widthField.get()
+            val height = heightField.get()
             reportManager.reportEvent(CreateWallpaperEvent(
                 currentTileSource.value!!.id,
                 centerPoint.latitude,
                 centerPoint.longitude,
                 zoomLevel,
-                target)
+                WallpaperMode.BOTH) // TODO track target
             )
             val wallpaper = imageGenerator.generate(
                 currentTileSource.value!!.id,
@@ -56,7 +56,7 @@ class HomeViewModel(
                     width,
                     height,
                     Calendar.getInstance()))
-            handler.handle(wallpaper, target)
+            handler.handle(wallpaper)
         }.start()
     }
 }

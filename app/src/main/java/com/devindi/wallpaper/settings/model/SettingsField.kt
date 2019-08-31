@@ -1,13 +1,12 @@
 package com.devindi.wallpaper.settings.model
 
 import android.arch.lifecycle.MutableLiveData
-import android.support.annotation.CallSuper
 import com.devindi.wallpaper.misc.NonNullMediatorLiveData
 import com.devindi.wallpaper.misc.nonNull
 
 abstract class SettingsField<T> {
 
-    private val liveData = MutableLiveData<T>()
+    protected val liveData = MutableLiveData<T>()
 
     abstract val key: String
 
@@ -17,10 +16,7 @@ abstract class SettingsField<T> {
 
     abstract fun get(fallback: T): T
 
-    @CallSuper
-    open fun set(value: T) {
-        liveData.value = value
-    }
+    abstract fun set(value: T)
 
     fun observe(): NonNullMediatorLiveData<T> {
         liveData.value = this.get()

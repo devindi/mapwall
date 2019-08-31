@@ -4,10 +4,10 @@ import android.content.SharedPreferences
 import android.support.annotation.StringRes
 
 open class BooleanField(
-    private val storage: SharedPreferences,
+    storage: SharedPreferences,
     @StringRes override val titleId: Int,
     override val key: String
-) : SettingsField<Boolean>() {
+) : SharedPreferencesField<Boolean>(storage) {
 
     override fun get(): Boolean {
         return get(false)
@@ -18,7 +18,6 @@ open class BooleanField(
     }
 
     override fun set(value: Boolean) {
-        super.set(value)
         storage.edit().putBoolean(key, value).apply()
     }
 }

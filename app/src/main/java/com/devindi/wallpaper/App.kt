@@ -20,7 +20,9 @@ import com.devindi.wallpaper.model.storage.MapCacheStrategy
 import com.devindi.wallpaper.model.storage.SharedPreferencesStorage
 import com.devindi.wallpaper.model.storage.dbModule
 import com.devindi.wallpaper.settings.SettingsViewModel
-import com.devindi.wallpaper.settings.model.SettingsManager
+import com.devindi.wallpaper.settings.model.HeightField
+import com.devindi.wallpaper.settings.model.SizeSettingsFactory
+import com.devindi.wallpaper.settings.model.WidthField
 import com.devindi.wallpaper.settings.size.edit.EditSizeViewModel
 import com.devindi.wallpaper.source.MapSourceViewModel
 import com.devindi.wallpaper.splash.SplashViewModel
@@ -50,12 +52,12 @@ class App : Application() {
         single { MapCacheStrategy(androidApplication(), get()) }
         single { ConfigManager() }
         single { Configuration.getInstance() }
-        single { SettingsManager(PreferenceManager.getDefaultSharedPreferences(get())) }
+        factory { SizeSettingsFactory(PreferenceManager.getDefaultSharedPreferences(get()), get()) }
         viewModel { SplashViewModel(get(), get(), get()) }
-        viewModel { HomeViewModel(get(), get(), get(), get(), get(), get()) }
+        viewModel { HomeViewModel(get(), get(), get(), get(), get(), WidthField(PreferenceManager.getDefaultSharedPreferences(get()), get()), HeightField(PreferenceManager.getDefaultSharedPreferences(get()), get())) }
         viewModel { MapSourceViewModel(get(), get()) }
         viewModel { EditSizeViewModel(get()) }
-        viewModel { SettingsViewModel(get(), PreferenceManager.getDefaultSharedPreferences(get())) }
+        viewModel { SettingsViewModel(PreferenceManager.getDefaultSharedPreferences(get()), get()) }
         viewModel { HistoryViewModel(get()) }
     }
 
