@@ -7,7 +7,10 @@ import com.devindi.wallpaper.model.DisplayInfo
 const val DIMENSION_HEIGHT = "wallpaper_height"
 const val DIMENSION_WIDTH = "wallpaper_width"
 
-class SizeSettingsFactory(private val storage: SharedPreferences, private val displayInfo: DisplayInfo) {
+class SizeSettingsFactory(
+    private val storage: SharedPreferences,
+    private val displayInfo: DisplayInfo
+) {
 
     fun createField(key: String): IntField {
         return when (key) {

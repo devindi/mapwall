@@ -14,9 +14,11 @@ import com.devindi.wallpaper.settings.model.StorageTargetField
 import com.devindi.wallpaper.settings.model.WallpaperTargetField
 import timber.log.Timber
 
-class SettingsViewModel(storage: SharedPreferences, sizeSettingsFactory: SizeSettingsFactory) : ViewModel() {
+class SettingsViewModel(
+    storage: SharedPreferences,
+    sizeSettingsFactory: SizeSettingsFactory
+) : ViewModel() {
 
-    private val items = MutableLiveData<List<SettingsField<*>>>()
     private val mediator = MediatorLiveData<List<SettingsField<*>>>()
 
     init {

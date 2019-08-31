@@ -20,7 +20,6 @@ import com.devindi.wallpaper.settings.size.edit.TITLE_KEY
 import com.devindi.wallpaper.source.OnItemClickListener
 import kotlinx.android.synthetic.main.settings_screen.view.*
 import org.koin.android.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 class SettingsController : BaseController(), OnItemClickListener {
 

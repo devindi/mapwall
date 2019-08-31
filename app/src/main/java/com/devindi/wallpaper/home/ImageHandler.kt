@@ -22,7 +22,12 @@ fun createWallpaperHandler(impl: WallpaperManager, storage: SharedPreferences): 
     } else {
         WallpaperHandlerImpl(impl)
     }
-    return CompositeHandler(WallpaperTargetField(storage), wallpaperTarget, StorageTargetField(storage), ExportImageHandler(Environment.getExternalStoragePublicDirectory("Maps")))
+    return CompositeHandler(
+        WallpaperTargetField(storage),
+        wallpaperTarget,
+        StorageTargetField(storage),
+        ExportImageHandler(Environment.getExternalStoragePublicDirectory("Maps"))
+    )
 }
 
 interface ImageHandler {
@@ -35,7 +40,7 @@ class CompositeHandler(
     private val wallpaperTarget: ImageHandler,
     private val storageTargetField: BooleanField,
     private val storageTarget: ImageHandler
-): ImageHandler {
+) : ImageHandler {
 
     override fun handle(image: Bitmap) {
         if (wallpaperTargetField.get()) {
@@ -52,7 +57,10 @@ class CompositeHandler(
  * Setup wallpaper to system, lock screen or both
  */
 @RequiresApi(Build.VERSION_CODES.N)
-class WallpaperHandlerApiNImpl(private val impl: WallpaperManager, private val modeField: WallpaperModeField) : ImageHandler {
+class WallpaperHandlerApiNImpl(
+    private val impl: WallpaperManager,
+    private val modeField: WallpaperModeField
+) : ImageHandler {
 
     override fun handle(image: Bitmap) {
         val flag = when (WallpaperMode.valueOf(modeField.get())) {

@@ -7,11 +7,9 @@ import com.devindi.wallpaper.R
 import com.devindi.wallpaper.settings.model.BooleanField
 import com.devindi.wallpaper.settings.model.IntField
 import com.devindi.wallpaper.settings.model.SettingsField
-import com.devindi.wallpaper.settings.model.WallpaperTargetField
 import com.devindi.wallpaper.settings.size.SizeViewHolder
 import com.devindi.wallpaper.settings.target.TargetViewHolder
 import com.devindi.wallpaper.source.OnItemClickListener
-import kotlin.IllegalStateException
 
 class SettingsAdapter(
     private val clickListener: OnItemClickListener

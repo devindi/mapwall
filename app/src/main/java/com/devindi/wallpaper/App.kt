@@ -1,6 +1,7 @@
 package com.devindi.wallpaper
 
 import android.app.Application
+import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import com.devindi.wallpaper.history.HistoryViewModel
 import com.devindi.wallpaper.home.HomeViewModel
@@ -53,8 +54,12 @@ class App : Application() {
         single { ConfigManager() }
         single { Configuration.getInstance() }
         factory { SizeSettingsFactory(PreferenceManager.getDefaultSharedPreferences(get()), get()) }
+        factory { PreferenceManager.getDefaultSharedPreferences(get()) } bind SharedPreferences::class
         viewModel { SplashViewModel(get(), get(), get()) }
-        viewModel { HomeViewModel(get(), get(), get(), get(), get(), WidthField(PreferenceManager.getDefaultSharedPreferences(get()), get()), HeightField(PreferenceManager.getDefaultSharedPreferences(get()), get())) }
+        viewModel {
+            HomeViewModel(get(), get(), get(), get(), get(),
+                WidthField(get(), get()), HeightField(get(), get()))
+        }
         viewModel { MapSourceViewModel(get(), get()) }
         viewModel { EditSizeViewModel(get()) }
         viewModel { SettingsViewModel(PreferenceManager.getDefaultSharedPreferences(get()), get()) }
