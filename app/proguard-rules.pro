@@ -32,3 +32,13 @@
 -dontwarn com.squareup.okhttp.**
 
 -keepnames class * extends java.lang.Exception
+
+#Conductor rules
+# Retain constructor that is called by using reflection to recreate the Controller
+-keepclassmembers public class * extends com.bluelinelabs.conductor.Controller {
+   public <init>();
+   public <init>(android.os.Bundle);
+}
+-keepclassmembers public class * extends com.bluelinelabs.conductor.ControllerChangeHandler {
+   public <init>();
+}
