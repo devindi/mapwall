@@ -1,8 +1,7 @@
 package com.devindi.wallpaper.search
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.Context
-import android.support.design.widget.Snackbar
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -20,6 +19,7 @@ import com.devindi.wallpaper.misc.inject
 import com.devindi.wallpaper.model.analytics.FailedSearchEvent
 import com.devindi.wallpaper.model.analytics.ScreenEvent
 import com.devindi.wallpaper.model.analytics.SuccessSearchEvent
+import com.google.android.material.snackbar.Snackbar
 import org.koin.android.viewmodel.ext.android.viewModel
 
 interface OnPlacePickedListener {

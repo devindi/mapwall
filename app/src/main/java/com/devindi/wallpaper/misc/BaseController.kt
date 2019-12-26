@@ -1,7 +1,7 @@
 package com.devindi.wallpaper.misc
 
-import android.arch.lifecycle.ViewModelStore
-import android.arch.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModelStoreOwner
 import android.os.Bundle
 import com.bluelinelabs.conductor.archlifecycle.LifecycleController
 

@@ -1,6 +1,6 @@
 package com.devindi.wallpaper.settings.model
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import com.devindi.wallpaper.misc.NonNullMediatorLiveData
 import com.devindi.wallpaper.misc.nonNull
 

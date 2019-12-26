@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Environment
-import android.support.annotation.RequiresApi
+import androidx.annotation.RequiresApi
 import com.devindi.wallpaper.settings.model.BooleanField
 import com.devindi.wallpaper.settings.model.StorageTargetField
 import com.devindi.wallpaper.settings.model.WallpaperMode

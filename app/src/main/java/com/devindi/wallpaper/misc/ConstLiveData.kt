@@ -1,6 +1,6 @@
 package com.devindi.wallpaper.misc
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 
 /**
  * Write-once live data implementation

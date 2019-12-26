@@ -1,6 +1,6 @@
 package com.devindi.wallpaper.splash
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import com.devindi.wallpaper.misc.SingleLiveEvent
 import com.devindi.wallpaper.model.SettingsRepo
 import com.devindi.wallpaper.model.storage.MapCacheStrategy

@@ -1,11 +1,11 @@
 package com.devindi.wallpaper.history
 
-import android.arch.lifecycle.Observer
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.Toolbar
+import androidx.lifecycle.Observer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.devindi.wallpaper.R
 import com.devindi.wallpaper.misc.BaseController
 import com.devindi.wallpaper.misc.ToolbarHelper

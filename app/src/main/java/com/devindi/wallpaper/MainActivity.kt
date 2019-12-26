@@ -1,9 +1,9 @@
 package com.devindi.wallpaper
 
 import android.os.Bundle
-import android.support.v4.view.ViewCompat
-import android.support.v7.app.AppCompatActivity
+import androidx.core.view.ViewCompat
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction

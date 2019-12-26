@@ -3,7 +3,7 @@ package com.devindi.wallpaper.splash
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.pm.PackageManager
 import android.view.LayoutInflater
 import android.view.View

@@ -1,6 +1,6 @@
 package com.devindi.wallpaper.model.history
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import com.devindi.wallpaper.model.storage.wallpaper.WallpaperDao
 
 class HistoryManager(private val wallpaperDao: WallpaperDao) {

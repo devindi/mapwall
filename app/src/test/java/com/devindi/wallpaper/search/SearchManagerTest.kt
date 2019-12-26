@@ -1,6 +1,6 @@
 package com.devindi.wallpaper.search
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.devindi.wallpaper.model.places.GoogleApiErrorHandler
 import com.devindi.wallpaper.search.Place as MapwallPlace
 import com.google.android.gms.common.api.GoogleApiClient

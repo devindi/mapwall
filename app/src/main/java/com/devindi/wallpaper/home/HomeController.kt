@@ -1,11 +1,10 @@
 package com.devindi.wallpaper.home
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.NavigationView
-import android.support.v4.widget.DrawerLayout
+import androidx.drawerlayout.widget.DrawerLayout
 import android.util.DisplayMetrics
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -32,6 +31,7 @@ import com.devindi.wallpaper.search.SearchChangeHandler
 import com.devindi.wallpaper.search.SearchController
 import com.devindi.wallpaper.settings.SettingsController
 import com.devindi.wallpaper.source.MapSourceController
+import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.osmdroid.util.GeoPoint

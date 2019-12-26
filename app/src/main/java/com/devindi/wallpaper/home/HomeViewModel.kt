@@ -1,6 +1,6 @@
 package com.devindi.wallpaper.home
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.model.SettingsRepo
 import com.devindi.wallpaper.model.analytics.CreateWallpaperEvent

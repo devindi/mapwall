@@ -3,7 +3,7 @@ package com.devindi.wallpaper.misc
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Build
-import android.support.annotation.RequiresApi
+import androidx.annotation.RequiresApi
 import com.bluelinelabs.conductor.Controller
 
 private const val REQUEST_CODE = 42

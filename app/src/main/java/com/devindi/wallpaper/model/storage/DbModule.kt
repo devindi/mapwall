@@ -1,6 +1,6 @@
 package com.devindi.wallpaper.model.storage
 
-import android.arch.persistence.room.Room
+import androidx.room.Room
 import com.devindi.wallpaper.model.history.HistoryManager
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module.module

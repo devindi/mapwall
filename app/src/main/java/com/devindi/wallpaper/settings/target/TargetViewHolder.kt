@@ -1,9 +1,9 @@
 package com.devindi.wallpaper.settings.target
 
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.Switch
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.devindi.wallpaper.settings.model.BooleanField
 import kotlinx.android.synthetic.main.settings_checkbox_item.view.*
 

@@ -1,8 +1,8 @@
 package com.devindi.wallpaper.settings.size
 
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.devindi.wallpaper.settings.model.IntField
 import com.devindi.wallpaper.source.OnItemClickListener
 import kotlinx.android.synthetic.main.settings_simple_item.view.*

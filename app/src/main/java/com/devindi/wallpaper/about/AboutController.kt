@@ -1,11 +1,11 @@
 package com.devindi.wallpaper.about
 
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.devindi.wallpaper.BuildConfig
 import com.devindi.wallpaper.R
 import com.devindi.wallpaper.misc.BaseController

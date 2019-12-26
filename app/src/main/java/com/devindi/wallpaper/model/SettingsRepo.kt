@@ -1,7 +1,7 @@
 package com.devindi.wallpaper.model
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.devindi.wallpaper.model.config.ConfigManager
 import com.devindi.wallpaper.model.map.MapSource
 import com.devindi.wallpaper.model.storage.KeyValueStorage

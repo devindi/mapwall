@@ -1,6 +1,6 @@
 package com.devindi.wallpaper.search
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import com.devindi.wallpaper.model.places.GoogleApiErrorHandler
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.places.AutocompleteFilter

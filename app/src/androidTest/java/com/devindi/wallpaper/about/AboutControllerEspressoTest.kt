@@ -2,13 +2,13 @@ package com.devindi.wallpaper.about
 
 import android.content.Intent
 import android.preference.PreferenceManager
-import android.support.test.InstrumentationRegistry.getInstrumentation
-import android.support.test.espresso.Espresso.onView
-import android.support.test.espresso.assertion.ViewAssertions.matches
-import android.support.test.espresso.matcher.ViewMatchers.withId
-import android.support.test.espresso.matcher.ViewMatchers.withText
-import android.support.test.rule.ActivityTestRule
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.rule.ActivityTestRule
+import androidx.test.runner.AndroidJUnit4
 import com.bluelinelabs.conductor.RouterTransaction
 import com.devindi.wallpaper.BuildConfig
 import com.devindi.wallpaper.MainActivity
@@ -19,11 +19,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.*
 
-/**
- * author   : Eugene Dudnik
- * date     : 10/15/18
- * e-mail   : esdudnik@gmail.com
- */
 @RunWith(AndroidJUnit4::class)
 class AboutControllerEspressoTest {
 

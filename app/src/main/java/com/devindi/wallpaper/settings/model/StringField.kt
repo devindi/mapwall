@@ -1,7 +1,7 @@
 package com.devindi.wallpaper.settings.model
 
 import android.content.SharedPreferences
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 
 abstract class StringField(
     private val storage: SharedPreferences,
@@ -14,7 +14,7 @@ abstract class StringField(
     }
 
     override fun get(fallback: String): String {
-        return storage.getString(key, fallback)
+        return storage.getString(key, fallback) ?: "fallback"
     }
 
     override fun set(value: String) {

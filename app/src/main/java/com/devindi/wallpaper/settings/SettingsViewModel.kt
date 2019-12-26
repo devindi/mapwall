@@ -1,8 +1,7 @@
 package com.devindi.wallpaper.settings
 
-import android.arch.lifecycle.MediatorLiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.ViewModel
 import android.content.SharedPreferences
 import com.devindi.wallpaper.misc.NonNullMediatorLiveData
 import com.devindi.wallpaper.misc.nonNull

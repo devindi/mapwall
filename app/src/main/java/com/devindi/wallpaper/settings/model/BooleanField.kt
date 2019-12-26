@@ -1,7 +1,7 @@
 package com.devindi.wallpaper.settings.model
 
 import android.content.SharedPreferences
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 
 open class BooleanField(
     storage: SharedPreferences,

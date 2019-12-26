@@ -1,7 +1,7 @@
 package com.devindi.wallpaper.search
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.devindi.wallpaper.model.places.GoogleApiErrorHandler
 
 class SearchViewModel(

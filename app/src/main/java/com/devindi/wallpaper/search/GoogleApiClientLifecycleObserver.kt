@@ -1,8 +1,8 @@
 package com.devindi.wallpaper.search
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import com.google.android.gms.common.api.GoogleApiClient
 
 class GoogleApiClientLifecycleObserver(private val client: GoogleApiClient) : LifecycleObserver {
