@@ -153,6 +153,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     androidTestImplementation "org.koin:koin-test:1.0.0"
+
+    implementation 'com.squareup.retrofit2:retrofit:2.6.3'
 }
 
 apply plugin: 'com.google.gms.google-services'

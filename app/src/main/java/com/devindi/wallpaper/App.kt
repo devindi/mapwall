@@ -8,6 +8,7 @@ import com.devindi.wallpaper.home.HomeViewModel
 import com.devindi.wallpaper.misc.FabricReportManager
 import com.devindi.wallpaper.misc.ReportManager
 import com.devindi.wallpaper.misc.createPermissionManager
+import com.devindi.wallpaper.misc.report.RemoteTree
 import com.devindi.wallpaper.model.AndroidInfo
 import com.devindi.wallpaper.model.DeviceInfo
 import com.devindi.wallpaper.model.DisplayInfo
@@ -78,6 +79,7 @@ class App : Application() {
         config.isDebugTileProviders = false
         config.userAgentValue = BuildConfig.APPLICATION_ID
 
+        Timber.plant(RemoteTree(this))
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
